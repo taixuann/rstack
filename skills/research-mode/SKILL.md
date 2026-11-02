@@ -128,7 +128,7 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Scaffold.** New project or folder setup (blueprint-folder bootstrap).
 - **Proposal intake.** Frame a new project: interview, context, aims, milestones, work packages. Runs first in explore.
 - **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
-- **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence) and AGENTS.md, and change state.
+- **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
 - **Investigation.** Read-only question about the data, a method, or the literature.
 - **Experimental design.** Hypothesis, study design, power, protocol.
 - **Study analysis.** Exploring, analysing, or interpreting data; figures.

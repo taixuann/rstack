@@ -41,7 +41,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 | proposal-intake | interview, context, aims, milestones, work packages |
 | proposal-synthesis | questions, hypotheses, methods, feasibility, explore exit check |
 | state-review | gate review at every state exit: rules per state, findings become tasks |
-| project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, state changes |
+| project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, CLAUDE.md stub, state changes |
 | investigation | a read-only question |
 | experimental-design | hypothesis, design, power, protocol |
 | study-analysis | analysing data, figures, results |

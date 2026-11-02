@@ -1,6 +1,6 @@
 ### Project docs
 
-Write or refresh a project's `README.md` and `AGENTS.md` from the templates in `references/`. Used by Scaffold, and at every state change.
+Write or refresh a project's `README.md`, `AGENTS.md`, and `CLAUDE.md` from the templates in `references/`. Used by Scaffold, and at every state change.
 
 1. Read the existing files. Never overwrite facts the user wrote.
 2. Fill only what is known: from the user, from `data/raw/` metadata, from files you read. Everything else stays `TODO: unknown`. Never invent devices, subject counts, rates, or citations.
@@ -10,6 +10,7 @@ Write or refresh a project's `README.md` and `AGENTS.md` from the templates in `
    - Each question owns its decision, its hypotheses with status (candidate, frozen, supported, rejected) and design link, and its evidence (data, accepted results, reproduce command).
    - Shared data: put the detailed inventory in `data/raw/README.md` and link it from each question.
 4. AGENTS.md is the stable operating contract. It changes rarely. Do not put results or tasks in it.
+   - `CLAUDE.md` is a stub from `references/CLAUDE.template.md` that imports `AGENTS.md` (`@AGENTS.md`). Claude Code reads `CLAUDE.md` and not `AGENTS.md`; Codex and other tools read `AGENTS.md`. Keep one source of truth: never copy rules into `CLAUDE.md`.
 5. Tasks live in `docs/rstack/<state>/tasks.md`. Seed it from the state's defaults below, then tailor it to the project's scope (explore does this through the Proposal intake playbook). Tick them as they finish, then sync the README.
 6. State change: run the **State review** playbook for the current state and clear its blocking tasks, confirm the exit check with the user, set `state` and `updated`, add the State history row, create `docs/rstack/<new-state>/` with a seeded `tasks.md`, add the new state's line to Contents, and sync the README. The old state's `tasks.md` stays as its record. Moving backwards is allowed; log the reason.
 7. Read both files back and report what is still `TODO`.
@@ -29,8 +30,8 @@ Write or refresh a project's `README.md` and `AGENTS.md` from the templates in `
 | State | Bundled | External |
 |---|---|---|
 | explore | `literature-review`, `paper-lookup`, `research-lookup`, `openalex-database`, `liteparse`, `zotero-cli`, `brainstorming`, `hypotheses`, `scientific-critical-thinking`, `sources`, `interrogate` | `citation-management`, `scholar-evaluation`, `deep-research` |
-| design | `experimental-design`, `hypotheses`, `arena`, `interrogate` | `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness`, `what-if-oracle` |
-| progressing | `analysis-report`, `figures`, `scientific-visualization`, `reproduce`, `swarm` | `exploratory-data-analysis`, `statistical-analysis`, `uncertainty-and-units`, `neurokit2` (ECG and biosignals) |
+| design | `experimental-design`, `statistical-power`, `hypotheses`, `what-if-oracle`, `arena`, `interrogate` | `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness` |
+| progressing | `exploratory-data-analysis`, `statistical-analysis`, `uncertainty-and-units`, `analysis-report`, `figures`, `scientific-visualization`, `reproduce`, `swarm` | `neurokit2` (ECG and biosignals) |
 | ready-for-publish | `scientific-slides`, `pptx-posters`, `latex-posters`, `peer-review`, `export` | `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates`, `infographics` |
 | closed | `export`, `sources` | none |
 
