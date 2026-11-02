@@ -73,11 +73,10 @@ Create missing folders, never rename existing ones. Prose goes in `docs/`, code 
 
 ## Research states
 
-A project's `README.md` front matter carries its state. Advance it only at an approved gate, and add a State history row.
+A project's `README.md` front matter carries its state, and its Current tasks list holds that state's tasks. A new project starts in explore (Scaffold is a trigger, not a state). Advance only at an approved gate, then add a State history row and archive the task list to `docs/rstack/<state>/tasks.md`.
 
 | State | Focus | Playbooks |
 |---|---|---|
-| scaffold | folders and question drafted | Scaffold, Project docs |
 | explore | literature explore and review | Literature review, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
@@ -121,7 +120,7 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
 - **Scaffold.** New project or folder setup (blueprint-folder bootstrap).
-- **Project docs.** Write or refresh a project's README (research state) and AGENTS.md, and change state.
+- **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence) and AGENTS.md, and change state.
 - **Investigation.** Read-only question about the data, a method, or the literature.
 - **Experimental design.** Hypothesis, study design, power, protocol.
 - **Study analysis.** Exploring, analysing, or interpreting data; figures.

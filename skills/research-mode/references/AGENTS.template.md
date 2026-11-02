@@ -5,8 +5,9 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 ## State rules
 
 - Read `state` in the `README.md` front matter before any task.
-- Work must fit the state. Allowed: scaffold → Scaffold. explore → Literature review, Investigation. design → Experimental design, Prototype. progressing → Study analysis, Hillclimb, Data forensics, Prototype, Reproduce. ready-for-publish → Manuscript writing, Presentation, Peer review, Package results. closed → Reviewer response. If the request does not fit, say so and propose the state change.
+- Work must fit the state. Allowed: explore → Literature review, Investigation. design → Experimental design, Prototype. progressing → Study analysis, Hillclimb, Data forensics, Prototype, Reproduce. ready-for-publish → Manuscript writing, Presentation, Peer review, Package results. closed → Reviewer response. If the request does not fit, say so and propose the state change.
 - Advance the state only at an approved gate (below), and add a row to the README State history. Moving backwards is allowed. Log the reason.
+- Keep the README Current tasks list to the current state's tasks. On a state change, move the finished list to `docs/rstack/<state>/tasks.md`.
 - Write each stage's documents under `docs/rstack/<state>/`.
 
 ## Layout and write permissions

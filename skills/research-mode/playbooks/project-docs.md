@@ -4,9 +4,22 @@ Write or refresh a project's `README.md` and `AGENTS.md` from the templates in `
 
 1. Read the existing files. Never overwrite facts the user wrote.
 2. Fill only what is known: from the user, from `data/raw/` metadata, from files you read. Everything else stays `TODO: unknown`. Never invent devices, subject counts, rates, or citations.
-3. README is the research state: the front matter `state`, the one-sentence question, hypotheses with their status, evidence, accepted results, open questions, and a State history row per change. Keep it short and scannable. No install, licence, or changelog sections. Lead with the conclusion (**principle-minimize-reader-load**).
-4. AGENTS.md is the stable operating contract. It changes rarely. Do not put results in it.
-5. State change: confirm the exit check for the current state with the user, set `state` and `updated`, add the History row, and create `docs/rstack/<new-state>/`. Exit checks: scaffold → explore: folders exist and a question is drafted. explore → design: literature synthesis in `docs/wiki/`, gap named, candidate hypotheses written. design → progressing: design note and analysis plan frozen, sample size justified. progressing → ready-for-publish: planned analyses done, every result accepted or rejected, pipeline rerun clean. ready-for-publish → closed: submitted, published, or abandoned, with the reason.
-6. Read both files back and report what is still `TODO`.
+3. README is the front page, kept short (**principle-minimize-reader-load**). It holds the state header, the current state's tasks, one block per research question, and the State history. No folder map, install, licence, or changelog sections.
+   - Each question owns its decision, its hypotheses with status (candidate, frozen, supported, rejected) and design link, and its evidence (data, accepted results, reproduce command).
+   - Shared data: put the detailed inventory in `data/raw/README.md` and link it from each question.
+4. AGENTS.md is the stable operating contract. It changes rarely. Do not put results or tasks in it.
+5. Tasks: seed the list from the state's defaults below plus what the user adds. Tick them as they finish.
+6. State change: confirm the exit check with the user, set `state` and `updated`, add the State history row, move the finished task list to `docs/rstack/<old-state>/tasks.md`, seed the new state's tasks, and create `docs/rstack/<new-state>/`. Moving backwards is allowed; log the reason.
+7. Read both files back and report what is still `TODO`.
+
+**States, default tasks, and exit checks**
+
+| State | Default tasks | Exit check |
+|---|---|---|
+| explore | Define scope and search terms. Search and screen. Read and synthesize into `docs/wiki/`. Name the gap. Write questions and candidate hypotheses. | Synthesis exists, gap named, each question has candidate hypotheses |
+| design | Freeze each question's hypotheses. Choose the design. Justify sample size. Write the analysis plan. Attack the design with `interrogate`. Plan data intake and ethics. | Design note and analysis plan frozen |
+| progressing | Intake data with provenance. Run the planned analyses per question. Run sensitivity checks. Accept or reject each result. Rerun the pipeline clean. | Planned analyses done, every result dispositioned, rerun clean |
+| ready-for-publish | Draft the manuscript. Verify numbers and citations. Peer-review pass. Package results. Submit. | Submitted |
+| closed | Record the reason (published or abandoned). Archive the package. | none |
 
 **Reply:** what changed, what remains unknown, and the questions you need answered to fill it.

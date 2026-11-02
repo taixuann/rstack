@@ -26,7 +26,7 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 data/raw/  docs/raw/  docs/wiki/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
 ```
 
-Each project's `README.md` carries a research state: scaffold → explore → design → progressing → ready-for-publish → closed.
+Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
 
 `data/raw` is immutable. `docs/wiki` is maintained with `karpathy-llm-wiki`.
 
@@ -38,7 +38,7 @@ Each project's `README.md` carries a research state: scaffold → explore → de
 | playbook | for |
 |---|---|
 | scaffold | blueprint-folder bootstrap for a new project |
-| project-docs | README as research state, AGENTS.md, and state changes |
+| project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, state changes |
 | investigation | a read-only question |
 | experimental-design | hypothesis, design, power, protocol |
 | study-analysis | analysing data, figures, results |
