@@ -1,6 +1,6 @@
 # Explore question bank
 
-General-purpose questions for the `proposal` playbook. Ask one at a time, recommended option first, and offer "you suggest" when the user is unsure. Skip what the user already answered. Save every answer verbatim in `docs/rstack/explore/00_interview.md`. Never invent an answer.
+General-purpose questions for the `proposal` playbook. Ask in short rounds of one to four related questions, recommended option first, and offer "you suggest" when the user is unsure. Skip what the user already answered. Save every answer verbatim in `docs/rstack/explore/00_interview.md`. Never invent an answer.
 
 **Context and goal**
 - What is the project in one or two sentences, and who is it for (thesis, paper, prototype, grant)?

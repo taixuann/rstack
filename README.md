@@ -33,13 +33,14 @@ Each project's `README.md` carries a research state: explore → design → prog
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **22 playbooks** in `skills/research-mode/playbooks/`:
+- **20 playbooks** in `skills/research-mode/playbooks/`:
 
 | playbook | for |
 |---|---|
 | scaffold | blueprint-folder bootstrap for a new project |
 | proposal-intake | interview, context, aims, milestones, work packages |
 | proposal-synthesis | questions, hypotheses, methods, feasibility, explore exit check |
+| state-review | gate review at every state exit: rules per state, findings become tasks |
 | project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, state changes |
 | investigation | a read-only question |
 | experimental-design | hypothesis, design, power, protocol |
@@ -54,11 +55,8 @@ Each project's `README.md` carries a research state: explore → design → prog
 | peer-review | reviewing others' work |
 | presentation | slides, talks, posters |
 | package-results | freezing and handing off a study |
-| authoring-a-skill | writing a skill or playbook |
-| autonomous-run | long unattended work |
-| multi-phase-plan | multi-phase studies |
-| session-pickup | resuming in-flight work |
-| pause-safely | suspending work cleanly |
+| authoring-a-skill | writing a skill or playbook, with a reuse-first sourcing ladder |
+| autonomous-run | long unattended work, with pause and resume |
 
 - **17 principles** as `principle-*` skills.
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`.
@@ -66,8 +64,13 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **Agents:** `research-agent` (delegate for playbook steps) and `paper-reader` (one paper and its Zotero annotations), both on Haiku at medium effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
 - **Setup and help:** `setup-research`, `research-help`.
-- **27 bundled domain skills**: 26 copied from the former `openscience-adapter` (literature, experimental design, figures, posters, peer review, and others), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
+- **27 bundled domain skills**: 25 copied from the former `openscience-adapter` (literature, experimental design, figures, posters, peer review, and others), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
 - **Works best with** [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer): the playbooks name its `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates` and `infographics`. Without it, those steps are skipped.
+
+## Checks and publishing
+
+- `scripts/check_plugin.py`: playbooks name only skills that exist (bundled or declared in `skills-manifest.yaml`), and the playbook list and counts match the files.
+- `scripts/publish.sh`: runs the checks, mirrors this folder into a clone of the GitHub repo, and commits. Pass `--push` to push and update the installed plugin.
 
 ## Maintainers
 

@@ -84,7 +84,7 @@ A project's `README.md` front matter carries its state. Each state has `docs/rst
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
 | closed | done, with reason | Reviewer response |
 
-Moving backwards is allowed. Log the reason. Exit checks are in the Project docs playbook.
+Moving backwards is allowed. Log the reason. Exit checks are in the Project docs playbook, and each exit runs the State review playbook first (rules in `references/state-gates/`).
 
 ## Autonomy
 
@@ -122,6 +122,7 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 
 - **Scaffold.** New project or folder setup (blueprint-folder bootstrap).
 - **Proposal intake.** Frame a new project: interview, context, aims, milestones, work packages. Runs first in explore.
+- **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
 - **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence) and AGENTS.md, and change state.
 - **Investigation.** Read-only question about the data, a method, or the literature.
 - **Experimental design.** Hypothesis, study design, power, protocol.
@@ -138,9 +139,6 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Presentation.** Slides, talks, posters.
 - **Package results.** Freeze, disposition, and hand off a finished study.
 - **Authoring a skill or playbook.** Writing or editing a SKILL.md or playbook.
-- **Autonomous run.** A long task driven to completion while the user is away.
-- **Multi-phase plan.** Work that spans phases or several deliverables.
-- **Session pickup.** Resume in-flight work from notes or a decision log.
-- **Pause safely.** Suspend in-flight work so it can resume.
+- **Autonomous run.** A long task driven to completion while the user is away, including pause and resume.
 
 Spanning two playbooks: finish the first, save its output to its home folder, then read the second.
