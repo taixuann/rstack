@@ -5,7 +5,7 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 ## State rules
 
 - Read `state` in the `README.md` front matter before any task.
-- Work must fit the state. Allowed: explore → Proposal intake, Literature review, Proposal synthesis, Investigation. design → Experimental design, Prototype. progressing → Study analysis, Hillclimb, Data forensics, Prototype, Reproduce. ready-for-publish → Manuscript writing, Presentation, Peer review, Package results. closed → Reviewer response. If the request does not fit, say so and propose the state change.
+- Work must fit the state. Allowed: explore → Proposal intake, Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation. design → Experimental design, Prototype. progressing → Study analysis, Hillclimb, Data forensics, Prototype, Reproduce. ready-for-publish → Manuscript writing, Presentation, Peer review, Package results. closed → Reviewer response. If the request does not fit, say so and propose the state change.
 - Run the State review playbook before any state change. Advance the state only at an approved gate (below), and add a row to the README State history. Moving backwards is allowed. Log the reason.
 - Each state has `docs/rstack/<state>/tasks.md`, the source of truth for tasks. After editing it, run `scripts/sync_readme_tasks.py <project>` (in the `research-mode` skill folder) so the README task block matches.
 - Write each stage's documents under `docs/rstack/<state>/`.

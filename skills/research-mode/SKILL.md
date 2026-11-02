@@ -78,7 +78,7 @@ A project's `README.md` front matter carries its state. Each state has `docs/rst
 
 | State | Focus | Playbooks |
 |---|---|---|
-| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Proposal synthesis, Investigation |
+| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
@@ -100,7 +100,7 @@ Moving backwards is allowed. Log the reason. Exit checks are in the Project docs
 
 Use `subagent_type: "research-agent"` for any subagent you spawn inside a playbook step. The chat that receives `/research-mode` runs the playbook. Never spawn a `research-agent` to run the playbook itself. Routed workflow skills (`swarm`, `arena`, `interrogate`) set their own agents.
 
-The bundled agents `research-agent` and `paper-reader` run on Haiku at medium effort. Omit `model` when spawning them so their own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
+The bundled agents `research-agent` and `paper-reader` run on Haiku at medium effort. The critics `source-critic`, `evidence-critic`, and `gap-critic` run on Sonnet at medium effort, always in a fresh context, and never review notes they wrote. Omit `model` when spawning them so their own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
 
 You own every subagent's work. Review the output and write your own summary instead of passing through theirs. A second opinion is the same prompt against a different model. Agreement is high-signal.
 
@@ -131,7 +131,9 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Reproduce.** Re-run a paper's or prior result before building on it.
 - **Data forensics.** Diagnose an anomaly in captured data. The deliverable is a diagnosis.
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
-- **Literature review.** The Zotero loop: register the collection, snapshot and read papers by colour, find more, map the gap.
+- **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
+- **Paper ingestion.** One paper to source-grounded notes (map, records, findings), frozen and reviewed by independent critics.
+- **Inquiry.** The user's questions from reading become answers, searches, and claims.
 - **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Manuscript writing.** Drafting, revising, and auditing manuscripts.
 - **Reviewer response.** Answering reviewer comments point by point.

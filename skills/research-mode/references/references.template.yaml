@@ -8,6 +8,7 @@ papers:
     cite: <First author et al. year>
     doi: <doi>
     status: snapshotted        # unread | snapshotted | read
+    review: needs_review       # needs_review | pass | repair | blocked | no_review
     snapshot: docs/raw/papers/<file>.md
     wiki: null                 # docs/wiki/<file>.md once written
     used_in: []                # 01_context, 02_aims-and-milestones, 03_literature-map, 04_questions-and-hypotheses, 05_methods-and-feasibility

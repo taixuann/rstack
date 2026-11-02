@@ -18,7 +18,7 @@ Write or refresh a project's `README.md` and `AGENTS.md` from the templates in `
 
 | State | Default tasks | Exit check |
 |---|---|---|
-| explore | Run the project interview. Write context, aims, and milestones. Register the Zotero collection and read papers. Map the literature and name the gap. Write questions and hypotheses per work package. Outline methods and feasibility. | Proposal chain holds (`interrogate`), `check_references.py` passes, each question has candidate hypotheses |
+| explore | Run the project interview. Write context, aims, and milestones. Register the Zotero collection, ingest and review papers, and run the inquiry. Map the literature and name the gap. Write questions and hypotheses per work package. Outline methods and feasibility. | Proposal chain holds (`interrogate`), `check_references.py` passes, each question has candidate hypotheses |
 | design | Freeze each question's hypotheses. Choose the design. Justify sample size. Write the analysis plan. Attack the design with `interrogate`. Plan data intake and ethics. | Design note and analysis plan frozen |
 | progressing | Intake data with provenance. Run the planned analyses per question. Run sensitivity checks. Accept or reject each result. Rerun the pipeline clean. | Planned analyses done, every result dispositioned, rerun clean |
 | ready-for-publish | Draft the manuscript. Verify numbers and citations. Peer-review pass. Package results. Submit. | Submitted |

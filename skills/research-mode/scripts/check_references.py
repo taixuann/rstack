@@ -10,6 +10,7 @@ from pathlib import Path
 import yaml
 
 STATUS = {"unread", "snapshotted", "read"}
+REVIEW = {"needs_review", "pass", "repair", "blocked", "no_review"}
 USED_IN = {"01_context", "02_aims-and-milestones", "03_literature-map",
            "04_questions-and-hypotheses", "05_methods-and-feasibility"}
 
@@ -34,6 +35,10 @@ def check(ref_file):
         for f in ("snapshot", "wiki"):
             if p.get(f) and not (root / p[f]).exists():
                 errs.append(f"{k}: {f} path not found: {p[f]}")
+        if p.get("review") and p["review"] not in REVIEW:
+            errs.append(f"{k}: review must be one of {sorted(REVIEW)}")
+        if p.get("status") == "read" and p.get("review") in ("needs_review", "repair", "blocked"):
+            errs.append(f"{k}: status read but review is {p['review']}")
         if p.get("status") in ("snapshotted", "read") and not p.get("snapshot"):
             errs.append(f"{k}: status {p['status']} needs a snapshot")
         if p.get("status") == "read" and not p.get("wiki"):
@@ -51,14 +56,14 @@ def selftest():
         (root / "docs/raw/papers").mkdir(parents=True)
         (root / "docs/raw/papers/a.md").write_text("x")
         good = {"zotero": {"collection_key": "C"}, "papers": [
-            {"key": "A", "cite": "X 2020", "status": "snapshotted", "snapshot": "docs/raw/papers/a.md", "used_in": ["01_context"]}]}
+            {"key": "A", "cite": "X 2020", "status": "snapshotted", "snapshot": "docs/raw/papers/a.md", "used_in": ["01_context"], "review": "needs_review"}]}
         f = root / "docs/rstack/references.yaml"
         f.write_text(yaml.safe_dump(good))
         assert check(f) == [], check(f)
         good["papers"][0].update(status="read", snapshot="docs/raw/papers/missing.md", used_in=["nope"])
         f.write_text(yaml.safe_dump(good))
         e = " ".join(check(f))
-        assert "not found" in e and "unknown used_in" in e and "needs a wiki" in e, e
+        assert "not found" in e and "unknown used_in" in e and "needs a wiki" in e and "review is needs_review" in e, e
     print("selftest ok")
 
 
