@@ -24,14 +24,14 @@ Write or refresh a project's `README.md` and `AGENTS.md` from the templates in `
 | ready-for-publish | Draft the manuscript. Verify numbers and citations. Peer-review pass. Package results. Submit. | Submitted |
 | closed | Record the reason (published or abandoned). Archive the package. | none |
 
-**Skills per state.** Bundled means in rstack. External means install it separately (for example from K-Dense's `scientific-agent-skills`); use it only if installed.
+**Skills per state.** Bundled means in rstack. External means install it separately (for example from `claude-scientific-writer` or K-Dense's `scientific-agent-skills`); use it only if installed.
 
 | State | Bundled | External |
 |---|---|---|
-| explore | `literature-review`, `paper-lookup`, `research-lookup`, `openalex-database`, `pyzotero`, `zotero-local`, `liteparse`, `brainstorming`, `hypotheses`, `scientific-critical-thinking`, `sources`, `citations`, `interrogate` | `scientific-brainstorming`, `scholar-evaluation` |
-| design | `experimental-design`, `statistical-power`, `statistical-conventions`, `hypotheses`, `arena`, `interrogate` | `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness`, `what-if-oracle` |
-| progressing | `analysis-report`, `figures`, `scientific-visualization`, `reproduce`, `execution-hygiene`, `compute`, `swarm` | `exploratory-data-analysis`, `statistical-analysis`, `uncertainty-and-units`, `neurokit2` (ECG and biosignals) |
-| ready-for-publish | `paper-writing`, `ml-paper-writing`, `schematics`, `scientific-slides`, `pptx-posters`, `latex-posters`, `peer-review`, `citations`, `export` | `venue-templates`, `scientific-writing` |
+| explore | `literature-review`, `paper-lookup`, `research-lookup`, `openalex-database`, `liteparse`, `zotero-cli`, `brainstorming`, `hypotheses`, `scientific-critical-thinking`, `sources`, `interrogate` | `citation-management`, `scholar-evaluation`, `deep-research` |
+| design | `experimental-design`, `hypotheses`, `arena`, `interrogate` | `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness`, `what-if-oracle` |
+| progressing | `analysis-report`, `figures`, `scientific-visualization`, `reproduce`, `swarm` | `exploratory-data-analysis`, `statistical-analysis`, `uncertainty-and-units`, `neurokit2` (ECG and biosignals) |
+| ready-for-publish | `ml-paper-writing`, `scientific-slides`, `pptx-posters`, `latex-posters`, `peer-review`, `export` | `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates`, `infographics` |
 | closed | `export`, `sources` | none |
 
 **Reply:** what changed, what remains unknown, and the questions you need answered to fill it.

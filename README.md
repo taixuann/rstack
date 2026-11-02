@@ -64,9 +64,10 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
 - **Agents:** `research-agent` (delegate for playbook steps) and `paper-reader` (one paper and its Zotero annotations), both on Haiku at medium effort.
-- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs `zotero-cli`.
+- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
 - **Setup and help:** `setup-research`, `research-help`.
-- **43 bundled domain skills** (statistics, citations, literature, figures, posters, and others), copied from the former `openscience-adapter`. Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution. Install them from Anthropic's skills if you need them.
+- **27 bundled domain skills**: 26 copied from the former `openscience-adapter` (literature, experimental design, figures, posters, peer review, and others), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
+- **Works best with** [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer): the playbooks name its `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates` and `infographics`. Without it, those steps are skipped.
 
 ## Maintainers
 
