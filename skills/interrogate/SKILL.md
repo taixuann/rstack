@@ -1,11 +1,21 @@
 ---
 name: interrogate
-description: "Adversarial review of a design, analysis, manuscript, or code: adversaries try to break it and only findings proven by a run or a traceable check survive. Use for 'interrogate', 'adversarial review', 'challenge this', 'stress test this', 'find blind spots', or 'tear this apart'. Reports findings; does not apply fixes."
+description: "Adversarial review of a design, analysis, manuscript, or code: adversaries try to break it and only findings proven by a run or a traceable check survive. Also an interview mode that probes a person's understanding with counter-cases. Use for 'interrogate', 'interrogate me', 'adversarial review', 'challenge this', 'stress test this', 'find blind spots', or 'tear this apart'. Reports findings; does not apply fixes."
 ---
 
 # Interrogate
 
 Adversaries try to break a work product. A finding survives only when a run or a traceable check proves it. Report findings; do not fix.
+
+## Interview mode (probe a person's understanding)
+
+Use when the target is what the user understands, not a document: "interrogate me", or the alignment step of the Inquiry playbook. No sub-agents.
+
+1. Say in your own words what you think the user understands and which questions they raised, theme by theme. Mark your own reading separately and label it unverified.
+2. Ask in short rounds of one to four questions, each built on the last answer. Test understanding with a counter-case, a number, or a "what would you expect if this were false?".
+3. Record each item as one of: confirmed (agrees with the source), misconception (conflicts with the source, cite the page), unknown (neither side can say), or my error (the user corrected you).
+4. Do not lecture. A misconception is shown with the passage that contradicts it, then the user decides.
+5. Output the list of items with their class, ready to become the inquiry.
 
 ## Frame
 Scope is what the user names; otherwise the current work product (latest diff, draft, or analysis). Restate the intent in your own words from the user's message and the artifacts; ask when unclear.

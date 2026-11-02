@@ -50,8 +50,8 @@ Each project's `README.md` carries a research state: explore → design → prog
 | data-forensics | diagnosing an anomaly in captured data |
 | prototype | a throwaway pilot that settles a fork |
 | literature-review | the Zotero loop: ingest papers, run the inquiry, find more, map the gap |
-| paper-ingestion | one paper to frozen notes (map, records, findings) reviewed by independent critics |
-| inquiry | the user's questions from reading become answers, searches, and claims |
+| paper-ingestion | one paper to a frozen Source Analysis reviewed by an independent critic |
+| inquiry | align the user's reading with the assistant's, interrogate both, extend, search, claim |
 | manuscript-writing | drafting and auditing manuscripts |
 | reviewer-response | answering reviewer comments |
 | peer-review | reviewing others' work |
@@ -63,7 +63,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **17 principles** as `principle-*` skills.
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
-- **Agents:** `research-agent` (delegate for playbook steps) and `paper-reader` (one paper and its Zotero annotations), both on Haiku at medium effort. Three critics (`source-critic`, `evidence-critic`, `gap-critic`) review ingested papers independently on Sonnet at medium effort.
+- **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort, plus `source-analyst` (deep read of one paper) and `paper-critic` (independent three-pass review), both on Sonnet at medium effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
 - **Setup and help:** `setup-research`, `research-help`.
 - **27 bundled domain skills**: 25 copied from the former `openscience-adapter` (literature, experimental design, figures, posters, peer review, and others), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.

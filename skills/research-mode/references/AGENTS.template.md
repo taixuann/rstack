@@ -15,9 +15,9 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 | Folder | Holds | Agents may |
 |---|---|---|
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
-| `docs/raw/papers/` | Zotero snapshots (`scripts/zotero_snapshot.py`) | Add or refresh; never hand-edit |
+| `docs/raw/papers/<cite>/` | Zotero snapshot `annotations.md` (`scripts/zotero_snapshot.py`) | Add or refresh; never hand-edit |
 | `docs/raw/inputs/` | The user's other free-form thoughts and discussions | Append new dated files; never edit |
-| `docs/wiki/` | Synthesized notes (`karpathy-llm-wiki`) | Write |
+| `docs/wiki/` | Synthesized notes (`karpathy-llm-wiki`); `papers/<cite>/` holds source analysis, alignment, review | Write; label every statement `[user]`, `[assistant]`, `[source-checked]`, or `[verified: cite]` |
 | `docs/rstack/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |
 | `docs/rstack/<state>/` | Stage documents and `tasks.md`; explore also holds the raw `00_interview.md` (append, never edit) | Write |
 | `analysis/` | Scripts, figures, tables | Write |

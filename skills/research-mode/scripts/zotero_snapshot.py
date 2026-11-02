@@ -3,10 +3,10 @@
 
 Usage: zotero_snapshot.py --out DIR (--collection KEY | ITEM_KEY ...) [--refresh]
        zotero_snapshot.py --selftest
-Needs the `zotero-cli` command. Writes one markdown file per item; skips existing
+Needs the `zotero-cli` command. Writes OUT/<slug>/annotations.md per item; skips existing
 files unless --refresh. The PDF is never copied; Zotero stays the library.
 """
-import argparse, datetime, json, re, subprocess, sys
+import argparse, datetime, json, re, subprocess, sys, tempfile
 from pathlib import Path
 
 # Highlight colour -> meaning. Yellow is an assumed "general note"; change with the user.
@@ -54,13 +54,23 @@ def render(key, meta, version, anns, today):
     return "\n".join(lines)
 
 
+def paper_path(out, name, key):
+    """One folder per paper: OUT/<slug>/annotations.md. A slug used by another paper gets the key appended."""
+    path = Path(out) / name / "annotations.md"
+    if path.exists():
+        m = re.search(r"^zotero_key: (\S+)", path.read_text(), re.M)
+        if m and m.group(1) != key:
+            path = Path(out) / f"{name}-{key}" / "annotations.md"
+    return path
+
+
 def snapshot(key, out, refresh):
     data = cli("--json", "get", "metadata", key)["data"]
     meta = data["data"]
     version = data.get("version", meta.get("version", ""))
     anns = json.loads(subprocess.run(["zotero-cli", "ann", "list", "--item-key", key, "--format", "json"],
                                      capture_output=True, text=True, check=True).stdout)
-    path = Path(out) / f"{slug(meta)}-{key}.md"
+    path = paper_path(out, slug(meta), key)
     if path.exists() and not refresh:
         print(f"exists, skipped: {path}")
         return
@@ -77,6 +87,12 @@ def selftest():
     md = render("K", {"title": "T", "creators": [{"lastName": "Lee", "firstName": "A"}], "date": "2023-01-01"}, 5, anns, "2026-01-01")
     assert "## Orange: Methods" in md and "Comment: check material" in md and "## Teal: Other" in md and "[note]" in md
     assert slug({"creators": [{"lastName": "Van Dyke"}], "date": "2020"}) == "vandyke2020"
+    with tempfile.TemporaryDirectory() as d:
+        a = paper_path(d, "lee2020", "K1")
+        assert a == Path(d) / "lee2020" / "annotations.md"
+        a.parent.mkdir(); a.write_text("---\nzotero_key: K1\n---\n")
+        assert paper_path(d, "lee2020", "K1") == a
+        assert paper_path(d, "lee2020", "K2") == Path(d) / "lee2020-K2" / "annotations.md"
     print("selftest ok")
 
 

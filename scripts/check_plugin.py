@@ -21,7 +21,7 @@ IGNORE = {"state", "tasks", "true", "false", "yaml", "unread", "snapshotted", "r
           "todo", "model", "haiku", "main", "docs", "data", "raw", "wiki", "analysis", "unknown",
           "parts", "why", "updated", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
           # plugin, repo, agent, and example names
-          "claude-scientific-writer", "scientific-agent-skills", "paper-reader", "source-critic", "evidence-critic", "gap-critic", "docx", "pdf", "pptx", "xlsx"}
+          "claude-scientific-writer", "scientific-agent-skills", "annotations", "source-analyst", "paper-critic", "docx", "pdf", "pptx", "xlsx"}
 NAME = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 
 

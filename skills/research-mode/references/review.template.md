@@ -7,10 +7,10 @@ Reviewer qualification: QUALIFYING_INDEPENDENT | NON_QUALIFYING_SAME_CONTEXT | U
 
 - Zotero item: <key>, version <n>
 - Snapshot sha256: <hash>
-- Wiki page sha256: <hash>
+- Source Analysis sha256: <hash>
 - Frozen: <date>
 
-## Source inventory (written by source-critic before it opens the wiki page)
+## Source inventory (written by paper-critic, pass 1, before it opens the Source Analysis)
 
 <Contribution, system and materials, preparation sequence, methods with instruments and settings, results including negative and null, limitations, every figure and table (material, non-material, or unresolved), supplements, references, source gaps.>
 
@@ -36,9 +36,8 @@ One row per independently repairable defect.
 
 ## Critic sections
 
-### source-critic
-### evidence-critic
-### gap-critic
+### Pass 2: evidence strength
+### Pass 3: gaps and questions
 
 ## Race check and verdict
 

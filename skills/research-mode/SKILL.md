@@ -62,8 +62,9 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ```
 data/raw/             immutable source measurements
-docs/raw/papers|inputs  paper snapshots and the user's own inputs
-docs/wiki/            synthesized notes (karpathy-llm-wiki)
+docs/raw/papers/<cite>/  per-paper Zotero snapshots (annotations.md)
+docs/raw/inputs/        the user's own inputs
+docs/wiki/              synthesized notes (karpathy-llm-wiki); papers/<cite>/ holds each paper's analysis
 docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
 analysis/             scripts, figures, tables
 manuscripts/          drafts
@@ -86,6 +87,10 @@ A project's `README.md` front matter carries its state. Each state has `docs/rst
 
 Moving backwards is allowed. Log the reason. Exit checks are in the Project docs playbook, and each exit runs the State review playbook first (rules in `references/state-gates/`).
 
+## Understanding ladder
+
+Statements in `docs/wiki/` carry a label and move up only through review: `[user]` the user's reading, `[assistant]` the assistant's reading (both unverified), `[source-checked]` confirmed by a critic against the paper, `[verified: cite]` confirmed by an external source that passed a cite-check. Claims use `[source-checked]` or above.
+
 ## Autonomy
 
 **Just do it.** Reversible work and read-only lookups proceed without asking.
@@ -100,7 +105,7 @@ Moving backwards is allowed. Log the reason. Exit checks are in the Project docs
 
 Use `subagent_type: "research-agent"` for any subagent you spawn inside a playbook step. The chat that receives `/research-mode` runs the playbook. Never spawn a `research-agent` to run the playbook itself. Routed workflow skills (`swarm`, `arena`, `interrogate`) set their own agents.
 
-The bundled agents `research-agent` and `paper-reader` run on Haiku at medium effort. The critics `source-critic`, `evidence-critic`, and `gap-critic` run on Sonnet at medium effort, always in a fresh context, and never review notes they wrote. Omit `model` when spawning them so their own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
+The bundled agent `research-agent` runs on Haiku at medium effort. `source-analyst` (deep read of one paper) and `paper-critic` (independent review) run on Sonnet at medium effort, always in a fresh context. The critic never reviews an analysis it wrote. Omit `model` when spawning them so their own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
 
 You own every subagent's work. Review the output and write your own summary instead of passing through theirs. A second opinion is the same prompt against a different model. Agreement is high-signal.
 
@@ -132,8 +137,8 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Data forensics.** Diagnose an anomaly in captured data. The deliverable is a diagnosis.
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
 - **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
-- **Paper ingestion.** One paper to source-grounded notes (map, records, findings), frozen and reviewed by independent critics.
-- **Inquiry.** The user's questions from reading become answers, searches, and claims.
+- **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
+- **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
 - **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Manuscript writing.** Drafting, revising, and auditing manuscripts.
 - **Reviewer response.** Answering reviewer comments point by point.
