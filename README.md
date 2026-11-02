@@ -23,19 +23,22 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 ## Standard project layout
 
 ```
-data/raw/  docs/raw/  docs/wiki/  analysis/  manuscripts/  presentation/
+data/raw/  docs/raw/  docs/wiki/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
 ```
+
+Each project's `README.md` carries a research state: scaffold → explore → design → progressing → ready-for-publish → closed.
 
 `data/raw` is immutable. `docs/wiki` is maintained with `karpathy-llm-wiki`.
 
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **19 playbooks** in `skills/research-mode/playbooks/`:
+- **20 playbooks** in `skills/research-mode/playbooks/`:
 
 | playbook | for |
 |---|---|
 | scaffold | blueprint-folder bootstrap for a new project |
+| project-docs | README as research state, AGENTS.md, and state changes |
 | investigation | a read-only question |
 | experimental-design | hypothesis, design, power, protocol |
 | study-analysis | analysing data, figures, results |

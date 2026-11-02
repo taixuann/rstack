@@ -11,7 +11,7 @@ Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's a
 
 The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.
 
-- First message on a task → read `research-profile.md` in the research-space root if it exists (written by `setup-research`). Then tell the user, in your own words, the research question, the decision it supports, and the smallest output that meets it. Don't wait for confirmation. If the evidence rules out what the user asked for, show it and stop. Restate the question in each subagent brief and open each final report with it.
+- First message on a task → read `research-profile.md` in the research-space root if it exists (written by `setup-research`), and the `state` in the project's `README.md` front matter. If the request does not fit the state, say so and propose the state change (**Project docs** playbook). Then tell the user, in your own words, the research question, the decision it supports, and the smallest output that meets it. Don't wait for confirmation. If the evidence rules out what the user asked for, show it and stop. Restate the question in each subagent brief and open each final report with it.
 - About to ask "which approach" or "what should this do" → classify it first. If the answer is a fact you could observe by running something (a pilot on one subject, a quick plot, a power calculation), it is not the human's to answer. Run the Prototype playbook and let the result decide. Reserve the question for a real preference or scientific judgment no run can settle.
 - Any code that touches data → name the data shape first (**principle-model-the-domain**). Raw data is read-only (**principle-raw-data-is-read-only**).
 - Any measured number → **principle-explain-the-number** before you report it.
@@ -63,12 +63,28 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 ```
 data/raw/             immutable source measurements
 docs/raw/  docs/wiki/ literature sources and the synthesized wiki (karpathy-llm-wiki)
-analysis/             scripts, figures, tables, design notes
+docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
+analysis/             scripts, figures, tables
 manuscripts/          drafts
 presentation/         slides, posters, talk notes
 ```
 
-Create missing folders, never rename existing ones. Each stage writes into its home folder so the next stage finds it: design note, then analysis, then manuscript and slides. `data/raw` holds measurements and `docs/raw` holds literature. Keep them separate.
+Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/raw` holds literature. Keep them separate.
+
+## Research states
+
+A project's `README.md` front matter carries its state. Advance it only at an approved gate, and add a State history row.
+
+| State | Focus | Playbooks |
+|---|---|---|
+| scaffold | folders and question drafted | Scaffold, Project docs |
+| explore | literature explore and review | Literature review, Investigation |
+| design | design the whole study | Experimental design, Prototype |
+| progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
+| ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
+| closed | done, with reason | Reviewer response |
+
+Moving backwards is allowed. Log the reason. Exit checks are in the Project docs playbook.
 
 ## Autonomy
 
@@ -105,6 +121,7 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
 - **Scaffold.** New project or folder setup (blueprint-folder bootstrap).
+- **Project docs.** Write or refresh a project's README (research state) and AGENTS.md, and change state.
 - **Investigation.** Read-only question about the data, a method, or the literature.
 - **Experimental design.** Hypothesis, study design, power, protocol.
 - **Study analysis.** Exploring, analysing, or interpreting data; figures.

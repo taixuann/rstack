@@ -1,6 +1,6 @@
 ### Investigation
 
-**Read-only.** A question about what the data, a method, or the literature shows: how does X work, why was Y done this way, are we sure about Z. The deliverable is a cited answer, not new analysis.
+**Read-only. Allowed in any state.** A question about what the data, a method, or the literature shows: how does X work, why was Y done this way, are we sure about Z. The deliverable is a cited answer, not new analysis.
 
 1. Restate the question and what would count as an answer.
 2. Gather evidence from files and sources you read: `data/` metadata, `analysis/` outputs, `docs/wiki/`, papers via `paper-lookup`. Use `swarm` when slices are independent.

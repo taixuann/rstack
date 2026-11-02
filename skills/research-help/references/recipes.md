@@ -3,7 +3,7 @@
 **Recipes**
 - New project: `/research-mode scaffold projects/res_<name> and write a one-page README with the question.`
 - Design: `/research-mode design the study for <question>. Argue the best alternative design first.`
-- Analysis: `/research-mode analyse data/raw/<file> per the plan in analysis/design/<note>. Label post-hoc findings.`
+- Analysis: `/research-mode analyse data/raw/<file> per the plan in docs/rstack/design/<note>. Label post-hoc findings.`
 - Literature: `/research-mode review the literature on <topic>; sources to docs/raw, notes to docs/wiki.`
 - Manuscript: `/research-mode draft the Methods section; every number copied from analysis/.`
 - Review: `/research-mode peer-review manuscripts/<draft>.md and separate blocking issues.`

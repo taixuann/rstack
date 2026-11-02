@@ -17,7 +17,7 @@ Write each row as you would tell a teammate what you did: concrete actions, plai
 A run is one agent conversation. When a run adds to a log that already has rows, its first row has phase `start`, naming the `ts` range of rows it did not write; use `start` for nothing else.
 
 ## Where it lives
-Default `decisions.tsv` in the work folder (for research projects `analysis/decisions.tsv`), or `.audit/<task-slug>.tsv` when several efforts run at once. Commit it when a reviewer needs the trail to trust the result.
+Default `decisions.tsv` in the work folder (for research projects `docs/rstack/decisions.tsv`), or `.audit/<task-slug>.tsv` when several efforts run at once. Commit it when a reviewer needs the trail to trust the result.
 
 ## Rules
 - Append-only. A wrong call gets a new row that supersedes it; never edit or delete history.
