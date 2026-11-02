@@ -33,11 +33,12 @@ Each project's `README.md` carries a research state: explore → design → prog
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **20 playbooks** in `skills/research-mode/playbooks/`:
+- **21 playbooks** in `skills/research-mode/playbooks/`:
 
 | playbook | for |
 |---|---|
 | scaffold | blueprint-folder bootstrap for a new project |
+| proposal | frame a new project: interview, aims, milestones, work packages, feasibility |
 | project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, state changes |
 | investigation | a read-only question |
 | experimental-design | hypothesis, design, power, protocol |

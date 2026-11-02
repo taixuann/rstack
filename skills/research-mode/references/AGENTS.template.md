@@ -5,9 +5,9 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 ## State rules
 
 - Read `state` in the `README.md` front matter before any task.
-- Work must fit the state. Allowed: explore → Literature review, Investigation. design → Experimental design, Prototype. progressing → Study analysis, Hillclimb, Data forensics, Prototype, Reproduce. ready-for-publish → Manuscript writing, Presentation, Peer review, Package results. closed → Reviewer response. If the request does not fit, say so and propose the state change.
+- Work must fit the state. Allowed: explore → Proposal, Literature review, Investigation. design → Experimental design, Prototype. progressing → Study analysis, Hillclimb, Data forensics, Prototype, Reproduce. ready-for-publish → Manuscript writing, Presentation, Peer review, Package results. closed → Reviewer response. If the request does not fit, say so and propose the state change.
 - Advance the state only at an approved gate (below), and add a row to the README State history. Moving backwards is allowed. Log the reason.
-- Keep the README Current tasks list to the current state's tasks. On a state change, move the finished list to `docs/rstack/<state>/tasks.md`.
+- Each state has `docs/rstack/<state>/tasks.md`, the source of truth for tasks. After editing it, run `scripts/sync_readme_tasks.py <project>` (in the `research-mode` skill folder) so the README task block matches.
 - Write each stage's documents under `docs/rstack/<state>/`.
 
 ## Layout and write permissions
@@ -16,9 +16,9 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 |---|---|---|
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
 | `docs/raw/papers/` | Zotero snapshots (`scripts/zotero_snapshot.py`) | Add or refresh; never hand-edit |
-| `docs/raw/inputs/` | The user's thoughts, interviews, discussions | Append new dated files; never edit |
+| `docs/raw/inputs/` | The user's other free-form thoughts and discussions | Append new dated files; never edit |
 | `docs/wiki/` | Synthesized notes (`karpathy-llm-wiki`) | Write |
-| `docs/rstack/<state>/` | Stage documents, `decisions.tsv` | Write |
+| `docs/rstack/<state>/` | Stage documents and `tasks.md`; explore also holds the raw `00_interview.md` (append, never edit) | Write |
 | `analysis/` | Scripts, figures, tables | Write |
 | `manuscripts/`, `presentation/` | Drafts and talks | Write; numbers come from `analysis/` |
 

@@ -2,6 +2,6 @@
   "name": "rstack",
   "owner": { "name": "taixuann" },
   "plugins": [
-    { "name": "rstack", "source": "./", "description": "Research counterpart to pstack: research-mode with 20 playbooks, 17 principles, reflect and correct, plus bundled domain skills." }
+    { "name": "rstack", "source": "./", "description": "Research counterpart to pstack: research-mode with 21 playbooks, 17 principles, reflect and correct, plus bundled domain skills." }
   ]
 }

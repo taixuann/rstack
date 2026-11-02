@@ -9,17 +9,29 @@ updated: YYYY-MM-DD
 >
 > **Current state: explore.** <One sentence on where the project stands.>
 
-## Current tasks
+## Tasks
 
-- [ ] <task for the current state>
+<!-- tasks:start -->
+<!-- tasks:end -->
 
-## Q1: <research question>
+## Contents
+
+Link each file once it exists.
+
+- Explore: [interview](docs/rstack/explore/00_interview.md) · [context](docs/rstack/explore/01_context.md) · [aims and milestones](docs/rstack/explore/02_aims-and-milestones.md) · [literature map](docs/rstack/explore/03_literature-map.md) · [questions and hypotheses](docs/rstack/explore/04_questions-and-hypotheses.md) · [methods and feasibility](docs/rstack/explore/05_methods-and-feasibility.md)
+- Wiki: [docs/wiki/](docs/wiki/) · Papers: [docs/raw/papers/](docs/raw/papers/)
+
+Add a line per state as it starts (design, progressing, ready-for-publish).
+
+## WP1: <work package name>
+
+### Q1.1: <research question>
 
 **Decision it supports:** <one sentence>
 
 | Hypothesis | Status | Design |
 |---|---|---|
-| H1.1 <falsifiable statement> | candidate | not yet |
+| H1.1.1 <falsifiable statement> | candidate | not yet |
 
 Status runs candidate → frozen (at design) → supported or rejected (during progressing).
 
