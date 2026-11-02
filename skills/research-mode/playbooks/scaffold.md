@@ -15,7 +15,7 @@ presentation/    slides, posters, talk notes
 
 1. Confirm the target folder (default: the project folder the user names under research-space/projects/).
 2. Create the folders above with `.gitkeep`; skip existing ones. `docs/rstack/<state>/` folders are created when a project enters that state. Map legacy folders instead of moving them (`docs/manuscripts` → `manuscripts`, `docs/presentation` → `presentation`, `docs/experiments` → `docs/rstack/design`) and ask before moving anything.
-3. Run **Project docs** to write `README.md` and `AGENTS.md` with `state: explore`, `docs/rstack/explore/tasks.md`, and the task block. Then offer the **Proposal** playbook. Scaffold is a trigger, not a state.
+3. Run **Project docs** to write `README.md` and `AGENTS.md` with `state: explore`, `docs/rstack/explore/tasks.md`, and the task block. Then offer the **Proposal intake** playbook. Scaffold is a trigger, not a state.
 4. Read the tree back from disk and report it.
 
 `data/raw` holds measurements and `docs/raw` holds literature. Keep them separate. Derived data goes in `analysis/`, never back into `data/raw`.

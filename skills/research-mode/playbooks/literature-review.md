@@ -1,13 +1,17 @@
-# Literature review and discussion
+# Literature review (Zotero loop)
 
-State: explore, after the Proposal interview. Output: `docs/rstack/explore/03_literature-map.md` (themes, search log, gap), paper snapshots in `docs/raw/papers/`, notes in `docs/wiki/` via `karpathy-llm-wiki`.
+State: explore. Output: `docs/rstack/explore/03_literature-map.md` (themes, search log, gap), `docs/rstack/references.yaml`, paper snapshots in `docs/raw/papers/`, notes in `docs/wiki/` via `karpathy-llm-wiki`. Runs after **Proposal intake** and repeats as the user reads more papers.
 
-0. Read `00_interview.md`, `01_context.md`, and `02_aims-and-milestones.md`. The search serves the work packages and questions they name. If they do not exist yet, run the **Proposal** playbook first.
-1. Define the question and inclusion criteria before searching.
-2. `literature-review` is the main skill (find, rank, read, synthesise). `paper-lookup` for the scholarly APIs, `openalex-database` for bibliometric queries, `research-lookup` for a focused fact. For papers already in Zotero, run `scripts/zotero_snapshot.py --collection <key> --out docs/raw/papers` (the `paper-reader` agent can do one paper at a time). `swarm` fans out one worker per paper.
-3. Read PDFs with `liteparse`. Resolve every DOI before listing a paper.
-4. **Highlight colours** in Zotero carry meaning: purple interpretation and context, orange methods, green results, blue mechanism, red unclear or doubtful, yellow general notes. Read each paper by colour. Judge orange (methods) with `scientific-critical-thinking`. Turn blue and red items, and purple comments phrased as questions, into open questions and candidate hypotheses (`brainstorming`, `hypotheses`).
-5. Wiki page per paper in `docs/wiki/`: Context, Methods, Results, Mechanism, Open questions, taken from the matching colours. List a paper as read only if you read it; mark abstract-only.
-6. Synthesise by theme and by conflict between studies, then name the gap the project fills. `sources` audits whether a claim matches its source.
-7. `citations` to verify every reference resolves and matches the claim. Never cite from memory.
-8. Write the gap into `03_literature-map.md`, then continue the Proposal playbook (`04` and `05`, then the exit check).
+1. Read `00_interview.md`, `01_context.md`, and `02_aims-and-milestones.md`. The search serves the work packages they name. If they do not exist yet, run **Proposal intake** first.
+2. **Register the collection.** Record the Zotero collection (name and key) at the top of `docs/rstack/references.yaml` (template in `references/references.template.yaml`). The user keeps all papers in one flat collection.
+3. **Snapshot.** For each new item run `scripts/zotero_snapshot.py <key> --out docs/raw/papers`, or the whole collection with `--collection <key>`. Add each paper to `references.yaml` with `status: snapshotted`. `swarm` fans out one `paper-reader` agent per paper.
+4. **Read by colour.** Zotero highlight colours carry meaning: purple interpretation and context, orange methods, green results, blue mechanism, red unclear or doubtful, yellow general notes. The `paper-reader` agent writes the wiki page (Context, Methods, Results, Mechanism, Open questions) and drafts `used_in`, `parts`, and `why` for the user to confirm. Set `status: read` only for papers actually read. Mark abstract-only.
+5. **Judge.** `scientific-critical-thinking` on orange (methods) and on any strong claim. Turn blue and red items and purple comments phrased as questions into open questions (`brainstorming`).
+6. **Find more.** Discovery only suggests candidates. Every candidate is resolved to a DOI and approved by the user before it enters Zotero.
+   - `paper-lookup` and `openalex-database` for targeted searches.
+   - `deep-research` for a landscape of a domain the user is new to. Treat its report as an unverified lead list.
+   - HyperResearch only on request: `/opt/miniconda3/envs/core/bin/hyperresearch scholar search "<query>" --scope papers -j` for citation-ranked results. The full pipeline is slow and heavy.
+7. **Map.** Write `03_literature-map.md`: themes, conflicts between studies, search log, and the gap, with links to `docs/wiki/` and the papers by cite. `sources` audits whether a claim matches its source. `citations` verifies every reference resolves.
+8. Run `scripts/check_references.py docs/rstack/references.yaml` and fix what it reports. Then continue with **Proposal synthesis**.
+
+**Reply:** papers added and read, the gap, and open questions the user must decide.

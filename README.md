@@ -33,12 +33,13 @@ Each project's `README.md` carries a research state: explore → design → prog
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **21 playbooks** in `skills/research-mode/playbooks/`:
+- **22 playbooks** in `skills/research-mode/playbooks/`:
 
 | playbook | for |
 |---|---|
 | scaffold | blueprint-folder bootstrap for a new project |
-| proposal | frame a new project: interview, aims, milestones, work packages, feasibility |
+| proposal-intake | interview, context, aims, milestones, work packages |
+| proposal-synthesis | questions, hypotheses, methods, feasibility, explore exit check |
 | project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, state changes |
 | investigation | a read-only question |
 | experimental-design | hypothesis, design, power, protocol |
@@ -47,7 +48,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 | reproduce | re-running a published or prior result |
 | data-forensics | diagnosing an anomaly in captured data |
 | prototype | a throwaway pilot that settles a fork |
-| literature-review | finding, reading, verifying papers |
+| literature-review | the Zotero loop: snapshot, read by colour, find more, map the gap |
 | manuscript-writing | drafting and auditing manuscripts |
 | reviewer-response | answering reviewer comments |
 | peer-review | reviewing others' work |
@@ -63,7 +64,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
 - **Agents:** `research-agent` (delegate for playbook steps) and `paper-reader` (one paper and its Zotero annotations), both on Haiku at medium effort.
-- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`. Needs `zotero-cli`.
+- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs `zotero-cli`.
 - **Setup and help:** `setup-research`, `research-help`.
 - **43 bundled domain skills** (statistics, citations, literature, figures, posters, and others), copied from the former `openscience-adapter`. Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution. Install them from Anthropic's skills if you need them.
 

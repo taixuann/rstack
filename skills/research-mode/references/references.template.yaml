@@ -1,0 +1,15 @@
+# Zotero stays the library. This file records which papers matter and why.
+zotero:
+  library: My Library
+  collection: <collection name>
+  collection_key: <key>
+papers:
+  - key: <zotero item key>
+    cite: <First author et al. year>
+    doi: <doi>
+    status: snapshotted        # unread | snapshotted | read
+    snapshot: docs/raw/papers/<file>.md
+    wiki: null                 # docs/wiki/<file>.md once written
+    used_in: []                # 01_context, 02_aims-and-milestones, 03_literature-map, 04_questions-and-hypotheses, 05_methods-and-feasibility
+    parts: []                  # slugs of the work package names
+    why: ""                    # one line: what this paper gives the project
