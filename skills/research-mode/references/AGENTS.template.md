@@ -15,11 +15,16 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 | Folder | Holds | Agents may |
 |---|---|---|
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
-| `docs/raw/` | Papers and datasheets | Add after the source is resolved |
+| `docs/raw/papers/` | Zotero snapshots (`scripts/zotero_snapshot.py`) | Add or refresh; never hand-edit |
+| `docs/raw/inputs/` | The user's thoughts, interviews, discussions | Append new dated files; never edit |
 | `docs/wiki/` | Synthesized notes (`karpathy-llm-wiki`) | Write |
 | `docs/rstack/<state>/` | Stage documents, `decisions.tsv` | Write |
 | `analysis/` | Scripts, figures, tables | Write |
 | `manuscripts/`, `presentation/` | Drafts and talks | Write; numbers come from `analysis/` |
+
+## Zotero highlight colours
+
+Purple: interpretation and context. Orange: methods. Green: results. Blue: mechanism. Red: unclear or doubtful. Yellow: general notes. Comments carry the user's own questions.
 
 ## Data protection
 

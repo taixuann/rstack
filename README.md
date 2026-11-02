@@ -23,7 +23,7 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 ## Standard project layout
 
 ```
-data/raw/  docs/raw/  docs/wiki/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
+data/raw/  docs/raw/{papers,inputs}/  docs/wiki/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
 ```
 
 Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
@@ -61,9 +61,10 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **17 principles** as `principle-*` skills.
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
-- **Agent:** `research-agent`, the delegate for playbook steps.
+- **Agents:** `research-agent` (delegate for playbook steps) and `paper-reader` (one paper and its Zotero annotations), both on Haiku at medium effort.
+- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`. Needs `zotero-cli`.
 - **Setup and help:** `setup-research`, `research-help`.
-- **42 bundled domain skills** (statistics, citations, literature, figures, posters, and others), copied from the former `openscience-adapter`. Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution. Install them from Anthropic's skills if you need them.
+- **43 bundled domain skills** (statistics, citations, literature, figures, posters, and others), copied from the former `openscience-adapter`. Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution. Install them from Anthropic's skills if you need them.
 
 ## Maintainers
 

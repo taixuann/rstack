@@ -23,3 +23,5 @@ SOFTWARE.
 
 Bundled domain skills keep the license they declare in their own SKILL.md
 frontmatter (mostly MIT, one Apache-2.0). openalex-database declares no license.
+
+scientific-critical-thinking is from K-Dense's scientific-agent-skills (MIT License, Copyright (c) 2025 K-Dense Inc.).

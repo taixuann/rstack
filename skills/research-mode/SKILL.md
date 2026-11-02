@@ -62,7 +62,8 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ```
 data/raw/             immutable source measurements
-docs/raw/  docs/wiki/ literature sources and the synthesized wiki (karpathy-llm-wiki)
+docs/raw/papers|inputs  paper snapshots and the user's own inputs
+docs/wiki/            synthesized notes (karpathy-llm-wiki)
 docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
 analysis/             scripts, figures, tables
 manuscripts/          drafts
@@ -99,7 +100,7 @@ Moving backwards is allowed. Log the reason. Exit checks are in the Project docs
 
 Use `subagent_type: "research-agent"` for any subagent you spawn inside a playbook step. The chat that receives `/research-mode` runs the playbook. Never spawn a `research-agent` to run the playbook itself. Routed workflow skills (`swarm`, `arena`, `interrogate`) set their own agents.
 
-Defaults for every spawn: run in the background, give file pointers instead of inlined data, and pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine scripting goes to a faster one. With no rule, omit `model`.
+The bundled agents `research-agent` and `paper-reader` run on Haiku at medium effort. Omit `model` when spawning them so their own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
 
 You own every subagent's work. Review the output and write your own summary instead of passing through theirs. A second opinion is the same prompt against a different model. Agreement is high-signal.
 

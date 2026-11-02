@@ -4,7 +4,8 @@ Standard research-project layout. Create the missing folders, never rename or ov
 
 ```
 data/raw/        immutable source measurements; never edit, never regenerate
-docs/raw/        source papers, PDFs, web captures (input to the wiki)
+docs/raw/papers/ Zotero snapshots of papers with colour-coded annotations
+docs/raw/inputs/ your thoughts, interviews, and discussions, dated and never edited
 docs/wiki/       synthesized knowledge, maintained with `karpathy-llm-wiki`
 docs/rstack/     written documents of each stage, in <state>/ subfolders
 analysis/        scripts, figures, tables
