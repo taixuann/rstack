@@ -15,8 +15,9 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 | Folder | Holds | Agents may |
 |---|---|---|
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
-| `docs/raw/papers/<cite>/` | Zotero snapshot `annotations.md` (`scripts/zotero_snapshot.py`) | Add or refresh; never hand-edit |
-| `docs/raw/inputs/` | The user's other free-form thoughts and discussions | Append new dated files; never edit |
+| `docs/raw/papers/<cite>/` | Zotero snapshot `annotations.md` (`scripts/zotero_snapshot.py`) and `learning-<date>.md` records | Add or refresh the snapshot; append new dated files; never hand-edit |
+| `docs/raw/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought) | Append new dated files; never edit |
+| `docs/raw/reports/` | Deep-research and HyperResearch outputs. Leads, not read papers | Append new dated files; never edit; use nothing until checked against a paper |
 | `docs/wiki/` | Synthesized notes (`karpathy-llm-wiki`); `papers/<cite>/` holds source analysis, alignment, review | Write; label every statement `[user]`, `[assistant]`, `[source-checked]`, or `[verified: cite]` |
 | `docs/rstack/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |
 | `docs/rstack/<state>/` | Stage documents and `tasks.md`; explore also holds the raw `00_interview.md` (append, never edit) | Write |

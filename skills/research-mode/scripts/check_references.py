@@ -5,14 +5,34 @@ Usage: check_references.py REFERENCES_YAML   |   check_references.py --selftest
 Paths are relative to the project root (two levels above docs/rstack/).
 Exit 1 and print each problem when a check fails.
 """
-import sys, tempfile
+import re, sys, tempfile
 from pathlib import Path
 import yaml
 
 STATUS = {"unread", "snapshotted", "read"}
 REVIEW = {"needs_review", "pass", "repair", "blocked", "no_review"}
+KINDS = {"understanding", "learning", "supervisor", "result-thought"}
+DATED = r"\d{4}-\d{2}-\d{2}"
 USED_IN = {"01_context", "02_aims-and-milestones", "03_literature-map",
            "04_questions-and-hypotheses", "05_methods-and-feasibility"}
+
+
+def check_raw(root):
+    """Raw inputs and reports are dated; inputs carry a known kind. Files starting with . or README are skipped."""
+    errs = []
+    for f in sorted((root / "docs/raw/inputs").glob("*")):
+        if f.name.startswith(".") or f.name.startswith("README"):
+            continue
+        m = re.fullmatch(DATED + r"_([a-z-]+)_[a-z0-9-]+\.md", f.name)
+        if not m or m.group(1) not in KINDS:
+            errs.append(f"inputs/{f.name}: name must be <date>_<kind>_<slug>.md, kind in {sorted(KINDS)}")
+    for f in sorted((root / "docs/raw/reports").glob("*")):
+        if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
+            errs.append(f"reports/{f.name}: name must be <date>_<tool>_<slug>.md")
+    for f in sorted((root / "docs/raw/papers").glob("*/learning-*")):
+        if not re.fullmatch(r"learning-" + DATED + r"\.md", f.name):
+            errs.append(f"papers/{f.parent.name}/{f.name}: name must be learning-<date>.md")
+    return errs
 
 
 def check(ref_file):
@@ -46,7 +66,7 @@ def check(ref_file):
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
-    return errs
+    return errs + check_raw(root)
 
 
 def selftest():
@@ -64,6 +84,11 @@ def selftest():
         f.write_text(yaml.safe_dump(good))
         e = " ".join(check(f))
         assert "not found" in e and "unknown used_in" in e and "needs a wiki" in e and "review is needs_review" in e, e
+        (root / "docs/raw/inputs").mkdir()
+        (root / "docs/raw/inputs/2026-11-02_learning_ecg.md").write_text("x")
+        (root / "docs/raw/inputs/notes.md").write_text("x")
+        e = " ".join(check(f))
+        assert "inputs/notes.md" in e and "2026-11-02_learning" not in e, e
     print("selftest ok")
 
 

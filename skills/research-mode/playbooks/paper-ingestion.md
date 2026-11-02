@@ -2,7 +2,7 @@
 
 State: explore, once per paper. Produce the assistant's independent reading of one paper, freeze it, and have a critic review it. The analyst and the critic are always separate agents in fresh contexts. A review in the same context is `NON_QUALIFYING_SAME_CONTEXT` and cannot give a PASS. This is the assistant's side of the understanding ladder. The user's side is their annotations, and **Inquiry** brings the two together.
 
-Per-paper folders: `docs/raw/papers/<cite>/annotations.md` (the user's Zotero snapshot, raw) and `docs/wiki/papers/<cite>/` with `source-analysis.md`, `review.md`, and later `alignment.md`.
+Per-paper folders: `docs/raw/papers/<cite>/annotations.md` (the user's Zotero snapshot, raw; `learning-<date>.md` records from the **Learning** playbook sit beside it) and `docs/wiki/papers/<cite>/` with `source-analysis.md`, `review.md`, and later `alignment.md`.
 
 **Route.** The user marks key papers. `FULL` for key papers and for any paper whose analysis changed in a major way. `SCOPED` for a local repair to an analysis that already passed. `NO_REVIEW` for background papers; they are context only and never the sole support for a claim.
 

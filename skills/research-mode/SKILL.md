@@ -62,14 +62,17 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ```
 data/raw/             immutable source measurements
-docs/raw/papers/<cite>/  per-paper Zotero snapshots (annotations.md)
-docs/raw/inputs/        the user's own inputs
+docs/raw/papers/<cite>/  per-paper Zotero snapshot (annotations.md) and learning-<date>.md records
+docs/raw/inputs/        the user's own words, dated: <date>_<kind>_<slug>.md
+docs/raw/reports/       deep-research and HyperResearch outputs: leads, not read papers
 docs/wiki/              synthesized notes (karpathy-llm-wiki); papers/<cite>/ holds each paper's analysis
 docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
 analysis/             scripts, figures, tables
 manuscripts/          drafts
 presentation/         slides, posters, talk notes
 ```
+
+Raw is what came in and is never edited. Wiki is what we understand, with ladder labels. `docs/rstack/<state>/` is the work in progress. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/raw/reports/` is used until checked against a paper.
 
 Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/raw` holds literature. Keep them separate.
 
@@ -79,7 +82,7 @@ A project's `README.md` front matter carries its state. Each state has `docs/rst
 
 | State | Focus | Playbooks |
 |---|---|---|
-| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
+| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Paper ingestion, Learning, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
@@ -138,6 +141,7 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
 - **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
 - **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
+- **Learning.** The user teaches back, the assistant finds the gaps, and the session is recorded. Any state.
 - **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
 - **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Manuscript writing.** Drafting, revising, and auditing manuscripts.
