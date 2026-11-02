@@ -24,6 +24,6 @@ SOFTWARE.
 Bundled domain skills keep the license they declare in their own SKILL.md
 frontmatter (mostly MIT, one Apache-2.0). openalex-database declares no license.
 
-scientific-critical-thinking is from K-Dense's scientific-agent-skills (MIT License, Copyright (c) 2025 K-Dense Inc.).
+scientific-critical-thinking, statistical-analysis, statistical-power, exploratory-data-analysis, uncertainty-and-units and what-if-oracle are from K-Dense's scientific-agent-skills (MIT License, Copyright (c) 2025 K-Dense Inc.).
 zotero-cli (skill text) is from zotero-mcp (https://github.com/54yyyu/zotero-mcp), MIT License.
 skill-creator is from Anthropic's skills repository (Apache License 2.0; see skills/skill-creator/LICENSE.txt).
