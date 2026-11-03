@@ -51,6 +51,39 @@ def check_readmes(root):
     return errs
 
 
+def check_notes(root):
+    """Notes the user reads in Obsidian: front matter, no mermaid block, embeds resolve, diagrams fresh, comments balanced."""
+    errs = []
+    base = root / "docs"
+    files = [f for d in ("literature-review", "inputs") for f in sorted((base / d).rglob("*.md"))]
+    for f in files:
+        if f.name == "annotations.md":
+            continue
+        rel = f.relative_to(root)
+        text = f.read_text()
+        m = re.match(r"---\n(.*?)\n---\n", text, re.S)
+        keys = set(re.findall(r"^(\w+):", m.group(1), re.M)) if m else set()
+        need = {"created", "updated", "kind", "voice"}
+        if "papers" in f.parts:
+            need.add("paper")
+        if need - keys:
+            errs.append(f"{rel}: front matter missing {sorted(need - keys)}")
+        if "```mermaid" in text:
+            errs.append(f"{rel}: mermaid block; write figures/<name>.mmd, run scripts/render_diagram.mjs, embed the SVG")
+        for e in re.findall(r"!\[\[([^\]|]+)", text):
+            if not (f.parent / e).exists():
+                errs.append(f"{rel}: embed not found: {e}")
+        ids = lambda pat: set(re.findall(pat, text))
+        opened, closed, threads = ids(r"<!--c:(\w+)-->"), ids(r"<!--/c:(\w+)-->"), ids(r"<!--co:(\w+)")
+        if not (opened == closed == threads):
+            errs.append(f"{rel}: unbalanced comment markers {sorted(opened ^ closed | opened ^ threads)}; restore them, never delete half a comment")
+    for mmd in sorted(base.rglob("*.mmd")):
+        svg = mmd.with_suffix(".svg")
+        if not svg.exists() or svg.stat().st_mtime < mmd.stat().st_mtime:
+            errs.append(f"{mmd.relative_to(root)}: SVG missing or older; run scripts/render_diagram.mjs on it")
+    return errs
+
+
 def check(ref_file):
     ref_file = Path(ref_file)
     root = ref_file.resolve().parents[2]
@@ -82,7 +115,7 @@ def check(ref_file):
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
-    return errs + check_raw(root) + check_readmes(root)
+    return errs + check_raw(root) + check_readmes(root) + check_notes(root)
 
 
 def selftest():
@@ -113,7 +146,21 @@ def selftest():
         e = " ".join(check(f))
         assert "Contents does not link docs/literature-review/papers/b/README.md" in e, e
         (root / "README.md").write_text("docs/literature-review/papers/b/README.md")
-        assert "README" not in " ".join(check(f)), check(f)
+        e = " ".join(check(f))
+        assert "papers/b/README.md: front matter missing" in e, e
+        b = root / "docs/literature-review/papers/b"
+        fm = "---\ncreated: x\nupdated: x\nkind: k\nvoice: v\npaper: b\n---\n"
+        (b / "README.md").write_text(fm + "```mermaid\nx\n```\n![[figures/f.svg]]\n<!--c:q1-->t<!--/c:q1-->\n")
+        e = " ".join(check(f))
+        assert "mermaid block" in e and "embed not found: figures/f.svg" in e and "unbalanced comment markers ['q1']" in e, e
+        (b / "figures").mkdir()
+        (b / "figures/f.mmd").write_text("flowchart LR\n A-->B")
+        e = " ".join(check(f))
+        assert "f.mmd: SVG missing or older" in e, e
+        (b / "figures/f.svg").write_text("<svg/>")
+        (root / "docs/literature-review/papers/a.md").write_text(fm)
+        (b / "README.md").write_text(fm + "![[figures/f.svg]]\n<!--c:q1-->t<!--/c:q1-->\n<!--co:q1 by:me status:open\nme (x): hi\n-->\n")
+        assert check(f) == [], check(f)
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         (root / "docs/literature-review/reports").mkdir(parents=True)

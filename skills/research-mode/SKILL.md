@@ -142,6 +142,7 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
 - **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
 - **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
+- **Obsidian writing.** Writing notes the user reads and comments on in Obsidian: placement, front matter, Pele diagrams, comment threads.
 - **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
 - **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Manuscript writing.** Drafting, revising, and auditing manuscripts.

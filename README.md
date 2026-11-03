@@ -33,7 +33,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **20 playbooks** in `skills/research-mode/playbooks/`:
+- **21 playbooks** in `skills/research-mode/playbooks/`:
 
 | playbook | for |
 |---|---|
@@ -49,6 +49,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 | prototype | a throwaway pilot that settles a fork |
 | literature-review | the Zotero loop: ingest papers, run the inquiry, find more, map the gap |
 | paper-ingestion | one paper to a frozen Source Analysis reviewed by an independent critic |
+| obsidian-writing | notes the user comments on in Obsidian: front matter, Pele diagrams, comment threads |
 | inquiry | align the user's reading with the assistant's, interrogate both, extend, search, claim |
 | manuscript-writing | drafting and auditing manuscripts |
 | reviewer-response | answering reviewer comments |
