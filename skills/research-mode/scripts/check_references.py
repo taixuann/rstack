@@ -35,6 +35,22 @@ def check_raw(root):
     return errs
 
 
+def check_readmes(root):
+    """Every paper folder has a README.md, and the project README links it."""
+    errs = []
+    top = root / "README.md"
+    top_text = top.read_text() if top.exists() else None
+    for d in sorted((root / "docs/literature-review/papers").glob("*")):
+        if not d.is_dir():
+            continue
+        rel = f"docs/literature-review/papers/{d.name}/README.md"
+        if not (d / "README.md").exists():
+            errs.append(f"papers/{d.name}: README.md missing; write it from references/paper-readme.template.md")
+        elif top_text is not None and rel not in top_text:
+            errs.append(f"README.md: Contents does not link {rel}")
+    return errs
+
+
 def check(ref_file):
     ref_file = Path(ref_file)
     root = ref_file.resolve().parents[2]
@@ -66,7 +82,7 @@ def check(ref_file):
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
-    return errs + check_raw(root)
+    return errs + check_raw(root) + check_readmes(root)
 
 
 def selftest():
@@ -89,6 +105,15 @@ def selftest():
         (root / "docs/inputs/notes.md").write_text("x")
         e = " ".join(check(f))
         assert "inputs/notes.md" in e and "2026-11-02_learning" not in e, e
+        (root / "docs/literature-review/papers/b").mkdir()
+        (root / "README.md").write_text("no links")
+        e = " ".join(check(f))
+        assert "papers/b: README.md missing" in e, e
+        (root / "docs/literature-review/papers/b/README.md").write_text("x")
+        e = " ".join(check(f))
+        assert "Contents does not link docs/literature-review/papers/b/README.md" in e, e
+        (root / "README.md").write_text("docs/literature-review/papers/b/README.md")
+        assert "README" not in " ".join(check(f)), check(f)
     print("selftest ok")
 
 
