@@ -19,6 +19,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Any citation, constant, or prior result → **principle-sources-not-memory**.
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
+- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **learn** skill, in any state. Reading one paper into a Source Analysis → the **paper-ingest** skill.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
@@ -82,7 +83,7 @@ A project's `README.md` front matter carries its state. Each state has `docs/rst
 
 | State | Focus | Playbooks |
 |---|---|---|
-| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Paper ingestion, Learning, Inquiry, Proposal synthesis, Investigation |
+| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
@@ -141,7 +142,6 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
 - **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
 - **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
-- **Learning.** The user teaches back, the assistant finds the gaps, and the session is recorded. Any state.
 - **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
 - **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Manuscript writing.** Drafting, revising, and auditing manuscripts.

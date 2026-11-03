@@ -29,7 +29,7 @@ Write or refresh a project's `README.md`, `AGENTS.md`, and `CLAUDE.md` from the 
 
 | State | Bundled | External |
 |---|---|---|
-| explore | `literature-review`, `paper-lookup`, `research-lookup`, `openalex-database`, `liteparse`, `zotero-cli`, `brainstorming`, `hypotheses`, `scientific-critical-thinking`, `sources`, `interrogate` | `citation-management`, `scholar-evaluation`, `deep-research` |
+| explore | `paper-ingest`, `learn`, `literature-review`, `paper-lookup`, `research-lookup`, `openalex-database`, `liteparse`, `zotero-cli`, `brainstorming`, `hypotheses`, `scientific-critical-thinking`, `sources`, `interrogate` | `citation-management`, `scholar-evaluation`, `deep-research` |
 | design | `experimental-design`, `statistical-power`, `hypotheses`, `what-if-oracle`, `arena`, `interrogate` | `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness` |
 | progressing | `exploratory-data-analysis`, `statistical-analysis`, `uncertainty-and-units`, `analysis-report`, `figures`, `scientific-visualization`, `reproduce`, `swarm` | `neurokit2` (ECG and biosignals) |
 | ready-for-publish | `scientific-slides`, `pptx-posters`, `latex-posters`, `peer-review`, `export` | `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates`, `infographics` |
