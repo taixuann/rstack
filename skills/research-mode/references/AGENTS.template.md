@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the research-space root applies first. This file adds project rules and never relaxes them. Current research state lives in `README.md`, not here.
+Operating rules for agents in `<project>`. This file holds the project's rules. Current research state lives in `README.md`, not here.
 
 ## State rules
 

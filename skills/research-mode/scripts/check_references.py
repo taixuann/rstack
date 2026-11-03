@@ -114,6 +114,14 @@ def selftest():
         assert "Contents does not link docs/literature-review/papers/b/README.md" in e, e
         (root / "README.md").write_text("docs/literature-review/papers/b/README.md")
         assert "README" not in " ".join(check(f)), check(f)
+    with tempfile.TemporaryDirectory() as d:
+        root = Path(d)
+        (root / "docs/literature-review/reports").mkdir(parents=True)
+        (root / "docs/literature-review/reports/summary.md").write_text("x")
+        (root / "docs/literature-review/papers/a").mkdir(parents=True)
+        (root / "docs/literature-review/papers/a/learning-notes.md").write_text("x")
+        e = " ".join(check_raw(root))
+        assert "reports/summary.md" in e and "learning-notes.md" in e, e
     print("selftest ok")
 
 

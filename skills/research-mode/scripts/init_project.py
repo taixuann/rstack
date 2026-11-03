@@ -6,7 +6,7 @@ Creates the standard folders (with .gitkeep), then README.md, AGENTS.md and CLAU
 ../references/*.template.*, then docs/rstack/explore/tasks.md, then syncs the README task block.
 Anything that already exists is skipped and reported, so it also adds rstack to an existing project.
 """
-import re, subprocess, sys, tempfile
+import argparse, re, subprocess, sys, tempfile
 from datetime import date
 from pathlib import Path
 
@@ -37,6 +37,9 @@ def readme(title):
     t = (REF / "README.template.md").read_text()
     t = t.replace("YYYY-MM-DD", date.today().isoformat()).replace("<Project title>", title)
     t = t.replace("<One sentence on where the project stands.>", "Just initialised. The project interview comes first.")
+    # day one has only tasks.md and the literature-review folder: drop links to files that do not exist yet
+    t = re.sub(r"^- Explore:.*$", "- Explore: [tasks](docs/rstack/explore/tasks.md)", t, flags=re.M)
+    t = re.sub(r"^- Literature review:.*$", "- Literature review: [docs/literature-review/](docs/literature-review/)", t, flags=re.M)
     # the per-question blocks are filled after the interview; drop the template placeholders
     return re.sub(r"## <Work package name>.*?(?=## State history)", "", t, flags=re.S)
 
@@ -80,6 +83,8 @@ def selftest():
         assert "state: explore" in r and "Demo device" in r and "<Project title>" not in r and "<Work package name>" not in r
         assert "Tasks (explore): 0/9 done" in r, r
         assert "res_demo-device" in (proj / "AGENTS.md").read_text()
+        for dead in ("00_interview.md", "03_literature-map.md", "references.yaml"):
+            assert dead not in r, dead
         for f in ("data/raw", "docs/literature-review/reports", "docs/rstack/explore"):
             assert (proj / f).is_dir()
         (proj / "README.md").write_text("mine")
@@ -90,13 +95,13 @@ def selftest():
 
 
 if __name__ == "__main__":
-    a = sys.argv[1:]
-    if a == ["--selftest"]:
+    if sys.argv[1:] == ["--selftest"]:
         selftest()
-    elif a and not a[0].startswith("-"):
-        title = a[a.index("--title") + 1] if "--title" in a else None
-        made, skipped = init(a[0], title)
+    else:
+        ap = argparse.ArgumentParser(description="Create the rstack project layout and front docs. Never overwrites.")
+        ap.add_argument("project")
+        ap.add_argument("--title")
+        args = ap.parse_args()
+        made, skipped = init(args.project, args.title)
         print("created:", ", ".join(made) or "nothing")
         print("skipped (already exist):", ", ".join(skipped) or "nothing")
-    else:
-        sys.exit(__doc__)
