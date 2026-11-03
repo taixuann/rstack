@@ -1,0 +1,58 @@
+---
+title: "A research project, from first idea to closed"
+---
+stateDiagram-v2
+  state "Legend" as legend {
+    lg0: working
+    lg1: ready
+    lg2: end
+  }
+  class lg0 blue
+  class lg1 teal
+  class lg2 tan
+  state "Explore" as s0 {
+    s1: Review pending
+    s2: Review passed
+  }
+  state "Closed" as s3 {
+    s4: Abandoned
+    s5: Published
+  }
+  state "Design" as s6 {
+    s7: Review pending
+    s8: Review passed
+  }
+  state "Progressing" as s9 {
+    s10: Review pending
+    s11: Review passed
+  }
+  state "Ready for publish" as s12 {
+    s13: Review pending
+    s14: Review passed
+  }
+  [*] --> s1
+  s1 --> s2: the state review passes
+  s2 --> s7: you move to the next state
+  s7 --> s8: the state review passes
+  s8 --> s10: you move to the next state
+  s10 --> s11: the state review passes
+  s11 --> s13: you move to the next state
+  s13 --> s14: the state review passes
+  s14 --> s5: the paper is submitted
+  s0 --> s4: you abandon the project
+  s6 --> s1: you go back, and log why
+  s6 --> s4: you abandon the project
+  s9 --> s7: you go back, and log why
+  s9 --> s4: you abandon the project
+  s12 --> s10: you go back, and log why
+  s12 --> s4: you abandon the project
+  class s1 blue
+  class s2 teal
+  class s4 tan
+  class s5 tan
+  class s7 blue
+  class s8 teal
+  class s10 blue
+  class s11 teal
+  class s13 blue
+  class s14 teal

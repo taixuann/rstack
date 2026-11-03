@@ -28,6 +28,14 @@ Ask one question to find out where the user is. Do not start with three leading 
   - One concept at a time. State what it is in everyday words, tie it to the user's own project (the device, the electrode, the signal), and show it with a small picture when structure helps (a table, a Mermaid diagram, or `show_widget` if available). End with one question that asks them to say it back or predict something.
 - **The question is really about notation, procedure, or what the paper claims**: say which, and answer at that level.
 
+## Work in the file, not the chat
+
+The lesson lives in the record file (section 5), created at the start of the session. Write each lesson there: the zoom-out picture (Mermaid or an SVG in a `figures/` folder next to the file), the plain account, a short word table, and one question for the user at the end. The user reads it in Obsidian and comments inline (the Document Comments plugin stores a thread as `<!--co:ID by:NAME at:ISO status:open quote:"..."` followed by one `name (ISO-time): text` line per message, then `-->`).
+
+Each turn: read the file, find the open threads and the user's answers, reply inside the same thread by adding one line `claude (<UTC ISO time>): <reply>` before the closing `-->`, and write new material into the file under a new heading. Never resolve or delete the user's threads. Keep a reply on one line and do not start it with a word followed by a colon. Copy the user's own explanations into the file word for word with `[user]`. The chat message is only the file path and what to look at or answer next, in three lines or fewer.
+
+If the user answers in chat instead, copy what they said into the file first, then respond there.
+
 ## 3. The teach-back loop
 
 1. **The user teaches.** "Explain this to me as if I'm smart but new to the field." Listen. Do not interrupt. Do not correct yet. Their language is the language you use.
