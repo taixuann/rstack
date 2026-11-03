@@ -12,7 +12,7 @@ In a research project this skill also keeps the record: what the user understood
 
 ## 1. Target and goal
 
-Name one target: an annotation or passage (`docs/raw/papers/<cite>/annotations.md`), a term, a mechanism, a method, or a result. Say in one line what the user should be able to explain afterwards. If the target is a paper passage, find it and read the source analysis (`docs/wiki/papers/<cite>/source-analysis.md`) silently. Do not summarise either to the user yet.
+Name one target: an annotation or passage (`docs/literature-review/papers/<cite>/annotations.md`), a term, a mechanism, a method, or a result. Say in one line what the user should be able to explain afterwards. If the target is a paper passage, find it and read the source analysis (`docs/literature-review/papers/<cite>/source-analysis.md`) silently. Do not summarise either to the user yet.
 
 Long preparation (a primer, finding passages across papers) can go to a `research-agent` in the background while the user answers.
 
@@ -49,20 +49,20 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 
 Append a dated record; never edit an old one.
 
-- About a paper: `docs/raw/papers/<cite>/learning-YYYY-MM-DD.md`
-- Otherwise: `docs/raw/inputs/YYYY-MM-DD_learning_<slug>.md`
+- About a paper: `docs/literature-review/papers/<cite>/learning-YYYY-MM-DD.md`
+- Otherwise: `docs/inputs/YYYY-MM-DD_learning_<slug>.md`
 
 It holds: the target, the user's final explanation in their own words, the gaps found, the plain accounts you gave, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
 
 ## 6. Promote and hand off
 
-Only statements checked against the source (`[source-checked]`) go into `docs/wiki/` with `karpathy-llm-wiki`, keeping the label. Open gaps become items in `docs/rstack/explore/inquiry.md` or tasks in the state's `tasks.md`; then run `scripts/sync_readme_tasks.py` and add a row to `docs/rstack/decisions.tsv` (**show-me-your-work**). Tell the user the file paths.
+Only statements checked against the source (`[source-checked]`) go into `docs/literature-review/cross-papers/`, keeping the label. Open gaps become items in `docs/rstack/explore/inquiry.md` or tasks in the state's `tasks.md`; then run `scripts/sync_readme_tasks.py` and add a row to `docs/rstack/decisions.tsv` (**show-me-your-work**). Tell the user the file paths.
 
 ## Tone
 
 Warm, direct, willing to push back. Treat the user as a capable adult working on something hard. When it is hard, say so. No emoji, no cheerleading. Language follows the user.
 
-**Reply:** what the user can now explain, the gaps that remain, where the record was saved, and what moved to the wiki or the inquiry.
+**Reply:** what the user can now explain, the gaps that remain, where the record was saved, and what moved to the cross-paper notes or the inquiry.
 
 ---
 Adapted from Anthropic's `learn` skill (Apache License 2.0) and the user's `feynman.md`.

@@ -64,19 +64,20 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ```
 data/raw/             immutable source measurements
-docs/raw/papers/<cite>/  per-paper Zotero snapshot (annotations.md) and learning-<date>.md records
-docs/raw/inputs/        the user's own words, dated: <date>_<kind>_<slug>.md
-docs/raw/reports/       deep-research and HyperResearch outputs: leads, not read papers
-docs/wiki/              synthesized notes (karpathy-llm-wiki); papers/<cite>/ holds each paper's analysis
+docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, source-analysis.md, review.md, learning-<date>.md, alignment.md
+docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, mechanism primer, gap map
+docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
+docs/literature-review/references.yaml which Zotero papers matter and why
+docs/inputs/          the user's own words, dated: <date>_<kind>_<slug>.md
 docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
 analysis/             scripts, figures, tables
 manuscripts/          drafts
 presentation/         slides, posters, talk notes
 ```
 
-Raw is what came in and is never edited. Wiki is what we understand, with ladder labels. `docs/rstack/<state>/` is the work in progress. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/raw/reports/` is used until checked against a paper.
+`annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. `docs/rstack/<state>/` is the work in progress. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
 
-Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/raw` holds literature. Keep them separate.
+Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate.
 
 ## Research states
 
@@ -94,7 +95,7 @@ Moving backwards is allowed. Log the reason. Exit checks are in the Project docs
 
 ## Understanding ladder
 
-Statements in `docs/wiki/` carry a label and move up only through review: `[user]` the user's reading, `[assistant]` the assistant's reading (both unverified), `[source-checked]` confirmed by a critic against the paper, `[verified: cite]` confirmed by an external source that passed a cite-check. Claims use `[source-checked]` or above.
+Statements in `docs/literature-review/` carry a label and move up only through review: `[user]` the user's reading, `[assistant]` the assistant's reading (both unverified), `[source-checked]` confirmed by a critic against the paper, `[verified: cite]` confirmed by an external source that passed a cite-check. Claims use `[source-checked]` or above.
 
 ## Autonomy
 

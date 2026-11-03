@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check docs/rstack/references.yaml against the files on disk.
+"""Check docs/literature-review/references.yaml against the files on disk.
 
 Usage: check_references.py REFERENCES_YAML   |   check_references.py --selftest
 Paths are relative to the project root (two levels above docs/rstack/).
@@ -20,16 +20,16 @@ USED_IN = {"01_context", "02_aims-and-milestones", "03_literature-map",
 def check_raw(root):
     """Raw inputs and reports are dated; inputs carry a known kind. Files starting with . or README are skipped."""
     errs = []
-    for f in sorted((root / "docs/raw/inputs").glob("*")):
+    for f in sorted((root / "docs/inputs").glob("*")):
         if f.name.startswith(".") or f.name.startswith("README"):
             continue
         m = re.fullmatch(DATED + r"_([a-z-]+)_[a-z0-9-]+\.md", f.name)
         if not m or m.group(1) not in KINDS:
             errs.append(f"inputs/{f.name}: name must be <date>_<kind>_<slug>.md, kind in {sorted(KINDS)}")
-    for f in sorted((root / "docs/raw/reports").glob("*")):
+    for f in sorted((root / "docs/literature-review/reports").glob("*")):
         if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
             errs.append(f"reports/{f.name}: name must be <date>_<tool>_<slug>.md")
-    for f in sorted((root / "docs/raw/papers").glob("*/learning-*")):
+    for f in sorted((root / "docs/literature-review/papers").glob("*/learning-*")):
         if not re.fullmatch(r"learning-" + DATED + r"\.md", f.name):
             errs.append(f"papers/{f.parent.name}/{f.name}: name must be learning-<date>.md")
     return errs
@@ -52,7 +52,7 @@ def check(ref_file):
                 errs.append(f"{k}: {f} missing")
         if p.get("status") not in STATUS:
             errs.append(f"{k}: status must be one of {sorted(STATUS)}")
-        for f in ("snapshot", "wiki"):
+        for f in ("snapshot", "analysis"):
             if p.get(f) and not (root / p[f]).exists():
                 errs.append(f"{k}: {f} path not found: {p[f]}")
         if p.get("review") and p["review"] not in REVIEW:
@@ -61,8 +61,8 @@ def check(ref_file):
             errs.append(f"{k}: status read but review is {p['review']}")
         if p.get("status") in ("snapshotted", "read") and not p.get("snapshot"):
             errs.append(f"{k}: status {p['status']} needs a snapshot")
-        if p.get("status") == "read" and not p.get("wiki"):
-            errs.append(f"{k}: status read needs a wiki page")
+        if p.get("status") == "read" and not p.get("analysis"):
+            errs.append(f"{k}: status read needs an analysis path")
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
@@ -73,20 +73,20 @@ def selftest():
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         (root / "docs/rstack").mkdir(parents=True)
-        (root / "docs/raw/papers").mkdir(parents=True)
-        (root / "docs/raw/papers/a.md").write_text("x")
+        (root / "docs/literature-review/papers").mkdir(parents=True)
+        (root / "docs/literature-review/papers/a.md").write_text("x")
         good = {"zotero": {"collection_key": "C"}, "papers": [
-            {"key": "A", "cite": "X 2020", "status": "snapshotted", "snapshot": "docs/raw/papers/a.md", "used_in": ["01_context"], "review": "needs_review"}]}
-        f = root / "docs/rstack/references.yaml"
+            {"key": "A", "cite": "X 2020", "status": "snapshotted", "snapshot": "docs/literature-review/papers/a.md", "used_in": ["01_context"], "review": "needs_review"}]}
+        f = root / "docs/literature-review/references.yaml"
         f.write_text(yaml.safe_dump(good))
         assert check(f) == [], check(f)
-        good["papers"][0].update(status="read", snapshot="docs/raw/papers/missing.md", used_in=["nope"])
+        good["papers"][0].update(status="read", snapshot="docs/literature-review/papers/missing.md", used_in=["nope"])
         f.write_text(yaml.safe_dump(good))
         e = " ".join(check(f))
-        assert "not found" in e and "unknown used_in" in e and "needs a wiki" in e and "review is needs_review" in e, e
-        (root / "docs/raw/inputs").mkdir()
-        (root / "docs/raw/inputs/2026-11-02_learning_ecg.md").write_text("x")
-        (root / "docs/raw/inputs/notes.md").write_text("x")
+        assert "not found" in e and "unknown used_in" in e and "needs an analysis" in e and "review is needs_review" in e, e
+        (root / "docs/inputs").mkdir()
+        (root / "docs/inputs/2026-11-02_learning_ecg.md").write_text("x")
+        (root / "docs/inputs/notes.md").write_text("x")
         e = " ".join(check(f))
         assert "inputs/notes.md" in e and "2026-11-02_learning" not in e, e
     print("selftest ok")

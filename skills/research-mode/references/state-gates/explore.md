@@ -7,6 +7,6 @@ Each angle is one adversary for `interrogate`. A finding survives only if it nam
 3. **Unknowns have owners.** Every `TODO: unknown` has an owner (the user or the supervisor) and a due point, or is dropped.
 4. **Evidence quality.** Every claim in `01` to `05` traces to a `references.yaml` entry. Leads from `deep-research` or HyperResearch are not treated as read papers.
 5. **Gates outside the work.** If people are recorded, are consent and an approved plan done or scheduled? Is equipment or access confirmed or a listed risk?
-6. **Learning gap.** Terms and mechanisms the user flagged as unclear each have a wiki entry or a task.
+6. **Learning gap.** Terms and mechanisms the user flagged as unclear each have a note in `docs/literature-review/cross-papers/` or a task.
 7. **Key papers reviewed.** Each paper the proposal leans on has a `PASS` review, or is marked `NO_REVIEW` and is not the sole support for any claim.
 8. **Questions resolved.** Every item in `inquiry.md` is answered with a cite, assigned to the supervisor, or queued for search. No claim in `claims.md` rests on an unanswered item.

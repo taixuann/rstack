@@ -2,7 +2,7 @@
 """Append the user's question-like Zotero annotations to docs/rstack/explore/inquiry.md.
 
 Usage: inquiry_extract.py PROJECT_DIR   |   inquiry_extract.py --selftest
-Reads papers from PROJECT_DIR/docs/rstack/references.yaml and their annotations through `zotero-cli`.
+Reads papers from PROJECT_DIR/docs/literature-review/references.yaml and their annotations through `zotero-cli`.
 An annotation counts as a question when it is red or its comment contains a question mark.
 Each is added once, under "## Open (new)", keyed by its Zotero annotation key. Existing entries are kept.
 """
@@ -33,7 +33,7 @@ def entries(cite, anns, known):
 
 def run(project):
     project = Path(project)
-    refs = yaml.safe_load((project / "docs/rstack/references.yaml").read_text())
+    refs = yaml.safe_load((project / "docs/literature-review/references.yaml").read_text())
     f = project / "docs/rstack/explore/inquiry.md"
     f.parent.mkdir(parents=True, exist_ok=True)
     text = f.read_text() if f.exists() else HEAD

@@ -23,12 +23,12 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 ## Standard project layout
 
 ```
-data/raw/  docs/raw/{papers,inputs}/  docs/wiki/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
+data/raw/  docs/literature-review/{papers,cross-papers,reports}/  docs/inputs/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
 ```
 
 Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
 
-`data/raw` is immutable. `docs/wiki` is maintained with `karpathy-llm-wiki`.
+`data/raw` is immutable. Everything about one paper lives in `docs/literature-review/papers/<cite>/`, starting at its `README.md`.
 
 ## What is inside
 
@@ -62,7 +62,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `learn` (teach-back and guided lessons), `paper-ingest` (deep read of one paper), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
 - **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort, plus `source-analyst` (deep read of one paper) and `paper-critic` (independent three-pass review), both on Sonnet at medium effort.
-- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
+- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/literature-review/papers/`, `docs/literature-review/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
 - **Setup and help:** `setup-research`, `research-help`.
 - **32 bundled domain skills**: 25 copied from the former `openscience-adapter` (literature, experimental design, figures, posters, peer review, and others), five from [K-Dense scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) (MIT: `statistical-analysis`, `statistical-power`, `exploratory-data-analysis`, `uncertainty-and-units`, `what-if-oracle`), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
 - **Works best with** [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer): the playbooks name its `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates` and `infographics`. Without it, those steps are skipped.

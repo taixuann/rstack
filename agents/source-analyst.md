@@ -13,8 +13,8 @@ You read one paper end to end and write its Source Analysis. Read the `research-
 
 1. Get the paper through `zotero-cli` (`zotero-cli get fulltext <key>`, `zotero-cli read`, `zotero-cli layout` for figures and tables). Do not open the user's `annotations.md` yet. Your reading must be independent of the user's.
 2. Take the roadmap from the project's `docs/rstack/explore/01_context.md` and `02_aims-and-milestones.md`.
-3. Write `<project>/docs/wiki/papers/<cite>/source-analysis.md` from the template. Do not skip the methods or the caveats. Keep experimental records separate from findings. Mark every statement `[assistant]`.
-4. Only then run `scripts/zotero_snapshot.py <key> --out <project>/docs/raw/papers` and add or update the entry in `<project>/docs/rstack/references.yaml` (`status: snapshotted`, `review: needs_review`). Draft `used_in`, `parts`, and `why` as proposals for the user. Run `scripts/check_references.py`.
+3. Write `<project>/docs/literature-review/papers/<cite>/source-analysis.md` from the template. Do not skip the methods or the caveats. Keep experimental records separate from findings. Mark every statement `[assistant]`. Start the file with front matter: `created`, `updated`, `kind: source-analysis`, `voice: assistant`, `paper: <cite>`.
+4. Only then run `scripts/zotero_snapshot.py <key> --out <project>/docs/literature-review/papers` and add or update the entry in `<project>/docs/literature-review/references.yaml` (`status: snapshotted`, `review: needs_review`). Draft `used_in`, `parts`, and `why` as proposals for the user. Run `scripts/check_references.py`.
 5. Report PASS, ISSUES, or BLOCKED with the file paths, the relevance verdict, the top three findings in one sentence each, and anything you could not read (truncation, missing figures or supplements).
 
-Never write outside `docs/wiki/papers/<cite>/`, `docs/raw/papers/`, and `docs/rstack/references.yaml`. Never touch `data/raw/`.
+Never write outside `docs/literature-review/papers/<cite>/` and `docs/literature-review/references.yaml`. Never touch `data/raw/`.

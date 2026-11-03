@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Snapshot Zotero items and their colour-coded annotations into docs/raw/papers/.
+"""Snapshot Zotero items and their colour-coded annotations into docs/literature-review/papers/.
 
 Usage: zotero_snapshot.py --out DIR (--collection KEY | ITEM_KEY ...) [--refresh]
        zotero_snapshot.py --selftest

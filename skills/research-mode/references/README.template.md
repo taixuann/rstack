@@ -19,7 +19,7 @@ updated: YYYY-MM-DD
 Link each file once it exists.
 
 - Explore: [interview](docs/rstack/explore/00_interview.md) · [context](docs/rstack/explore/01_context.md) · [aims and milestones](docs/rstack/explore/02_aims-and-milestones.md) · [literature map](docs/rstack/explore/03_literature-map.md) · [questions and hypotheses](docs/rstack/explore/04_questions-and-hypotheses.md) · [methods and feasibility](docs/rstack/explore/05_methods-and-feasibility.md)
-- Wiki: [docs/wiki/](docs/wiki/) · Papers: [docs/rstack/references.yaml](docs/rstack/references.yaml) and [docs/raw/papers/](docs/raw/papers/)
+- Literature review: [docs/literature-review/](docs/literature-review/) · Papers: [docs/literature-review/references.yaml](docs/literature-review/references.yaml) and [docs/literature-review/papers/](docs/literature-review/papers/)
 
 Add a line per state as it starts (design, progressing, ready-for-publish).
 

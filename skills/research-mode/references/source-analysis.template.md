@@ -1,3 +1,10 @@
+---
+created: <YYYY-MM-DD>
+updated: <YYYY-MM-DD>
+kind: source-analysis
+voice: assistant
+paper: <cite>
+---
 # Source Analysis: <title, exact capitalization>
 
 Adapted from the hyperresearch `source-analyst` (MIT License) through the user's `paper-ingest.md`. Everything here is the assistant's reading, labelled `[assistant]` and unverified until a critic checks it.

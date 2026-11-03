@@ -1,3 +1,10 @@
+---
+created: <YYYY-MM-DD>
+updated: <YYYY-MM-DD>
+kind: review
+voice: critic
+paper: <cite>
+---
 # Review: <cite>
 
 Route: FULL | SCOPED | NO_REVIEW

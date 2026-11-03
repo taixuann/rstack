@@ -15,11 +15,11 @@ Operating rules for agents in `<project>`. The workspace `AGENTS.md` at the rese
 | Folder | Holds | Agents may |
 |---|---|---|
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
-| `docs/raw/papers/<cite>/` | Zotero snapshot `annotations.md` (`scripts/zotero_snapshot.py`) and `learning-<date>.md` records | Add or refresh the snapshot; append new dated files; never hand-edit |
-| `docs/raw/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought) | Append new dated files; never edit |
-| `docs/raw/reports/` | Deep-research and HyperResearch outputs. Leads, not read papers | Append new dated files; never edit; use nothing until checked against a paper |
-| `docs/wiki/` | Synthesized notes (`karpathy-llm-wiki`); `papers/<cite>/` holds source analysis, alignment, review | Write; label every statement `[user]`, `[assistant]`, `[source-checked]`, or `[verified: cite]` |
-| `docs/rstack/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |
+| `docs/literature-review/papers/<cite>/` | Everything for one paper: `README.md` (start here, with the paper's metadata), `annotations.md` (frozen Zotero snapshot, `scripts/zotero_snapshot.py`), `source-analysis.md`, `review.md`, `learning-<date>.md`, `alignment.md`. Every file except `annotations.md` carries front matter: `created`, `updated`, `kind`, `voice`, `paper` | Add or refresh; never hand-edit `annotations.md`; keep `README.md` and `updated` current |
+| `docs/literature-review/cross-papers/` | Synthesis across papers: comparison tables, themes, mechanism primer, gap map | Write; label statements; cite the paper folders |
+| `docs/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought) | Append new dated files; never edit |
+| `docs/literature-review/reports/` | Deep-research and HyperResearch outputs. Leads, not read papers | Append new dated files; never edit; use nothing until checked against a paper |
+| `docs/literature-review/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |
 | `docs/rstack/<state>/` | Stage documents and `tasks.md`; explore also holds the raw `00_interview.md` (append, never edit) | Write |
 | `analysis/` | Scripts, figures, tables | Write |
 | `manuscripts/`, `presentation/` | Drafts and talks | Write; numbers come from `analysis/` |

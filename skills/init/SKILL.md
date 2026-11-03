@@ -19,17 +19,18 @@ Run `../research-mode/scripts/init_project.py <project> [--title "<title>"]`. It
 
 ```
 data/raw/        immutable source measurements; never edit, never regenerate
-docs/raw/papers/ Zotero snapshots of papers with colour-coded annotations
-docs/raw/inputs/ the user's own words, dated, never edited
-docs/raw/reports/ deep-research and HyperResearch outputs: leads, not read papers
-docs/wiki/       synthesized knowledge (karpathy-llm-wiki)
+docs/literature-review/papers/<cite>/  one folder per paper: README, annotations, analysis, review, learning
+docs/literature-review/cross-papers/   synthesis across papers
+docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
+docs/literature-review/references.yaml which papers matter and why
+docs/inputs/     the user's own words, dated, never edited
 docs/rstack/     written documents of each stage, in <state>/ subfolders
 analysis/        scripts, figures, tables
 manuscripts/     drafts and submission files
 presentation/    slides, posters, talk notes
 ```
 
-`data/raw` holds measurements and `docs/raw` holds literature. Keep them separate. Derived data goes in `analysis/`, never back into `data/raw`.
+`data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate. Derived data goes in `analysis/`, never back into `data/raw`.
 
 ## 3. Interview
 

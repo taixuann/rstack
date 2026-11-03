@@ -12,7 +12,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REF = HERE.parent / "references"
-FOLDERS = ["data/raw", "docs/raw/papers", "docs/raw/inputs", "docs/raw/reports", "docs/wiki",
+FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/literature-review/cross-papers", "docs/literature-review/reports",
            "docs/rstack/explore", "analysis", "manuscripts", "presentation"]
 EXPLORE_TASKS = """# Tasks: explore
 
@@ -80,7 +80,7 @@ def selftest():
         assert "state: explore" in r and "Demo device" in r and "<Project title>" not in r and "<Work package name>" not in r
         assert "Tasks (explore): 0/9 done" in r, r
         assert "res_demo-device" in (proj / "AGENTS.md").read_text()
-        for f in ("data/raw", "docs/raw/reports", "docs/rstack/explore"):
+        for f in ("data/raw", "docs/literature-review/reports", "docs/rstack/explore"):
             assert (proj / f).is_dir()
         (proj / "README.md").write_text("mine")
         made2, skipped2 = init(proj)

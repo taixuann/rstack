@@ -12,4 +12,3 @@ externals:
   - {name: lab-hardware-cad, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
   - {name: analytical-method-validation, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
   - {name: iso-standards-readiness, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
-  - {name: karpathy-llm-wiki, source: user skill, license: unknown, status: external, used_by: [literature-review, scaffold]}
