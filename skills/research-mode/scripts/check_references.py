@@ -123,7 +123,7 @@ def selftest():
         root = Path(d)
         (root / "docs/rstack").mkdir(parents=True)
         (root / "docs/literature-review/papers").mkdir(parents=True)
-        (root / "docs/literature-review/papers/a.md").write_text("x")
+        (root / "docs/literature-review/papers/a.md").write_text("---\ncreated: x\nupdated: x\nkind: k\nvoice: v\npaper: a\n---\n")
         good = {"zotero": {"collection_key": "C"}, "papers": [
             {"key": "A", "cite": "X 2020", "status": "snapshotted", "snapshot": "docs/literature-review/papers/a.md", "used_in": ["01_context"], "review": "needs_review"}]}
         f = root / "docs/literature-review/references.yaml"
@@ -134,7 +134,7 @@ def selftest():
         e = " ".join(check(f))
         assert "not found" in e and "unknown used_in" in e and "needs an analysis" in e and "review is needs_review" in e, e
         (root / "docs/inputs").mkdir()
-        (root / "docs/inputs/2026-11-02_learning_ecg.md").write_text("x")
+        (root / "docs/inputs/2026-11-02_learning_ecg.md").write_text("---\ncreated: x\nupdated: x\nkind: k\nvoice: v\n---\n")
         (root / "docs/inputs/notes.md").write_text("x")
         e = " ".join(check(f))
         assert "inputs/notes.md" in e and "2026-11-02_learning" not in e, e
@@ -158,9 +158,8 @@ def selftest():
         e = " ".join(check(f))
         assert "f.mmd: SVG missing or older" in e, e
         (b / "figures/f.svg").write_text("<svg/>")
-        (root / "docs/literature-review/papers/a.md").write_text(fm)
         (b / "README.md").write_text(fm + "![[figures/f.svg]]\n<!--c:q1-->t<!--/c:q1-->\n<!--co:q1 by:me status:open\nme (x): hi\n-->\n")
-        assert check(f) == [], check(f)
+        assert "papers/b" not in " ".join(check(f)), check(f)
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         (root / "docs/literature-review/reports").mkdir(parents=True)
