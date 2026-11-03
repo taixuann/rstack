@@ -1,6 +1,6 @@
 # Literature review (Zotero loop)
 
-State: explore. Output: `docs/rstack/explore/03_literature-map.md` (themes, search log, gap), `docs/rstack/references.yaml`, `docs/rstack/explore/inquiry.md` and `claims.md`, per-paper snapshots in `docs/raw/papers/<cite>/`, and per-paper analyses in `docs/wiki/papers/<cite>/` via `karpathy-llm-wiki`. Runs after **Proposal intake** and repeats as the user reads more papers.
+State: explore. Output: `docs/rstack/explore/03_literature-map.md` (themes, search log, gap), `docs/rstack/references.yaml`, `docs/rstack/explore/inquiry.md` and `claims.md`, per-paper snapshots in `docs/raw/papers/<cite>/`, and per-paper analyses in `docs/wiki/papers/<cite>/` via `karpathy-llm-wiki`. Runs after the **init** interview and repeats as the user reads more papers.
 
 1. Read `00_interview.md`, `01_context.md`, and `02_aims-and-milestones.md`. The search serves the work packages they name. If they do not exist yet, run **Proposal intake** first.
 2. **Register the collection.** Record the Zotero collection (name and key) at the top of `docs/rstack/references.yaml` (template in `references/references.template.yaml`). The user keeps all papers in one flat collection and highlights by colour: purple interpretation and context, orange methods, green results, blue mechanism, red unclear or doubtful, yellow general notes. The `zotero-cli` skill documents the command line.

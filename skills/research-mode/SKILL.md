@@ -1,6 +1,6 @@
 ---
 name: research-mode
-description: "Research agent style for rigorous, evidence-first work in research-space: states the question, picks one playbook, delegates deliberately, cites principles, and verifies every number against a file. Use for /research-mode, or whenever the user starts or scaffolds a project, designs a study, chooses sample size or statistics, analyses data, reviews literature, writes or reviews a manuscript, or builds slides or a poster."
+description: "Research agent style for rigorous, evidence-first work in research-space: states the question, picks one playbook, delegates deliberately, cites principles, and verifies every number against a file. Use for /research-mode, or whenever the user starts a project, designs a study, chooses sample size or statistics, analyses data, reviews literature, writes or reviews a manuscript, or builds slides or a poster."
 ---
 
 # Research mode
@@ -19,6 +19,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Any citation, constant, or prior result → **principle-sources-not-memory**.
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
+- Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
 - The user wants to understand something (a term, a mechanism, an annotation, a result) → the **learn** skill, in any state. Reading one paper into a Source Analysis → the **paper-ingest** skill.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
@@ -79,11 +80,11 @@ Create missing folders, never rename existing ones. Prose goes in `docs/`, code 
 
 ## Research states
 
-A project's `README.md` front matter carries its state. Each state has `docs/rstack/<state>/tasks.md`, which the README task block mirrors (`scripts/sync_readme_tasks.py`). A new project starts in explore (Scaffold is a trigger, not a state). Advance only at an approved gate, then add a State history row and start the new state's `tasks.md`.
+A project's `README.md` front matter carries its state. Each state has `docs/rstack/<state>/tasks.md`, which the README task block mirrors (`scripts/sync_readme_tasks.py`). A new project starts in explore (init is a trigger, not a state). Advance only at an approved gate, then add a State history row and start the new state's `tasks.md`.
 
 | State | Focus | Playbooks |
 |---|---|---|
-| explore | frame the project, read the literature, then synthesize questions and methods | Proposal intake, Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
+| explore | frame the project, read the literature, then synthesize questions and methods | Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
@@ -129,8 +130,6 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
-- **Scaffold.** New project or folder setup (blueprint-folder bootstrap).
-- **Proposal intake.** Frame a new project: interview, context, aims, milestones, work packages. Runs first in explore.
 - **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
 - **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
 - **Investigation.** Read-only question about the data, a method, or the literature.

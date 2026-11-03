@@ -33,12 +33,10 @@ Each project's `README.md` carries a research state: explore → design → prog
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **22 playbooks** in `skills/research-mode/playbooks/`:
+- **20 playbooks** in `skills/research-mode/playbooks/`:
 
 | playbook | for |
 |---|---|
-| scaffold | blueprint-folder bootstrap for a new project |
-| proposal-intake | interview, context, aims, milestones, work packages |
 | proposal-synthesis | questions, hypotheses, methods, feasibility, explore exit check |
 | state-review | gate review at every state exit: rules per state, findings become tasks |
 | project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, CLAUDE.md stub, state changes |
@@ -61,7 +59,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 | autonomous-run | long unattended work, with pause and resume |
 
 - **17 principles** as `principle-*` skills.
-- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `learn` (teach-back and guided lessons), `paper-ingest` (deep read of one paper), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
+- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `learn` (teach-back and guided lessons), `paper-ingest` (deep read of one paper), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
 - **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort, plus `source-analyst` (deep read of one paper) and `paper-critic` (independent three-pass review), both on Sonnet at medium effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/raw/papers/`, `docs/rstack/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
