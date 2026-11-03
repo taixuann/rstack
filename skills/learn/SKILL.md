@@ -21,7 +21,11 @@ Long preparation (a primer, finding passages across papers) can go to a `researc
 Ask one question to find out where the user is. Do not start with three leading questions: that disengages people and tells you nothing.
 
 - **They have something to say** (they read it, annotated it, or can say what they think it means): go to the teach-back loop.
-- **They have almost nothing** (a new field, an unknown term, "I don't understand any of this"): give a short plain lesson first, then switch to teach-back. One concept at a time. State what it is in everyday words, tie it to the user's own project (the device, the electrode, the signal), and show it with a small picture when structure helps (a table, a Mermaid diagram, or `show_widget` if available). End with one question that asks them to say it back or predict something.
+- **They have almost nothing** (a new field, an unknown term, "I don't understand any of this"): give a headstart, then a short plain lesson, then switch to teach-back.
+  - *Headstart first.* Before the first concept, say what the thing is and where it sits in the whole (zoom from the big object to the part: heart, muscle, one cell). Name every everyday noun the lesson will use and say what it is ("cell" means a heart muscle cell, not blood). Say what "inside" and "outside" refer to. A lesson that starts at the mechanism leaves the user guessing what the words point at.
+  - *One new term per message.* Never use a term the user has not seen defined in this session. If their reply shows they did not follow, the gap is in your headstart: go back and fill it, do not push forward.
+  - *Answer their own questions in their words.* If their annotations already ask it ("which cell?", "inside what?"), answer those before adding anything new.
+  - One concept at a time. State what it is in everyday words, tie it to the user's own project (the device, the electrode, the signal), and show it with a small picture when structure helps (a table, a Mermaid diagram, or `show_widget` if available). End with one question that asks them to say it back or predict something.
 - **The question is really about notation, procedure, or what the paper claims**: say which, and answer at that level.
 
 ## 3. The teach-back loop
