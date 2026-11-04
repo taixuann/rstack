@@ -19,7 +19,7 @@ WORKFLOW = {"research-mode", "setup-research", "research-help", "arena", "swarm"
 IGNORE = {"state", "tasks", "true", "false", "yaml", "unread", "snapshotted", "read", "candidate", "frozen",
           "supported", "rejected", "explore", "design", "progressing", "closed", "ready-for-publish",
           "todo", "model", "haiku", "main", "docs", "data", "raw", "wiki", "analysis", "unknown",
-          "pele", "mmd", "figures", "mermaid", "parts", "why", "updated", "created", "kind", "voice", "paper", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
+          "pele", "figures", "mermaid", "parts", "why", "updated", "created", "kind", "voice", "paper", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
           # plugin, repo, agent, and example names
           "claude-scientific-writer", "scientific-agent-skills", "annotations", "source-analyst", "paper-critic", "docx", "pdf", "pptx", "xlsx"}
 NAME = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")

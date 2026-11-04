@@ -5,7 +5,9 @@ Usage: check_references.py REFERENCES_YAML   |   check_references.py --selftest
 Paths are relative to the project root (two levels above docs/rstack/).
 Exit 1 and print each problem when a check fails.
 """
-import re, sys, tempfile
+import re
+import shutil
+import subprocess, sys, tempfile
 from pathlib import Path
 import yaml
 
@@ -52,7 +54,7 @@ def check_readmes(root):
 
 
 def check_notes(root):
-    """Notes the user reads in Obsidian: front matter, no mermaid block, embeds resolve, diagrams fresh, comments balanced."""
+    """Notes the user reads in Obsidian: front matter, mermaid blocks parse, embeds resolve, comments balanced."""
     errs = []
     base = root / "docs"
     files = [f for d in ("literature-review", "inputs") for f in sorted((base / d).rglob("*.md"))]
@@ -68,8 +70,9 @@ def check_notes(root):
             need.add("paper")
         if need - keys:
             errs.append(f"{rel}: front matter missing {sorted(need - keys)}")
-        if "```mermaid" in text:
-            errs.append(f"{rel}: mermaid block; write figures/<name>.mmd, run scripts/render_diagram.mjs, embed the SVG")
+        if "```mermaid" in text and shutil.which("node"):
+            r = subprocess.run(["node", str(Path(__file__).with_name("render_diagram.mjs")), str(f)], capture_output=True, text=True)
+            errs += [f"{ln.replace(str(f), str(rel), 1)} (fix the Mermaid syntax)" for ln in r.stderr.splitlines() if ln.strip()] if r.returncode else []
         for e in re.findall(r"!\[\[([^\]|]+)", text):
             if not (f.parent / e).exists():
                 errs.append(f"{rel}: embed not found: {e}")
@@ -77,10 +80,6 @@ def check_notes(root):
         opened, closed, threads = ids(r"<!--c:(\w+)-->"), ids(r"<!--/c:(\w+)-->"), ids(r"<!--co:(\w+)")
         if not (opened == closed == threads):
             errs.append(f"{rel}: unbalanced comment markers {sorted(opened ^ closed | opened ^ threads)}; restore them, never delete half a comment")
-    for mmd in sorted(base.rglob("*.mmd")):
-        svg = mmd.with_suffix(".svg")
-        if not svg.exists() or svg.stat().st_mtime < mmd.stat().st_mtime:
-            errs.append(f"{mmd.relative_to(root)}: SVG missing or older; run scripts/render_diagram.mjs on it")
     return errs
 
 
@@ -150,13 +149,13 @@ def selftest():
         assert "papers/b/README.md: front matter missing" in e, e
         b = root / "docs/literature-review/papers/b"
         fm = "---\ncreated: x\nupdated: x\nkind: k\nvoice: v\npaper: b\n---\n"
-        (b / "README.md").write_text(fm + "```mermaid\nx\n```\n![[figures/f.svg]]\n<!--c:q1-->t<!--/c:q1-->\n")
+        (b / "README.md").write_text(fm + "![[figures/f.svg]]\n<!--c:q1-->t<!--/c:q1-->\n")
         e = " ".join(check(f))
-        assert "mermaid block" in e and "embed not found: figures/f.svg" in e and "unbalanced comment markers ['q1']" in e, e
+        assert "embed not found: figures/f.svg" in e and "unbalanced comment markers ['q1']" in e, e
         (b / "figures").mkdir()
-        (b / "figures/f.mmd").write_text("flowchart LR\n A-->B")
-        e = " ".join(check(f))
-        assert "f.mmd: SVG missing or older" in e, e
+        if shutil.which("node"):
+            (b / "README.md").write_text(fm + "```mermaid\nflowchart LR\n  A --> \n```\n")
+            assert "papers/b/README.md:" in " ".join(check(f)) and "Mermaid syntax" in " ".join(check(f)), check(f)
         (b / "figures/f.svg").write_text("<svg/>")
         (b / "README.md").write_text(fm + "![[figures/f.svg]]\n<!--c:q1-->t<!--/c:q1-->\n<!--co:q1 by:me status:open\nme (x): hi\n-->\n")
         assert "papers/b" not in " ".join(check(f)), check(f)
