@@ -71,7 +71,7 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 
 - **The core note** is the record: one growing note per roadmap item, `docs/learning/core/<slug>.md` (kebab-case, no date). Front matter: `created`, `updated`, `kind: learning`, `voice`, `papers: [<cite>]` when a paper prompted it. It holds the target, the user's explanation in their own words, the gaps found, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added. Update `updated`.
 - **The log.** Append one line to `docs/learning/log.md` at the end of the lesson: date, core note, the branches made, and what the user can now say, in their words. Never edit earlier lines.
-- **Branches** are written by `branch`, one small note per word or question, not by this skill. List the slugs on the log line.
+- **Branches** are written by `branch`: an inline expansion beside the term, or, only when big, a note in `branches/`. List the slugs of the big ones on the log line.
 - **The roadmap.** Set the item's core note. Status follows `docs/learning/understanding.md`, which only `evaluate-my-understanding` changes. Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with a link to the core note.
 
 **Edit the note as little as possible.** The user reads and comments in the same file, and the Document Comments plugin refuses a new comment when the file changed after they selected text. So: one batched write per turn, at the end of the note, never a rewrite, never rewording or moving a thread. Tell the user when you are done writing.

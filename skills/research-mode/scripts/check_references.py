@@ -78,7 +78,7 @@ def check_learning(root):
         elif not fm["depth"].isdigit() or int(fm["depth"]) != pdepth + 1:
             errs.append(f"learning/branches/{f.name}: depth must be parent depth + 1 ({pdepth + 1})")
         if not re.search(r"\[\[" + re.escape(name) + r"[\]|#]", pf.read_text()):
-            errs.append(f"learning/{pkind}/{pf.name}: does not link [[{name}]]; add it under a Branches list")
+            errs.append(f"learning/{pkind}/{pf.name}: does not link [[{name}]]; link [[{name}|term]] at the term in the parent")
     return errs
 
 
@@ -240,7 +240,7 @@ def selftest():
         (L / "core").mkdir(parents=True)
         (L / "branches").mkdir()
         fm = "---\ncreated: x\nupdated: x\nkind: learning\nvoice: v\n"
-        (L / "core/heart.md").write_text(fm + "---\nEnough means: x\n\n## Branches\n- [[cell]]\n")
+        (L / "core/heart.md").write_text(fm + "---\nEnough means: x\n\nThe [[cell|heart muscle cell]] fires.\n")
         (L / "branches/cell.md").write_text(fm + "parent: heart\ndepth: 1\nstatus: unchecked\n---\nx\n")
         assert check_learning(root) == ["learning/log.md missing; write it from references/log.template.md"], check_learning(root)
         (L / "log.md").write_text("x")
