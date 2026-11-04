@@ -37,6 +37,30 @@ def check_raw(root):
     return errs
 
 
+def check_understanding(root):
+    """understanding.md: level 0-4; level 2 or more needs an evidence link to a file under docs/learning/."""
+    f = root / "docs/learning/understanding.md"
+    if not f.exists():
+        return []
+    errs = []
+    for ln in f.read_text().splitlines():
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if len(cells) < 5 or not cells[1].isdigit() and cells[1] not in ("Level", "---") and not set(cells[1]) <= {"-"}:
+            if len(cells) >= 5 and cells[0] not in ("Concept",) and not set(cells[0]) <= {"-"}:
+                errs.append(f"understanding.md: {cells[0]}: level must be 0 to 4")
+            continue
+        if not cells[1].isdigit():
+            continue
+        lvl = int(cells[1])
+        if lvl > 4:
+            errs.append(f"understanding.md: {cells[0]}: level must be 0 to 4")
+        m = re.search(r"\(([^)]+)\)|\[\[([^\]|]+)", cells[3])
+        target = (m.group(1) or m.group(2)) if m else None
+        if lvl >= 2 and not (target and (f.parent / target).exists()):
+            errs.append(f"understanding.md: {cells[0]}: level {lvl} needs an evidence link to an existing file (relative to docs/learning/)")
+    return errs
+
+
 def check_readmes(root):
     """Every paper folder has a README.md, and the project README links it."""
     errs = []
@@ -114,7 +138,7 @@ def check(ref_file):
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
-    return errs + check_raw(root) + check_readmes(root) + check_notes(root)
+    return errs + check_raw(root) + check_readmes(root) + check_understanding(root) + check_notes(root)
 
 
 def selftest():
@@ -167,6 +191,17 @@ def selftest():
         (root / "docs/learning/sessions/notes.md").write_text("x")
         e = " ".join(check_raw(root))
         assert "reports/summary.md" in e and "sessions/notes.md" in e, e
+    with tempfile.TemporaryDirectory() as d:
+        root = Path(d)
+        (root / "docs/learning/sessions").mkdir(parents=True)
+        (root / "docs/learning/sessions/s.md").write_text("x")
+        head = "| Concept | Level | Class | Evidence | Date |\n|---|---|---|---|---|\n"
+        u = root / "docs/learning/understanding.md"
+        u.write_text(head + "| a | 1 | unknown | | 2026-11-04 |\n| b | 2 | confirmed | [s](sessions/s.md) | 2026-11-04 |\n")
+        assert check_understanding(root) == [], check_understanding(root)
+        u.write_text(head + "| c | 3 | confirmed | | 2026-11-04 |\n| d | 2 | confirmed | [s](sessions/missing.md) | x |\n| e | 9 | x | | x |\n")
+        e = " ".join(check_understanding(root))
+        assert "c: level 3 needs" in e and "d: level 2 needs" in e and "e: level must be" in e, e
     print("selftest ok")
 
 

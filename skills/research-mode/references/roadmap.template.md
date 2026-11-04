@@ -7,7 +7,7 @@ voice: user+assistant
 
 # Learning roadmap
 
-Built with `make-me-roadmap`. `teach` changes only the status and session columns.
+Built with `make-me-roadmap`. `teach` sets only the session column. Status is read from `understanding.md` (explained means level 2 or higher).
 
 **Next:** <the first open item>
 

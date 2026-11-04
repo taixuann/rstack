@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 MODE = SKILLS / "research-mode"
 WORKFLOW = {"research-mode", "setup-research", "research-help", "arena", "swarm", "interrogate",
-            "figure-it-out", "show-me-your-work", "reflect", "correct", "bro", "in-your-own-words", "unslop", "teach", "explain", "make-the-figure", "answer-comments", "make-me-roadmap", "paper-ingest", "init"}
+            "figure-it-out", "show-me-your-work", "reflect", "correct", "bro", "in-your-own-words", "unslop", "teach", "explain", "make-the-figure", "answer-comments", "make-me-roadmap", "evaluate-my-understanding", "paper-ingest", "init"}
 # Backticked words in playbooks that are not skill names.
 IGNORE = {"state", "tasks", "true", "false", "yaml", "unread", "snapshotted", "read", "candidate", "frozen",
           "supported", "rejected", "explore", "design", "progressing", "closed", "ready-for-publish",

@@ -16,19 +16,22 @@ This skill runs the lesson. Other skills do the parts:
 | A flowing account of a meaning or a difficulty | `explain` |
 | A figure, when words cannot carry it | `make-the-figure` |
 | Replies inside the user's comment threads | `answer-comments` |
+| Testing what they now hold, and the level | `evaluate-my-understanding` |
 | Questions to the user, and capturing their answers | `interrogate` (interview mode) |
 
 Writing rules for notes the user reads in Obsidian (placement, front matter, comment format, checks) live in the Obsidian writing playbook. Follow it; do not restate it here.
 
 ## 1. Pick the target
 
-Read `docs/learning/roadmap.md`. If it does not exist, or the user's question is not on it, run `make-me-roadmap` first. Take the next open item, or the one the user names. Say in one line what they should be able to explain afterwards. If the target is a paper passage, find it and read the source analysis (`docs/literature-review/papers/<cite>/source-analysis.md`) silently. Do not summarise it to the user yet.
+Read `docs/learning/roadmap.md`. If it does not exist, or the user's question is not on it, run `make-me-roadmap` first. Take the next open item, or the one the user names. Say in one line what they should be able to explain afterwards.
+
+Inputs for the item, read silently and not summarised to the user yet: the annotations that prompted it (`docs/literature-review/papers/<cite>/annotations.md`), the matching section of `alignment.md`, the source analysis page it points to (`source-analysis.md`), and the item's current level in `docs/learning/understanding.md`.
 
 Long preparation (a primer, finding passages across papers) can go to a `research-agent` in the background while the user answers.
 
 ## 2. Find where the user is
 
-Read what they have already said: their annotations, `docs/inputs/`, earlier sessions, open comment threads. Then ask one question with `interrogate`. Do not start with three leading questions: that disengages people and tells you nothing.
+Read what they have already said: their annotations, `docs/inputs/`, earlier sessions, open comment threads. Then ask before you write anything: run `interrogate` in interview mode, one to four short questions, and copy their answers word for word as `[user]`. Do not start with three leading questions: that disengages people and tells you nothing.
 
 - **They have something to say**: go to the teach-back loop.
 - **They have almost nothing** (a new field, an unknown term): call `explain` for a headstart and a short account, then switch to teach-back.
@@ -53,7 +56,7 @@ At the start of each turn, run `answer-comments` on the session file. Copy any a
 4. **Explain only the gap, only after one honest attempt**, by calling `explain`. Distinguish impatient from stuck. Impatient: narrow the question until it is nearly rhetorical, or work a parallel example and let them do the last step. Stuck (same wrong idea twice, silence, frustration): give a concrete foothold (do the first step, name the rule), then hand the work back. Do not hide the answer inside a hint.
 5. **Refine.** "Say that step again without the jargon", or "what everyday thing is it like?" If new cracks appear, probe those. Brief acknowledgement, then deeper. Do not praise at length.
 6. **Test transfer.** One question the source does not answer: "if this works as you said, what changes if X changes?" Let them answer first.
-7. **Stop when done.** When they explain it back correctly, apply it to a new case, or stop needing hints, say so plainly, summarise what they now hold, and point at what to learn next.
+7. **Stop when done.** When they explain it back correctly, apply it to a new case, or stop needing hints, say so plainly, summarise what they now hold, and point at what to learn next. Do not grade them yourself: offer `evaluate-my-understanding`, which tests with fresh questions and records the level.
 
 Each reply carries one focused question and one small scaffold. Never a wall of questions. Never a lecture.
 
@@ -69,13 +72,14 @@ Append a dated record; never edit an old one.
 
 - The session: `docs/learning/sessions/YYYY-MM-DD_<slug>.md`, with `papers: [<cite>]` in its front matter when a paper prompted it. Sessions belong to the topic, not to one paper.
 - Each idea the user now holds: one short note in `docs/learning/concepts/<concept>.md` (a definition, then its properties; front matter `status: unchecked` until checked against a textbook or review), created or updated, linking back to the session. Link concept notes from the session with `[[concept]]`.
-- The roadmap: tick the item's status. Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with a link to the session.
+- The roadmap: set the item's session link. Status follows `docs/learning/understanding.md`, which only `evaluate-my-understanding` changes.
+  Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with a link to the session.
 
 A session file holds: the target, the user's final explanation in their own words, the gaps found, the accounts you gave, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
 
 ## 7. Promote and hand off
 
-Only statements checked against the source (`[source-checked]`) go into `docs/literature-review/cross-papers/`, keeping the label. Open gaps become items in `docs/rstack/explore/inquiry.md` or tasks in the state's `tasks.md`; then run `scripts/sync_readme_tasks.py` and add a row to `docs/rstack/decisions.tsv` (**show-me-your-work**).
+Before promoting, run `sources` on the account you gave: each statement traced to the paper and page, or labelled general knowledge. Only statements checked against the source (`[source-checked]`) go into `docs/literature-review/cross-papers/`, keeping the label. Open gaps become items in `docs/rstack/explore/inquiry.md` or tasks in the state's `tasks.md`; then run `scripts/sync_readme_tasks.py` and add a row to `docs/rstack/decisions.tsv` (**show-me-your-work**).
 
 ## Tone
 
