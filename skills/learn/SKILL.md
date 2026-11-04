@@ -61,10 +61,11 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 
 Append a dated record; never edit an old one.
 
-- About a paper: `docs/literature-review/papers/<cite>/learning-YYYY-MM-DD.md`
-- Otherwise: `docs/inputs/YYYY-MM-DD_learning_<slug>.md`
+- The session: `docs/learning/sessions/YYYY-MM-DD_<slug>.md`, with `papers: [<cite>]` in its front matter when a paper prompted it. Sessions belong to the topic, not to one paper.
+- Each idea the user now holds: one short note in `docs/learning/concepts/<concept>.md` (front matter `status: unchecked` until checked against a textbook or review), created or updated, linking back to the session. Link concept notes from the session with `[[concept]]`.
+- The plan: `docs/learning/roadmap.md`. Update the session's row. If the user's question belongs to a paper, add it to that paper's README with a link to the session.
 
-It holds: the target, the user's final explanation in their own words, the gaps found, the plain accounts you gave, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
+A session file holds: the target, the user's final explanation in their own words, the gaps found, the plain accounts you gave, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
 
 ## 6. Promote and hand off
 

@@ -15,8 +15,9 @@ Operating rules for agents in `<project>`. This file holds the project's rules. 
 | Folder | Holds | Agents may |
 |---|---|---|
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
-| `docs/literature-review/papers/<cite>/` | Everything for one paper: `README.md` (start here, with the paper's metadata), `annotations.md` (frozen Zotero snapshot, `scripts/zotero_snapshot.py`), `source-analysis.md`, `review.md`, `learning-<date>.md`, `alignment.md`. Every file except `annotations.md` carries front matter: `created`, `updated`, `kind`, `voice`, `paper` | Add or refresh; never hand-edit `annotations.md`; keep `README.md` and `updated` current |
-| `docs/literature-review/cross-papers/` | Synthesis across papers: comparison tables, themes, mechanism primer, gap map | Write; label statements; cite the paper folders |
+| `docs/literature-review/papers/<cite>/` | Everything for one paper: `README.md` (start here, with the paper's metadata), `annotations.md` (frozen Zotero snapshot, `scripts/zotero_snapshot.py`), `source-analysis.md`, `review.md`, `alignment.md`. Every file except `annotations.md` carries front matter: `created`, `updated`, `kind`, `voice`, `paper` | Add or refresh; never hand-edit `annotations.md`; keep `README.md` and `updated` current |
+| `docs/learning/` | `roadmap.md`; `sessions/` (one dated record per learning session, never edited afterwards); `concepts/` (one short note per idea, reused across papers); `figures/`. Every file carries front matter | Write; label statements; keep concept `status` honest |
+| `docs/literature-review/cross-papers/` | Synthesis across papers: comparison tables, themes, gap map | Write; label statements; cite the paper folders |
 | `docs/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought) | Append new dated files; never edit |
 | `docs/literature-review/reports/` | Deep-research and HyperResearch outputs. Leads, not read papers | Append new dated files; never edit; use nothing until checked against a paper |
 | `docs/literature-review/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |

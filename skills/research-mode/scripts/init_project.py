@@ -13,7 +13,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REF = HERE.parent / "references"
 FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/literature-review/cross-papers", "docs/literature-review/reports",
-           "docs/rstack/explore", "analysis", "manuscripts", "presentation"]
+           "docs/learning/sessions", "docs/learning/concepts", "docs/learning/figures", "docs/rstack/explore", "analysis", "manuscripts", "presentation"]
 EXPLORE_TASKS = """# Tasks: explore
 
 Proposal intake

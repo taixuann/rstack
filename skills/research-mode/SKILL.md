@@ -64,8 +64,9 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ```
 data/raw/             immutable source measurements
-docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, source-analysis.md, review.md, learning-<date>.md, alignment.md
-docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, mechanism primer, gap map
+docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, source-analysis.md, review.md, alignment.md
+docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, gap map
+docs/learning/                         roadmap.md, sessions/ (dated learning records), concepts/ (one note per idea), figures/
 docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
 docs/literature-review/references.yaml which Zotero papers matter and why
 docs/inputs/          the user's own words, dated: <date>_<kind>_<slug>.md

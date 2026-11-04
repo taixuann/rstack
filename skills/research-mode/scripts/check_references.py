@@ -31,9 +31,9 @@ def check_raw(root):
     for f in sorted((root / "docs/literature-review/reports").glob("*")):
         if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
             errs.append(f"reports/{f.name}: name must be <date>_<tool>_<slug>.md")
-    for f in sorted((root / "docs/literature-review/papers").glob("*/learning-*")):
-        if not re.fullmatch(r"learning-" + DATED + r"\.md", f.name):
-            errs.append(f"papers/{f.parent.name}/{f.name}: name must be learning-<date>.md")
+    for f in sorted((root / "docs/learning/sessions").glob("*")):
+        if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+\.md", f.name):
+            errs.append(f"learning/sessions/{f.name}: name must be <date>_<slug>.md")
     return errs
 
 
@@ -57,7 +57,7 @@ def check_notes(root):
     """Notes the user reads in Obsidian: front matter, mermaid blocks parse, embeds resolve, comments balanced."""
     errs = []
     base = root / "docs"
-    files = [f for d in ("literature-review", "inputs") for f in sorted((base / d).rglob("*.md"))]
+    files = [f for d in ("literature-review", "inputs", "learning") for f in sorted((base / d).rglob("*.md"))]
     for f in files:
         if f.name == "annotations.md":
             continue
@@ -163,10 +163,10 @@ def selftest():
         root = Path(d)
         (root / "docs/literature-review/reports").mkdir(parents=True)
         (root / "docs/literature-review/reports/summary.md").write_text("x")
-        (root / "docs/literature-review/papers/a").mkdir(parents=True)
-        (root / "docs/literature-review/papers/a/learning-notes.md").write_text("x")
+        (root / "docs/learning/sessions").mkdir(parents=True)
+        (root / "docs/learning/sessions/notes.md").write_text("x")
         e = " ".join(check_raw(root))
-        assert "reports/summary.md" in e and "learning-notes.md" in e, e
+        assert "reports/summary.md" in e and "sessions/notes.md" in e, e
     print("selftest ok")
 
 

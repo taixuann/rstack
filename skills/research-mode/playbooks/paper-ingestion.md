@@ -2,7 +2,7 @@
 
 State: explore, once per paper. Produce the assistant's independent reading of one paper, freeze it, and have a critic review it. The analyst and the critic are always separate agents in fresh contexts. A review in the same context is `NON_QUALIFYING_SAME_CONTEXT` and cannot give a PASS. This is the assistant's side of the understanding ladder. The user's side is their annotations, and **Inquiry** brings the two together.
 
-One folder per paper, `docs/literature-review/papers/<cite>/`, holds everything: `README.md` (start here), `annotations.md` (the user's frozen Zotero snapshot), `source-analysis.md`, `review.md`, and later `learning-<date>.md` and `alignment.md`. Every file except `annotations.md` starts with front matter (`created`, `updated`, `kind`, `voice`, `paper`); `voice` says who wrote it, so the user's, the assistant's and the critic's readings stay apart.
+One folder per paper, `docs/literature-review/papers/<cite>/`, holds everything: `README.md` (start here), `annotations.md` (the user's frozen Zotero snapshot), `source-analysis.md`, `review.md`, and later `alignment.md`. Learning sessions are not kept here; they go to `docs/learning/`, and the paper's README links to them. Every file except `annotations.md` starts with front matter (`created`, `updated`, `kind`, `voice`, `paper`); `voice` says who wrote it, so the user's, the assistant's and the critic's readings stay apart.
 
 **Route.** The user marks key papers. `FULL` for key papers and for any paper whose analysis changed in a major way. `SCOPED` for a local repair to an analysis that already passed. `NO_REVIEW` for background papers; they are context only and never the sole support for a claim.
 
