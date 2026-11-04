@@ -23,6 +23,7 @@ Ask one question to find out where the user is. Do not start with three leading 
 - **They have something to say** (they read it, annotated it, or can say what they think it means): go to the teach-back loop.
 - **They have almost nothing** (a new field, an unknown term, "I don't understand any of this"): give a headstart, then a short plain lesson, then switch to teach-back.
   - *Headstart first.* Before the first concept, say what the thing is and where it sits in the whole (zoom from the big object to the part: heart, muscle, one cell). Name every everyday noun the lesson will use and say what it is ("cell" means a heart muscle cell, not blood). Say what "inside" and "outside" refer to. A lesson that starts at the mechanism leaves the user guessing what the words point at.
+  - *Explain a process as a story, start to end.* When the thing is a mechanism, tell it in time order, one step per paragraph, and say what happens before naming it. Right under each step put two callouts: `> [!note] Definitions` for the words that step introduces, and `> [!info] Properties` for the rules, numbers and reasons that go with it. Draw the dynamic picture (a graph over time, or a before and after) once at the top of the story. Do not list all definitions first.
   - *One new term per message.* Never use a term the user has not seen defined in this session. If their reply shows they did not follow, the gap is in your headstart: go back and fill it, do not push forward.
   - *Answer their own questions in their words.* If their annotations already ask it ("which cell?", "inside what?"), answer those before adding anything new.
   - One concept at a time. State what it is in everyday words, tie it to the user's own project (the device, the electrode, the signal), and show it with a small picture when structure helps (a table, a Mermaid diagram, or `show_widget` if available). End with one question that asks them to say it back or predict something.
@@ -62,7 +63,7 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 Append a dated record; never edit an old one.
 
 - The session: `docs/learning/sessions/YYYY-MM-DD_<slug>.md`, with `papers: [<cite>]` in its front matter when a paper prompted it. Sessions belong to the topic, not to one paper.
-- Each idea the user now holds: one short note in `docs/learning/concepts/<concept>.md` (front matter `status: unchecked` until checked against a textbook or review), created or updated, linking back to the session. Link concept notes from the session with `[[concept]]`.
+- Each idea the user now holds: one short note in `docs/learning/concepts/<concept>.md` (a definition, then its properties; front matter `status: unchecked` until checked against a textbook or review), created or updated, linking back to the session. Link concept notes from the session with `[[concept]]`.
 - The plan: `docs/learning/roadmap.md`. Update the session's row. If the user's question belongs to a paper, add it to that paper's README with a link to the session.
 
 A session file holds: the target, the user's final explanation in their own words, the gaps found, the plain accounts you gave, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
