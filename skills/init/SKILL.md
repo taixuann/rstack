@@ -23,7 +23,7 @@ docs/literature-review/papers/<cite>/  one folder per paper: README, annotations
 docs/literature-review/cross-papers/   synthesis across papers
 docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
 docs/literature-review/references.yaml which papers matter and why
-docs/learning/   roadmap.md, sessions/ (dated records), concepts/ (one note per idea), figures/
+docs/learning/   roadmap.md (index), log.md, core/ (one growing note per roadmap item), branches/ (one small note per word or question), figures/
 docs/inputs/     the user's own words, dated, never edited
 docs/rstack/     written documents of each stage, in <state>/ subfolders
 analysis/        scripts, figures, tables

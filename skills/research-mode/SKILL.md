@@ -20,7 +20,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill (after **make-me-roadmap**) to be able to say it back, in any state. The learning cycle: **make-me-roadmap** → **teach** (with **explain**, **make-the-figure**, **answer-comments**) → **evaluate-my-understanding** → back to the roadmap. Reading one paper into a Source Analysis → the **paper-ingest** skill.
+- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill (after **make-me-roadmap**) to be able to say it back, in any state. The learning cycle: **make-me-roadmap** → **teach** (with **explain**, **make-the-figure**, **answer-comments**) → **evaluate-my-understanding** → back to the roadmap; a comment that asks to open a term up goes to **branch**. Reading one paper into a Source Analysis → the **paper-ingest** skill.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
@@ -66,7 +66,7 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 data/raw/             immutable source measurements
 docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, source-analysis.md, review.md, alignment.md
 docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, gap map
-docs/learning/                         roadmap.md, understanding.md, sessions/ (dated learning records), concepts/ (one note per idea), figures/
+docs/learning/                         roadmap.md, log.md, understanding.md, core/ (one growing note per item), branches/ (small notes from comments), figures/
 docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
 docs/literature-review/references.yaml which Zotero papers matter and why
 docs/inputs/          the user's own words, dated: <date>_<kind>_<slug>.md

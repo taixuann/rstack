@@ -16,6 +16,7 @@ This skill runs the lesson. Other skills do the parts:
 | A flowing account of a meaning or a difficulty | `explain` |
 | A figure, when words cannot carry it | `make-the-figure` |
 | Replies inside the user's comment threads | `answer-comments` |
+| A small note for a word or question the user wants opened up | `branch` |
 | Testing what they now hold, and the level | `evaluate-my-understanding` |
 | Questions to the user, and capturing their answers | `interrogate` (interview mode) |
 
@@ -23,7 +24,7 @@ Writing rules for notes the user reads in Obsidian (placement, front matter, com
 
 ## 1. Pick the target
 
-Read `docs/learning/roadmap.md`. If it does not exist, or the user's question is not on it, run `make-me-roadmap` first. Take the next open item, or the one the user names. Say in one line what they should be able to explain afterwards.
+Read `docs/learning/roadmap.md`. If it does not exist, or the user's question is not on it, run `make-me-roadmap` first. Take the next open item, or the one the user names. Say in one line what they should be able to explain afterwards: the row's "Enough means". Teaching stops there. Anything deeper is a branch (`branch`) or goes to the roadmap's Parked list.
 
 Inputs for the item, read silently and not summarised to the user yet: the annotations that prompted it (`docs/literature-review/papers/<cite>/annotations.md`), the matching section of `alignment.md`, the source analysis page it points to (`source-analysis.md`), and the item's current level in `docs/learning/understanding.md`.
 
@@ -31,7 +32,7 @@ Long preparation (a primer, finding passages across papers) can go to a `researc
 
 ## 2. Find where the user is
 
-Read what they have already said: their annotations, `docs/inputs/`, earlier sessions, open comment threads. Then ask before you write anything: run `interrogate` in interview mode, one to four short questions, and copy their answers word for word as `[user]`. Do not start with three leading questions: that disengages people and tells you nothing.
+Read what they have already said: their annotations, `docs/inputs/`, the core and branch notes so far, `docs/learning/log.md`, open comment threads. Then ask before you write anything: run `interrogate` in interview mode, one to four short questions, and copy their answers word for word as `[user]`. Do not start with three leading questions: that disengages people and tells you nothing.
 
 - **They have something to say**: go to the teach-back loop.
 - **They have almost nothing** (a new field, an unknown term): call `explain` for a headstart and a short account, then switch to teach-back.
@@ -39,11 +40,11 @@ Read what they have already said: their annotations, `docs/inputs/`, earlier ses
 
 ## 3. Write the lesson from their understanding
 
-The lesson is a section in the session file, built from their words, not a lecture prepared in advance. Use their wording for terms they already own. Start from the gap you found, not from page one. Keep the file short enough that they will read all of it.
+The lesson grows the item's core note, `docs/learning/core/<slug>.md`, built from their words, not a lecture prepared in advance. A new core note starts with an "Enough means" line (copied from the roadmap row). Append the new section at the end of the note; do not rewrite earlier text. Use their wording for terms they already own. Start from the gap you found, not from page one. Keep the file short enough that they will read all of it.
 
 New kind of lesson (first session on a topic, or a new layout): write one step as a sample, tell the user where it is, and wait for approval before writing the rest.
 
-At the start of each turn, run `answer-comments` on the session file. Copy any answer the user gave in chat into the file first, word for word, labelled `[user]`.
+At the start of each turn, run `answer-comments` on the core note, and `branch` for comments that ask to open a term up. Copy any answer the user gave in chat into the file first, word for word, labelled `[user]`.
 
 ## 4. The teach-back loop
 
@@ -68,14 +69,12 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 
 ## 6. Record
 
-Append a dated record; never edit an old one.
+- **The core note** is the record: one growing note per roadmap item, `docs/learning/core/<slug>.md` (kebab-case, no date). Front matter: `created`, `updated`, `kind: learning`, `voice`, `papers: [<cite>]` when a paper prompted it. It holds the target, the user's explanation in their own words, the gaps found, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added. Update `updated`.
+- **The log.** Append one line to `docs/learning/log.md` at the end of the lesson: date, core note, the branches made, and what the user can now say, in their words. Never edit earlier lines.
+- **Branches** are written by `branch`, one small note per word or question, not by this skill. List the slugs on the log line.
+- **The roadmap.** Set the item's core note. Status follows `docs/learning/understanding.md`, which only `evaluate-my-understanding` changes. Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with a link to the core note.
 
-- The session: `docs/learning/sessions/YYYY-MM-DD_<slug>.md`, with `papers: [<cite>]` in its front matter when a paper prompted it. Sessions belong to the topic, not to one paper.
-- Each idea the user now holds: one short note in `docs/learning/concepts/<concept>.md` (a definition, then its properties; front matter `status: unchecked` until checked against a textbook or review), created or updated, linking back to the session. Link concept notes from the session with `[[concept]]`.
-- The roadmap: set the item's session link. Status follows `docs/learning/understanding.md`, which only `evaluate-my-understanding` changes.
-  Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with a link to the session.
-
-A session file holds: the target, the user's final explanation in their own words, the gaps found, the accounts you gave, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
+**Edit the note as little as possible.** The user reads and comments in the same file, and the Document Comments plugin refuses a new comment when the file changed after they selected text. So: one batched write per turn, at the end of the note, never a rewrite, never rewording or moving a thread. Tell the user when you are done writing.
 
 ## 7. Promote and hand off
 

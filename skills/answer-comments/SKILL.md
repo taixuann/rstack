@@ -11,11 +11,11 @@ The thread format and the rules for leaving it intact are in the Obsidian writin
 
 ## Procedure
 
-1. **Read the file again** just before you edit. The user edits while you work.
+1. **Read the file again** just before you edit. The user edits while you work, and the Document Comments plugin refuses a new comment if the file changed after they selected text. So edit as little as possible: one batched write per turn.
 2. **Find the open threads**: `<!--co:ID ... status:open` blocks. A thread is open if its status is `open` and the last message is the user's, or if the user replied after your last line.
-3. **Answer each one**, in order of the file. Read the quoted text (`<!--c:ID-->...<!--/c:ID-->`) so you know what they are pointing at. Answer the question they asked, in the same plain words they used. If the answer needs more than a few lines, write it under a heading in the note and reply with a one-line pointer to it. A longer account follows the `explain` skill.
+3. **Answer each one**, in order of the file. Read the quoted text (`<!--c:ID-->...<!--/c:ID-->`) so you know what they are pointing at. Answer the question they asked, in the same plain words they used. If the answer needs more than a few lines, or the comment asks to branch, expand, or define a term, hand it to `branch` (the note goes in `docs/learning/branches/`) and reply with a one-line link. Do not put a longer account in the note the user is reading. An account that belongs in the core note itself follows the `explain` skill, added at the end.
 4. **Reply in the thread**: add one line `claude (<UTC ISO time>): <reply>` before the closing `-->`. One line. Do not start it with a word followed by a colon.
-5. **Never** resolve, delete, move, or reword a thread or a comment marker. Change only the exact lines you mean to; never rewrite a whole note from memory.
+5. **Never** resolve, delete, move, or reword a thread or a comment marker. Change only the exact lines you mean to, in one write; never rewrite a whole note from memory.
 6. **Anything you cannot answer** (it needs a source you do not have, or a judgment only the user can make): say so in the reply and name what is needed.
 7. **Check** with `scripts/check_references.py` (comment markers must stay balanced).
 

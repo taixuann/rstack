@@ -9,6 +9,8 @@ Make one thing clear. Not a lesson plan, not a quiz. Say what the thing is, how 
 
 ## Rules
 
+0. **Read the limit first.** The project is not teaching biology or physics for its own sake. Read the "Enough means" line of the core note (and the row's "Stop here" in `docs/learning/roadmap.md`) and stop at it. If the user's question goes below the line, say so and offer a branch (`branch`) or the Parked list; do not explain it anyway.
+
 1. **Say where it sits first.** Before the mechanism, say what the thing is and where it fits in the whole (zoom from the large object to the part: heart, muscle, one cell). Name every everyday noun the account will use and say what it points at. A cell here is a heart muscle cell, not blood. Say what "inside" and "outside" refer to.
 2. **Tell it as a story when it is a process.** Time order, start to end. Say what happens before naming it. One idea per paragraph.
 3. **Put each term beside the thing.** Define a new word in the sentence where the thing it names first happens. Put its rule, number or reason in the same paragraph, right where it matters. No separate Definitions box, no Properties box, no list of words before the story. A table of words at the end is allowed as a recap, not as the first introduction.
@@ -20,7 +22,7 @@ Make one thing clear. Not a lesson plan, not a quiz. Say what the thing is, how 
 
 ## When the account goes in a file
 
-If the user reads in Obsidian, write the account into the session or note file under a new heading, following the Obsidian writing playbook (placement, front matter, comment format). Answer open comment threads with `answer-comments`. The chat reply is the file path and what to read next, in three lines or fewer.
+If the user reads in Obsidian, add the account at the end of the core note, or write it as a branch note if it is a word or question the user wants opened up, following the Obsidian writing playbook (placement, front matter, comment format). Answer open comment threads with `answer-comments`. The chat reply is the file path and what to read next, in three lines or fewer.
 
 New layout or new kind of topic: write the first step or paragraph as a sample, tell the user where it is, and wait for approval before writing the rest.
 
