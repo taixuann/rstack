@@ -28,4 +28,4 @@ scientific-critical-thinking, statistical-analysis, statistical-power, explorato
 zotero-cli (skill text) is from zotero-mcp (https://github.com/54yyyu/zotero-mcp), MIT License.
 skill-creator is from Anthropic's skills repository (Apache License 2.0; see skills/skill-creator/LICENSE.txt).
 Pele (skills/research-mode/vendor/pele, unmodified, used to check Mermaid syntax) is by kepano, MIT License; see vendor/pele/LICENSE.
-learn adapts the guided-learning rhythm of Anthropic's learn skill (Apache License 2.0; see skills/learn/LICENSE.txt) and the teach-back method from the user's feynman.md.
+teach adapts the guided-learning rhythm of Anthropic's learn skill (Apache License 2.0; see skills/teach/LICENSE.txt) and the teach-back method from the user's feynman.md.

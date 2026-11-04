@@ -20,7 +20,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **learn** skill, in any state. Reading one paper into a Source Analysis → the **paper-ingest** skill.
+- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill (after **make-me-roadmap**) to be able to say it back, in any state. Reading one paper into a Source Analysis → the **paper-ingest** skill.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
