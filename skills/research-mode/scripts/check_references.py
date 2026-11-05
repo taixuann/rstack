@@ -40,72 +40,6 @@ def front(text):
     return dict(re.findall(r"^(\w+):[ \t]*(.*)$", m.group(1), re.M)) if m else {}
 
 
-def check_learning(root):
-    """docs/learning: core/ and branches/ notes are kebab-case without dates; each branch names a parent that
-    exists and links back with [[name]], and its depth is the parent's plus one (a core note is depth 0)."""
-    base = root / "docs/learning"
-    if not base.exists():
-        return []
-    errs = []
-    if not (base / "log.md").exists():
-        errs.append("learning/log.md missing; write it from references/log.template.md")
-    notes = {}
-    for kind in ("core", "branches"):
-        for f in sorted((base / kind).glob("*")):
-            if f.name.startswith("."):
-                continue
-            if not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*\.md", f.name) or re.match(DATED, f.name):
-                errs.append(f"learning/{kind}/{f.name}: name must be kebab-case <slug>.md with no date")
-            else:
-                notes[f.stem] = (kind, f)
-    for name, (kind, f) in notes.items():
-        if kind != "branches":
-            continue
-        fm = front(f.read_text())
-        missing = [k for k in ("parent", "depth", "status") if k not in fm]
-        if missing:
-            errs.append(f"learning/branches/{f.name}: front matter missing {missing}")
-            continue
-        parent = notes.get(fm["parent"])
-        if not parent:
-            errs.append(f"learning/branches/{f.name}: parent {fm['parent']} not found in core/ or branches/")
-            continue
-        pkind, pf = parent
-        pd = front(pf.read_text()).get("depth", "")
-        pdepth = 0 if pkind == "core" else (int(pd) if pd.isdigit() else None)
-        if pdepth is None:
-            errs.append(f"learning/branches/{pf.name}: depth missing or not a number")
-        elif not fm["depth"].isdigit() or int(fm["depth"]) != pdepth + 1:
-            errs.append(f"learning/branches/{f.name}: depth must be parent depth + 1 ({pdepth + 1})")
-        if not re.search(r"\[\[" + re.escape(name) + r"[\]|#]", pf.read_text()):
-            errs.append(f"learning/{pkind}/{pf.name}: does not link [[{name}]]; link [[{name}|term]] at the term in the parent")
-    return errs
-
-
-def check_understanding(root):
-    """understanding.md: level 0-4; level 2 or more needs an evidence link to a file under docs/learning/."""
-    f = root / "docs/learning/understanding.md"
-    if not f.exists():
-        return []
-    errs = []
-    for ln in f.read_text().splitlines():
-        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
-        if len(cells) < 5 or not cells[1].isdigit() and cells[1] not in ("Level", "---") and not set(cells[1]) <= {"-"}:
-            if len(cells) >= 5 and cells[0] not in ("Concept",) and not set(cells[0]) <= {"-"}:
-                errs.append(f"understanding.md: {cells[0]}: level must be 0 to 4")
-            continue
-        if not cells[1].isdigit():
-            continue
-        lvl = int(cells[1])
-        if lvl > 4:
-            errs.append(f"understanding.md: {cells[0]}: level must be 0 to 4")
-        m = re.search(r"\(([^)]+)\)|\[\[([^\]|]+)", cells[3])
-        target = (m.group(1) or m.group(2)) if m else None
-        if lvl >= 2 and not (target and (f.parent / target).exists()):
-            errs.append(f"understanding.md: {cells[0]}: level {lvl} needs an evidence link to an existing file (relative to docs/learning/)")
-    return errs
-
-
 def check_readmes(root):
     """Every paper folder has a README.md, and the project README links it."""
     errs = []
@@ -183,7 +117,7 @@ def check(ref_file):
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
-    return errs + check_raw(root) + check_readmes(root) + check_learning(root) + check_understanding(root) + check_notes(root)
+    return errs + check_raw(root) + check_readmes(root) + check_notes(root)
 
 
 def selftest():
@@ -234,35 +168,6 @@ def selftest():
         (root / "docs/literature-review/reports/summary.md").write_text("x")
         e = " ".join(check_raw(root))
         assert "reports/summary.md" in e, e
-    with tempfile.TemporaryDirectory() as d:
-        root = Path(d)
-        L = root / "docs/learning"
-        (L / "core").mkdir(parents=True)
-        (L / "branches").mkdir()
-        fm = "---\ncreated: x\nupdated: x\nkind: learning\nvoice: v\n"
-        (L / "core/heart.md").write_text(fm + "---\nEnough means: x\n\nThe [[cell|heart muscle cell]] fires.\n")
-        (L / "branches/cell.md").write_text(fm + "parent: heart\ndepth: 1\nstatus: unchecked\n---\nx\n")
-        assert check_learning(root) == ["learning/log.md missing; write it from references/log.template.md"], check_learning(root)
-        (L / "log.md").write_text("x")
-        assert check_learning(root) == [], check_learning(root)
-        (L / "branches/ion.md").write_text(fm + "parent: cell\ndepth: 3\nstatus: unchecked\n---\nx\n")
-        (L / "branches/2026-11-04_x.md").write_text("x")
-        (L / "branches/orphan.md").write_text(fm + "parent: nope\ndepth: 1\nstatus: unchecked\n---\nx\n")
-        (L / "branches/bare.md").write_text(fm + "---\nx\n")
-        e = " ".join(check_learning(root))
-        assert "ion.md: depth must be parent depth + 1 (2)" in e and "cell.md: does not link [[ion]]" in e, e
-        assert "2026-11-04_x.md: name must be" in e and "parent nope not found" in e and "bare.md: front matter missing" in e, e
-    with tempfile.TemporaryDirectory() as d:
-        root = Path(d)
-        (root / "docs/learning/core").mkdir(parents=True)
-        (root / "docs/learning/core/s.md").write_text("x")
-        head = "| Concept | Level | Class | Evidence | Date |\n|---|---|---|---|---|\n"
-        u = root / "docs/learning/understanding.md"
-        u.write_text(head + "| a | 1 | unknown | | 2026-11-04 |\n| b | 2 | confirmed | [s](core/s.md) | 2026-11-04 |\n")
-        assert check_understanding(root) == [], check_understanding(root)
-        u.write_text(head + "| c | 3 | confirmed | | 2026-11-04 |\n| d | 2 | confirmed | [s](core/missing.md) | x |\n| e | 9 | x | | x |\n")
-        e = " ".join(check_understanding(root))
-        assert "c: level 3 needs" in e and "d: level 2 needs" in e and "e: level must be" in e, e
     print("selftest ok")
 
 

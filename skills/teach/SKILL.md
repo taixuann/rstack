@@ -15,24 +15,24 @@ This skill runs the lesson. Other skills do the parts:
 | The plan: what to learn, in what order | `make-me-roadmap` |
 | A flowing account of a meaning or a difficulty | `explain` |
 | A figure, when words cannot carry it | `make-the-figure` |
-| Replies inside the user's comment threads | `answer-comments` |
-| A small note for a word or question the user wants opened up | `branch` |
+| Replies inside the user's comment threads | `teach` and `explain` do it, with the comment rules in the Notion writing playbook |
+| A word or question the user wants opened up | a new Raw page with a `Parent:` line (see section 3) |
 | Testing what they now hold, and the level | `evaluate-my-understanding` |
 | Questions to the user, and capturing their answers | `interrogate` (interview mode) |
 
-Writing rules for notes the user reads in Obsidian (placement, front matter, comment format, checks) live in the Obsidian writing playbook. Follow it; do not restate it here.
+Lessons live in Notion. Writing rules for them (placement, header, properties, open and closed pages, comment format, checks) live in the Notion writing playbook. Follow it; do not restate it here. Paper files (annotations, alignment, source analysis), the Roadmap and Understanding sections are in Notion (on the topic MOC and on each ingested page).
 
 ## 1. Pick the target
 
-Read `docs/learning/roadmap.md`. If it does not exist, or the user's question is not on it, run `make-me-roadmap` first. Take the next open item, or the one the user names. Say in one line what they should be able to explain afterwards: the row's "Enough means". Teaching stops there. Anything deeper is a branch (`branch`) or goes to the roadmap's Parked list.
+Read the `## Roadmap` section on the topic's Map of content page. If it does not exist, or the user's question is not on it, run `make-me-roadmap` first. Take the next open item, or the one the user names. Say in one line what they should be able to explain afterwards: the row's "Enough means". Teaching stops there. Anything deeper goes to the Roadmap's Parked list.
 
-Inputs for the item, read silently and not summarised to the user yet: the annotations that prompted it (`docs/literature-review/papers/<cite>/annotations.md`), the matching section of `alignment.md`, the source analysis page it points to (`source-analysis.md`), and the item's current level in `docs/learning/understanding.md`.
+Inputs for the item, read silently and not summarised to the user yet: the annotations that prompted it (`docs/literature-review/papers/<cite>/annotations.md`), the matching section of `alignment.md`, the source analysis page it points to (`source-analysis.md`), and the item's current level in the `## Understanding` section of its ingested page.
 
 Long preparation (a primer, finding passages across papers) can go to a `research-agent` in the background while the user answers.
 
 ## 2. Find where the user is
 
-Read what they have already said: their annotations, `docs/inputs/`, the core and branch notes so far, `docs/learning/log.md`, open comment threads. Then ask before you write anything: run `interrogate` in interview mode, one to four short questions, and copy their answers word for word as `[user]`. Do not start with three leading questions: that disengages people and tells you nothing.
+Read what they have already said: their annotations, `docs/inputs/`, the Raw pages of the topic so far (open and closed), the Log, open comment threads. Then ask before you write anything: run `interrogate` in interview mode, one to four short questions, and copy their answers word for word as `[user]`. Do not start with three leading questions: that disengages people and tells you nothing.
 
 - **They have something to say**: go to the teach-back loop.
 - **They have almost nothing** (a new field, an unknown term): call `explain` for a headstart and a short account, then switch to teach-back.
@@ -40,11 +40,13 @@ Read what they have already said: their annotations, `docs/inputs/`, the core an
 
 ## 3. Write the lesson from their understanding
 
-The lesson grows the item's core note, `docs/learning/core/<slug>.md`, built from their words, not a lecture prepared in advance. A new core note starts with an "Enough means" line (copied from the roadmap row). Append the new section at the end of the note; do not rewrite earlier text. Use their wording for terms they already own. Start from the gap you found, not from page one. Keep the file short enough that they will read all of it.
+The lesson grows the item's Raw page in Notion, built from their words, not a lecture prepared in advance. If an open Raw page exists for the item, extend it. If the last one is closed (ingested), open a new Raw page that continues it, as the Notion writing playbook says. A new page starts with an "Enough means" line (copied from the roadmap row). Add the new section at the end; do not rewrite earlier text. Use their wording for terms they already own. Start from the gap you found, not from page one. Keep the page short enough that they will read all of it.
 
 New kind of lesson (first session on a topic, or a new layout): write one step as a sample, tell the user where it is, and wait for approval before writing the rest.
 
-At the start of each turn, run `answer-comments` on the core note, and `branch` for comments that ask to open a term up. Copy any answer the user gave in chat into the file first, word for word, labelled `[user]`.
+Only lesson text goes to Notion. Signals, subject IDs and file listings from the project's data stay out (playbook rule on data).
+
+At the start of each turn, read the open comment threads on the Raw page and reply in-thread, following the comment rules in the Notion writing playbook. A comment that asks to open a term up becomes a new Raw page, a branch: header `Parent:` (the page it came from), `Depth:` (parent's plus one), then the account by `explain`. Past depth 3, or below the item's "Stop here" line, add a line to the Parked list in the `## Roadmap` section and tell the user. Reply in the thread with a link to the new page. Copy any answer the user gave in chat into the page first, word for word, labelled `[user]`.
 
 ## 4. The teach-back loop
 
@@ -69,12 +71,12 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 
 ## 6. Record
 
-- **The core note** is the record: one growing note per roadmap item, `docs/learning/core/<slug>.md` (kebab-case, no date). Front matter: `created`, `updated`, `kind: learning`, `voice`, `papers: [<cite>]` when a paper prompted it. It holds the target, the user's explanation in their own words, the gaps found, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added. Update `updated`.
-- **The log.** Append one line to `docs/learning/log.md` at the end of the lesson: date, core note, the branches made, and what the user can now say, in their words. Never edit earlier lines.
-- **Branches** are written by `branch`: an inline expansion beside the term, or, only when big, a note in `branches/`. List the slugs of the big ones on the log line.
-- **The roadmap.** Set the item's core note. Status follows `docs/learning/understanding.md`, which only `evaluate-my-understanding` changes. Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with a link to the core note.
+- **The Raw page** is the record: one page per lesson, titled `YYYY-MM-DD_slug`, open until ingested. It holds the target, the user's explanation in their own words, the gaps found, and the questions left. Label statements with the understanding ladder: `[user]` for what they said, `[assistant]` for what you added.
+- **The Log.** Add one Log entry when the lesson ends: date, Raw page, the branch pages made, and what the user can now say, in their words. Entries are plain text. Never edit earlier ones.
+- **Ingest.** At the end, offer to ingest the page with `notion-llm-wiki`. On yes, it writes the `ingested` pages and updates the Map of content, and the Raw page closes. Do not ingest unasked.
+- **The roadmap.** Set the item's note column to the Raw page title. Status follows the `## Understanding` rows, which only `evaluate-my-understanding` changes. Do not re-plan it; if the plan must change, run `make-me-roadmap`. If the user's question belongs to a paper, add it to that paper's README with the Raw page title.
 
-**Edit the note as little as possible.** The user reads and comments in the same file, and the Document Comments plugin refuses a new comment when the file changed after they selected text. So: one batched write per turn, at the end of the note, never a rewrite, never rewording or moving a thread. Tell the user when you are done writing.
+**Edit the page as little as possible.** The user reads and comments on the same page. So: one batched insert per turn, at the end of the page, never a replace, never rewording or moving a thread. Tell the user when you are done writing.
 
 ## 7. Promote and hand off
 

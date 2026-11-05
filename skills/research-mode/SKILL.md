@@ -20,7 +20,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill (after **make-me-roadmap**) to be able to say it back, in any state. The learning cycle: **make-me-roadmap** → **teach** (with **explain**, **make-the-figure**, **answer-comments**) → **evaluate-my-understanding** → back to the roadmap; a comment that asks to open a term up goes to **branch**. Reading one paper into a Source Analysis → the **paper-ingest** skill.
+- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill (after **make-me-roadmap**) to be able to say it back, in any state. Learning is a lane beside every state, and each state's `tasks.md` has a `Learning` heading with one `Learn:` line per Roadmap item the state needs. The learning cycle: **interrogate** (in explore, it finds the gaps) → **make-me-roadmap** → **teach** (with **explain** and **make-the-figure**; both answer the user's Notion comments, and a comment that asks to open a term up becomes a branch, a new Raw page with a Parent line) → ingest (**notion-llm-wiki**) → **evaluate-my-understanding** → back to the roadmap. Learning lives in Notion; see `docs/statechart/LEARNING.md`. Reading one paper into a Source Analysis → the **paper-ingest** skill.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
@@ -66,7 +66,6 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 data/raw/             immutable source measurements
 docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, source-analysis.md, review.md, alignment.md
 docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, gap map
-docs/learning/                         roadmap.md, log.md, understanding.md, core/ (one growing note per item), branches/ (notes for big branches), figures/
 docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
 docs/literature-review/references.yaml which Zotero papers matter and why
 docs/inputs/          the user's own words, dated: <date>_<kind>_<slug>.md
@@ -86,7 +85,7 @@ A project's `README.md` front matter carries its state. Each state has `docs/rst
 
 | State | Focus | Playbooks |
 |---|---|---|
-| explore | frame the project, read the literature, then synthesize questions and methods | Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
+| explore | scope the question (interrogate, a quick search), then deepen (key papers, inquiry), then synthesize questions and methods | Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
@@ -132,25 +131,36 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
-- **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
-- **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
-- **Investigation.** Read-only question about the data, a method, or the literature.
+Learning is a separate lane and has no playbook: `teach`, `explain`, `make-me-roadmap` and `evaluate-my-understanding` run beside any state (see `docs/statechart/LEARNING.md`).
+
+**Phase playbooks (run in the state's order; the state review is the gate out)**
+
+- **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
+- **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
+- **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
+- **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Experimental design.** Hypothesis, study design, power, protocol.
 - **Study analysis.** Exploring, analysing, or interpreting data; figures.
+- **Manuscript writing.** Drafting, revising, and auditing manuscripts.
+- **Package results.** Freeze, disposition, and hand off a finished study.
+- **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
+
+**Anytime tools (no order; they never advance the state)**
+
+- **Investigation.** Read-only question about the data, a method, or the literature.
 - **Hillclimb.** Sustained improvement of one metric against a target, one change per measurement.
 - **Reproduce.** Re-run a paper's or prior result before building on it.
 - **Data forensics.** Diagnose an anomaly in captured data. The deliverable is a diagnosis.
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
-- **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
-- **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
-- **Obsidian writing.** Writing notes the user reads and comments on in Obsidian: placement, front matter, Mermaid diagrams, comment threads.
-- **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
-- **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
-- **Manuscript writing.** Drafting, revising, and auditing manuscripts.
-- **Reviewer response.** Answering reviewer comments point by point.
 - **Peer review.** Reviewing someone else's manuscript, proposal, or analysis.
+- **Reviewer response.** Answering reviewer comments point by point.
 - **Presentation.** Slides, talks, posters.
-- **Package results.** Freeze, disposition, and hand off a finished study.
+
+**Support**
+
+- **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
+- **Obsidian writing.** Writing notes the user reads and comments on in Obsidian: placement, front matter, Mermaid diagrams, comment threads.
+- **Notion writing.** Writing lessons the user reads and comments on in Notion: Raw pages that stay open until ingested, Mermaid diagrams, native comment threads.
 - **Authoring a skill or playbook.** Writing or editing a SKILL.md or playbook.
 - **Autonomous run.** A long task driven to completion while the user is away, including pause and resume.
 

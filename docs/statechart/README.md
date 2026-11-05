@@ -15,7 +15,7 @@ How a project moves through rstack's five states. TLC checked the model: 12 stat
 **Make it again**
 
 ```bash
-~/.claude/plugins/cache/cursor-plugins/pstack/<version>/skills/statechart/scripts/statechart \
+rstack/skills/statechart/scripts/statechart \
   ResearchStates.tla --config ResearchStates.cfg --view view.mjs --out out
 ```
 

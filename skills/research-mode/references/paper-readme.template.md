@@ -27,7 +27,7 @@ parts: [<project parts this paper serves>]
 | 3 | [source-analysis.md](source-analysis.md) | the assistant's reading, every statement tagged `[assistant]` | you want what the paper says |
 | 4 | [review.md](review.md) | the critic's audit trail; read only the last section | you doubt a claim in the analysis |
 
-Add an `alignment.md` row when it appears. Learning lives in `docs/learning/`: link the roadmap and the core notes that answered this paper's questions.
+Add an `alignment.md` row when it appears. Learning lives in Notion: link the ingested pages that answered this paper's questions.
 
 ## What is open
 

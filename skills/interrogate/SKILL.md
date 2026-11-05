@@ -17,6 +17,15 @@ Use when the target is what the user understands, not a document: "interrogate m
 4. Do not lecture. A misconception is shown with the passage that contradicts it, then the user decides.
 5. Output the list of items with their class, ready to become the inquiry.
 
+## Learning mode (test what the user holds)
+
+Interview mode with a lesson as the target. `evaluate-my-understanding` and `teach` use it.
+
+1. Take one concept and its "Enough means" line. Ask only up to that line.
+2. Ask fresh questions the lesson did not give: a counter-case, a number, or "what would you expect if this changed?". One to four per round, each built on the last answer. No hints before the answer.
+3. Copy each answer word for word as `[user]` onto the test Raw page. Class each as confirmed, misconception (with the page that contradicts it), unknown, or my error.
+4. Do not grade or teach here. Hand the classed answers back; `evaluate-my-understanding` sets the level, and `explain` fills a gap.
+
 ## Frame
 Scope is what the user names; otherwise the current work product (latest diff, draft, or analysis). Restate the intent in your own words from the user's message and the artifacts; ask when unclear.
 

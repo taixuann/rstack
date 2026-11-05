@@ -1,6 +1,6 @@
 ---
 name: make-the-figure
-description: Makes one figure for a note the user reads in Obsidian, only where words cannot carry the idea. Use for /make-the-figure, or when the user asks for a picture, diagram or figure of a mechanism, structure or process, or when explain finds a structure words cannot show. Not for plots of data; use figures for those.
+description: Makes one figure for a lesson the user reads in Notion, only where words cannot carry the idea. Use for /make-the-figure, or when the user asks for a picture, diagram or figure of a mechanism, structure or process, or when explain finds a structure words cannot show. Not for plots of data; use figures for those.
 ---
 
 # Make the figure
@@ -15,8 +15,8 @@ A figure earns its place only when words cannot carry the idea: a structure in s
 
 ## Choose the form
 
-1. **Mermaid** in a `mermaid` code block when it is boxes, arrows, a sequence, a timeline, states. Obsidian draws it in the user's theme. Keep labels short. Preview with `scripts/render_diagram.mjs` under the research-mode skill, as the Obsidian writing playbook describes.
-2. **Hand-drawn SVG** in the `figures/` folder of that area, embedded as `![[figures/<name>.svg]]`, when Mermaid cannot draw it (a cell with ions, a circuit, a labelled part). Draw the thing itself with labelled parts, arrows for what moves, and a readout of the quantity that changes. Render to PNG (`rsvg-convert -w 1000 x.svg -o x.png`) and look at it before the user does.
+1. **Mermaid** in a `mermaid` code block when it is boxes, arrows, a sequence, a timeline, states. Notion draws it. Keep labels short. Preview it with `scripts/render_diagram.mjs` under the research-mode skill before writing it into the page.
+2. **Hand-drawn SVG** when Mermaid cannot draw it. Uploading an image to a Notion page is untested, so say so and ask the user before trying; until then describe the part in words or a table (a cell with ions, a circuit, a labelled part). Draw the thing itself with labelled parts, arrows for what moves, and a readout of the quantity that changes. Render to PNG (`rsvg-convert -w 1000 x.svg -o x.png`) and look at it before the user does.
 3. **A plot of data** is not this skill. Use `figures` (with `scientific-visualization`).
 
 ## Rules
@@ -24,6 +24,6 @@ A figure earns its place only when words cannot carry the idea: a structure in s
 - Say in one line what the figure shows and what it leaves out.
 - Label every part; a term in the figure was defined in the text.
 - Do not put numbers in a figure that the note does not source or label as general knowledge.
-- Check with `scripts/check_references.py` (embeds resolve, Mermaid parses).
+- Check that the Mermaid parses, by rendering it, before the page is written.
 
 **Reply:** the figure's path and the one thing it shows.

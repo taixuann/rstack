@@ -18,7 +18,9 @@ Ground first, then commit. Do not start until you can state:
 Present framing and tradeoffs before a long run. Reversible work proceeds; a multi-hour run earns one checkpoint with the user.
 
 ## Phase B: Design the workflow
-Decompose into atomic, independently checkable units, riskiest unknown first. Build the verification harness before the work, with a baseline captured from the pre-change state, so each check reads old value vs new value. For one-way-door decisions use `arena`. Parallelise only across seams (`swarm`), each worker with its own output location. Write the phase list down; the human reviews that list.
+First find what exists. For each unit, take the first rung that works, as in the sourcing ladder of `playbooks/authoring-a-skill.md`: an existing playbook (a phase playbook, or an anytime tool from the research-mode list), a bundled skill, an installed or external skill (search the installed skill list and the plugin catalog), an existing script, and only then something new. Write the choice beside each unit. A unit you had to build new, or a gap in a playbook, goes to `/reflect` so the next run finds it. Learning units (teach, explain, roadmap, tests) go to the learning skills, not into a playbook.
+
+Decompose into atomic, independently checkable units, riskiest unknown first. Build the verification harness before the work, with a baseline captured from the pre-change state, so each check reads old value vs new value. For one-way-door decisions use `arena`. Parallelise only across seams (`swarm`), each worker with its own output location. Write the phase list down, with the source of each unit; the human reviews that list.
 
 ## Phase C: Run the loop
 Each unit is an experiment: state the hypothesis, make the smallest change, measure against the predicate on the real artifact, keep it if it advanced, revert if not. Verify each unit before starting the next. Inspect artifacts, never trust a self-report; when something passes too easily, suspect the measurement first. Verdicts are VERIFIED, NOT VERIFIED, or INCONCLUSIVE; inconclusive is not a pass, and negatives stay visible.

@@ -22,9 +22,16 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 
 ## Standard project layout
 
-```
-data/raw/  docs/literature-review/{papers,cross-papers,reports}/  docs/inputs/  docs/rstack/<state>/  analysis/  manuscripts/  presentation/
-```
+| Folder | Holds |
+|---|---|
+| `data/raw/` | Raw data. Immutable |
+| `docs/inputs/` | What came in: proposals, supervisor notes. Never edited |
+| `docs/literature-review/` | `papers/<cite>/` (one folder per paper), `cross-papers/`, `reports/` (search reports, leads only) |
+| `docs/rstack/<state>/` | The state's tasks, documents, review and decisions |
+| `analysis/` | Derived work, each number traced to a script |
+| `manuscripts/`, `presentation/` | Writing and talks |
+
+Learning is not in the project folder. Lessons, ingested pages and the roadmap live in Notion (see `docs/statechart/LEARNING.md`).
 
 Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
 
@@ -33,34 +40,35 @@ Each project's `README.md` carries a research state: explore → design → prog
 ## What is inside
 
 - **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **21 playbooks** in `skills/research-mode/playbooks/`:
+- **22 playbooks** in `skills/research-mode/playbooks/`:
 
-| playbook | for |
-|---|---|
-| proposal-synthesis | questions, hypotheses, methods, feasibility, explore exit check |
-| state-review | gate review at every state exit: rules per state, findings become tasks |
-| project-docs | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, CLAUDE.md stub, state changes |
-| investigation | a read-only question |
-| experimental-design | hypothesis, design, power, protocol |
-| study-analysis | analysing data, figures, results |
-| hillclimb | sustained improvement of one metric |
-| reproduce | re-running a published or prior result |
-| data-forensics | diagnosing an anomaly in captured data |
-| prototype | a throwaway pilot that settles a fork |
-| literature-review | the Zotero loop: ingest papers, run the inquiry, find more, map the gap |
-| paper-ingestion | one paper to a frozen Source Analysis reviewed by an independent critic |
-| obsidian-writing | notes the user comments on in Obsidian: front matter, Mermaid diagrams, comment threads |
-| inquiry | align the user's reading with the assistant's, interrogate both, extend, search, claim |
-| manuscript-writing | drafting and auditing manuscripts |
-| reviewer-response | answering reviewer comments |
-| peer-review | reviewing others' work |
-| presentation | slides, talks, posters |
-| package-results | freezing and handing off a study |
-| authoring-a-skill | writing a skill or playbook, with a reuse-first sourcing ladder |
-| autonomous-run | long unattended work, with pause and resume |
+| playbook | group | for |
+|---|---|---|
+| literature-review | phase | the Zotero loop: ingest papers, run the inquiry, find more, map the gap |
+| paper-ingestion | phase | one paper to a frozen Source Analysis reviewed by an independent critic |
+| inquiry | phase | align the user's reading with the assistant's, interrogate both, extend, search, claim |
+| proposal-synthesis | phase | questions, hypotheses, methods, feasibility, explore exit check |
+| experimental-design | phase | hypothesis, design, power, protocol |
+| study-analysis | phase | analysing data, figures, results |
+| manuscript-writing | phase | drafting and auditing manuscripts |
+| package-results | phase | freezing and handing off a study |
+| state-review | phase | gate review at every state exit: rules per state, findings become tasks |
+| investigation | anytime | a read-only question |
+| hillclimb | anytime | sustained improvement of one metric |
+| reproduce | anytime | re-running a published or prior result |
+| data-forensics | anytime | diagnosing an anomaly in captured data |
+| prototype | anytime | a throwaway pilot that settles a fork |
+| peer-review | anytime | reviewing others' work |
+| reviewer-response | anytime | answering reviewer comments |
+| presentation | anytime | slides, talks, posters |
+| project-docs | support | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, CLAUDE.md stub, state changes |
+| obsidian-writing | support | notes the user comments on in Obsidian: front matter, Mermaid diagrams, comment threads |
+| notion-writing | support | lessons the user comments on in Notion: Raw pages, open and closed, Mermaid, native comments |
+| authoring-a-skill | support | writing a skill or playbook, with a reuse-first sourcing ladder |
+| autonomous-run | support | long unattended work, with pause and resume |
 
 - **17 principles** as `principle-*` skills.
-- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `teach` (teach-back lessons from the learning roadmap), `explain` (one flowing account of a meaning), `make-the-figure` (one figure, only where words cannot), `answer-comments` (reply inside the user's Obsidian comment threads), `make-me-roadmap` (the learning plan), `branch` (open up a term inline, or as its own note when big), `evaluate-my-understanding` (mastery levels 0 to 4 with evidence), `paper-ingest` (deep read of one paper), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
+- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `teach` (teach-back lessons in Notion, from the Roadmap section), `explain` (one flowing account of a meaning), `make-the-figure` (one figure, only where words cannot), `make-me-roadmap` (the learning plan, a Roadmap section on the topic's Map of content page), `evaluate-my-understanding` (mastery levels 0 to 4, in each ingested page's Understanding section), `paper-ingest` (deep read of one paper), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
 - **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort, plus `source-analyst` (deep read of one paper) and `paper-critic` (independent three-pass review), both on Sonnet at medium effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/literature-review/papers/`, `docs/literature-review/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).

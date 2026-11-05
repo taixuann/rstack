@@ -2,7 +2,7 @@
 """Create the rstack project layout and its three front docs. Never overwrites.
 
 Usage: init_project.py PROJECT_DIR [--title TITLE]   |   init_project.py --selftest
-Creates the standard folders (with .gitkeep), then README.md, AGENTS.md, CLAUDE.md, docs/learning/roadmap.md and log.md from
+Creates the standard folders (with .gitkeep), then README.md, AGENTS.md, CLAUDE.md from
 ../references/*.template.*, then docs/rstack/explore/tasks.md, then syncs the README task block.
 Anything that already exists is skipped and reported, so it also adds rstack to an existing project.
 """
@@ -13,7 +13,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REF = HERE.parent / "references"
 FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/literature-review/cross-papers", "docs/literature-review/reports",
-           "docs/learning/core", "docs/learning/branches", "docs/learning/figures", "docs/rstack/explore", "analysis", "manuscripts", "presentation"]
+           "docs/rstack/explore", "analysis", "manuscripts", "presentation"]
 EXPLORE_TASKS = """# Tasks: explore
 
 Proposal intake
@@ -22,9 +22,17 @@ Proposal intake
 - [ ] Write aims and milestones (`02_aims-and-milestones.md`)
 - [ ] Confirm the open points with the supervisor
 
-Literature review
-- [ ] Register the Zotero collection, ingest and review the papers, and run the inquiry
+Scope
+- [ ] Run `interrogate` on the proposal: aims, what the user knows, the gaps
+- [ ] Quick scoping search: register a few papers in Zotero, check what already exists
+- [ ] Scope check: the question is narrow, a gap is named, feasibility is judged
+
+Deepen
+- [ ] Ingest and review the key papers; run the inquiry
 - [ ] Write the literature map (`03_literature-map.md`): themes, search log, and the gap
+
+Learning
+- [ ] Write the Roadmap (`make-me-roadmap`), then add one `Learn: <item> (Roadmap)` line per item this state needs
 
 Proposal synthesis
 - [ ] Write questions and hypotheses (`04_questions-and-hypotheses.md`)
@@ -67,9 +75,6 @@ def init(project, title=None):
     put("AGENTS.md", (REF / "AGENTS.template.md").read_text().replace("<project>", p.name))
     put("CLAUDE.md", (REF / "CLAUDE.template.md").read_text())
     put("docs/rstack/explore/tasks.md", EXPLORE_TASKS)
-    today = date.today().isoformat()
-    for rel, tpl in (("docs/learning/roadmap.md", "roadmap.template.md"), ("docs/learning/log.md", "log.template.md")):
-        put(rel, (REF / tpl).read_text().replace("YYYY-MM-DD", today))
     # an existing README without the task markers cannot be synced; the caller reports it
     r = subprocess.run([sys.executable, str(HERE / "sync_readme_tasks.py"), str(p)], capture_output=True, text=True)
     if r.returncode:
@@ -84,14 +89,11 @@ def selftest():
         assert {"README.md", "AGENTS.md", "CLAUDE.md", "docs/rstack/explore/tasks.md"} <= set(made), made
         r = (proj / "README.md").read_text()
         assert "state: explore" in r and "Demo device" in r and "<Project title>" not in r and "<Work package name>" not in r
-        assert "Tasks (explore): 0/9 done" in r, r
+        assert "Tasks (explore): 0/13 done" in r, r
         assert "res_demo-device" in (proj / "AGENTS.md").read_text()
         for dead in ("00_interview.md", "03_literature-map.md", "references.yaml"):
             assert dead not in r, dead
-        for f in ("docs/learning/core", "docs/learning/branches", "docs/learning/figures"):
-            assert (proj / f).is_dir(), f
-        assert not (proj / "docs/learning/sessions").exists() and not (proj / "docs/learning/concepts").exists()
-        assert "Enough means" in (proj / "docs/learning/roadmap.md").read_text() and (proj / "docs/learning/log.md").exists()
+        assert not (proj / "docs/learning").exists(), "learning lives in Notion"
         for f in ("data/raw", "docs/literature-review/reports", "docs/rstack/explore"):
             assert (proj / f).is_dir()
         (proj / "README.md").write_text("mine")

@@ -1,6 +1,6 @@
 ### Inquiry
 
-State: explore. After the user has read and annotated papers in Zotero. Turn what the user read, and what the assistant read, into a good set of questions, extend them beyond one paper, and send them out to be answered. Talk first; search later.
+State: explore, deepen loop (the scope check has passed). After the user has read and annotated papers in Zotero. Turn what the user read, and what the assistant read, into a good set of questions, extend them beyond one paper, and send them out to be answered. Talk first; search later.
 
 **Understanding ladder.** Every statement in `docs/literature-review/` carries a label and moves up only through review: `[user]` (the user's reading, unverified), `[assistant]` (the assistant's reading, unverified), `[source-checked]` (a critic confirmed it against the paper), `[verified: cite]` (confirmed by an external source that passed a cite-check).
 
