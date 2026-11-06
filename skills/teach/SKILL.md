@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Runs a lesson so the user can explain something themselves, by teach-back (Feynman). Works from the user's own page: helps them understand it in back and forth, then rewrites the passage in their way when they are satisfied. Use for /teach, or when the user says "teach me", "quiz me", "test whether I understood", "next lesson", or wants to be able to say a reading or a result back in their own words. For a plain "what does this mean", use explain.
+description: Runs a lesson so the user can explain something themselves, by teach-back (Feynman). Works from the user's own draft: answers their questions in chat, then makes small updates to their draft, and helps write the permanent note in their structure. Use for /teach, or when the user says "teach me", "quiz me", "test whether I understood", "next lesson", or wants to be able to say a reading or a result back in their own words. For a plain "what does this mean", use explain.
 license: Apache-2.0 (guided-learning rhythm adapted from Anthropic's learn skill); teach-back method from the user's feynman.md
 ---
 
@@ -37,9 +37,9 @@ Read what they have already said: their annotations, `docs/inputs/`, the Raw pag
 - **They have almost nothing** (a new field, an unknown term): call `explain` for a headstart and a short account, then switch to teach-back.
 - **The question is really about notation, procedure, or what the paper claims**: say which, and answer at that level.
 
-## 3. Work from the user's page
+## 3. Work from the user's draft
 
-The user writes the page. You help them understand it, in back and forth, in chat (layout and rules: `research-mode/references/raw-lesson.template.md`; writing rules: `research-mode/references/plain-writing.md`). Use their wording for terms they already own. Start from the gap you found. Do not edit their text while you talk. When the user says they are satisfied, rewrite the passage directly in their way: their words, order and tone, with the idea now corrected or added. A word or question the user wants opened up can become a new Raw page with a `Parent:` line (depth 3 at most). Copy any answer the user gave in chat into the page only when they ask, word for word, labelled `[user]`.
+The user posts problems and questions in their draft. You answer in chat, short, one answer for each question. Then you update the draft parts the answers change: small edits to the user's own sentences, in their structure, order and style (layout and rules: `research-mode/references/raw-lesson.template.md`; writing rules: `research-mode/references/plain-writing.md`). Fix what is wrong, add a few words or one sentence, and tell the user which sentences changed. Never restructure, never add headings, never make a massive edit. The first time, show one before-and-after sample and wait for approval. The literature note beside the draft keeps its structure; add to it only a little. When the user gives a structure, write the permanent note from the draft in it, in their words. There is one permanent note per topic. Split only when the user says "split". A question the user wants opened up can become a new Raw page with a `Parent:` line (depth 3 at most).
 
 Only lesson text goes to Notion. Signals, subject IDs and file listings from the project's data stay out (playbook rule on data).
 
@@ -71,7 +71,7 @@ Each reply carries one focused question and one small scaffold. Never a wall of 
 - **Ingest.** At the end, offer to ingest the page with `notion-llm-wiki`. On yes, it writes the `ingested` pages and updates the Map of content, and the Raw page closes. Do not ingest unasked.
 - **Understanding.** Levels are recorded only by `evaluate-my-understanding`, and only when the user asks for a check.
 
-**Edit the page as little as possible.** The user writes on the same page. Edit a passage only after the user says they are satisfied, with small `update_content` changes, never a replace of the whole page. Tell the user when you are done writing.
+**Edit the page as little as possible.** Use small `update_content` changes, never a replace of the whole page, and never a restructure. Tell the user when you are done writing.
 
 ## 7. Promote and hand off
 

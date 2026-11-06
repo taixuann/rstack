@@ -22,7 +22,7 @@ Make one thing clear. Not a lesson plan, not a quiz. Say what the thing is, how 
 
 ## When the account goes in a file
 
-Answer in chat first. The user writes the page, and you help in back and forth (`research-mode/references/raw-lesson.template.md`; writing rules `research-mode/references/plain-writing.md`). Put an account on the page only as a "Base knowledge, added by the assistant" block under the user's text, or, once the user says they are satisfied, as a rewrite of their passage in their own way. Only lesson text goes to Notion, never signals or subject data. A word or question the user wants opened up can become a new Raw page with `Parent:` and `Depth:` in its header (depth 3 at most). The chat reply is the account, then one question.
+The user posts questions in their draft. Answer in chat first. Then update the draft parts the answers change, with small edits in the user's structure and style, and say which sentences changed (`research-mode/references/raw-lesson.template.md`; writing rules `research-mode/references/plain-writing.md`). Never restructure or make a massive edit. The "Base knowledge, added by the assistant" block keeps its structure; add to it only a little. The permanent note follows the structure the user chooses, in their words. Only lesson text goes to Notion, never signals or subject data. A word or question the user wants opened up can become a new Raw page with `Parent:` and `Depth:` in its header (depth 3 at most).
 
 New layout or new kind of topic: write the first step or paragraph as a sample, tell the user where it is, and wait for approval before writing the rest.
 

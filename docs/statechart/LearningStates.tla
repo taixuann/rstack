@@ -1,58 +1,55 @@
 ---- MODULE LearningStates ----
 EXTENDS Naturals
-\* One topic's learning in Notion, light loop. The user writes the page.
-\* wrote: the user has written a passage. asked: the user asked about it and the talk is open.
-\* satisfied: the user said they are satisfied. rewritten: the assistant rewrote the passage in the user's way.
-\* open: Raw pages now open (the page plus its branches). level: 0 not checked, 2 explained.
-VARIABLES wrote, asked, satisfied, rewritten, open, level
-vars == <<wrote, asked, satisfied, rewritten, open, level>>
+\* One topic's learning in Notion. Zettelkasten, light version.
+\* asked: the draft holds a question the assistant has not answered yet. answered: the assistant answered in chat.
+\* updated: the draft parts were updated after the answer (small edits). structure: the user gave a structure.
+\* notes: permanent notes written. splitSaid: the user said "split".
+VARIABLES draft, asked, answered, updated, structure, notes, splitSaid
+vars == <<draft, asked, answered, updated, structure, notes, splitSaid>>
 
-MaxOpen == 4   \* the page plus branches down to depth 3
+MaxNotes == 3
 
-Init == /\ wrote = FALSE /\ asked = FALSE /\ satisfied = FALSE /\ rewritten = FALSE
-        /\ open = 0 /\ level = 0
+Init == /\ draft = FALSE /\ asked = FALSE /\ answered = FALSE /\ updated = FALSE
+        /\ structure = FALSE /\ notes = 0 /\ splitSaid = FALSE
 
-UserWrites == /\ open = 0 /\ open' = 1 /\ wrote' = TRUE
-              /\ UNCHANGED <<asked, satisfied, rewritten, level>>
+UserWrites == /\ draft' = TRUE /\ asked' = TRUE /\ answered' = FALSE /\ updated' = FALSE
+              /\ UNCHANGED <<structure, notes, splitSaid>>
 
-\* The user asks. teach or explain answer in chat. The page does not change.
-UserAsks == /\ wrote /\ ~asked /\ asked' = TRUE /\ satisfied' = FALSE
-            /\ UNCHANGED <<wrote, rewritten, open, level>>
+\* The answer comes first, in chat. The page does not change yet.
+Answer == /\ asked /\ ~answered /\ answered' = TRUE /\ asked' = FALSE
+          /\ UNCHANGED <<draft, updated, structure, notes, splitSaid>>
 
-\* A question the user wants opened up becomes a new Raw page.
-Branch == /\ open \in 1..(MaxOpen - 1) /\ open' = open + 1
-          /\ UNCHANGED <<wrote, asked, satisfied, rewritten, level>>
+\* Small updates to the draft parts, only after the answer.
+UpdateDraft == /\ answered /\ ~updated /\ updated' = TRUE
+               /\ UNCHANGED <<draft, asked, answered, structure, notes, splitSaid>>
 
-UserSatisfied == /\ asked /\ ~satisfied /\ satisfied' = TRUE
-                 /\ UNCHANGED <<wrote, asked, rewritten, open, level>>
+UserGivesStructure == /\ answered /\ ~structure /\ structure' = TRUE
+                      /\ UNCHANGED <<draft, asked, answered, updated, notes, splitSaid>>
 
-\* Only after the user is satisfied, the assistant edits the passage.
-Rewrite == /\ satisfied /\ rewritten' = TRUE /\ asked' = FALSE /\ satisfied' = FALSE
-           /\ UNCHANGED <<wrote, open, level>>
+WritePermanent == /\ answered /\ structure /\ notes = 0 /\ notes' = 1
+                  /\ UNCHANGED <<draft, asked, answered, updated, structure, splitSaid>>
 
-\* A check runs only on request and only on a page the user wrote.
-Check == /\ wrote /\ \E l \in {0, 2} : level' = l
-         /\ UNCHANGED <<wrote, asked, satisfied, rewritten, open>>
+UserSaysSplit == /\ notes >= 1 /\ ~splitSaid /\ splitSaid' = TRUE
+                 /\ UNCHANGED <<draft, asked, answered, updated, structure, notes>>
 
-Ingest == /\ open > 0 /\ ~asked /\ open' = open - 1
-          /\ UNCHANGED <<wrote, asked, satisfied, rewritten, level>>
+Split == /\ splitSaid /\ notes < MaxNotes /\ notes' = notes + 1 /\ splitSaid' = FALSE
+         /\ UNCHANGED <<draft, asked, answered, updated, structure>>
 
 Done == UNCHANGED vars
 
-Next == UserWrites \/ UserAsks \/ Branch \/ UserSatisfied \/ Rewrite \/ Check \/ Ingest \/ Done
+Next == UserWrites \/ Answer \/ UpdateDraft \/ UserGivesStructure \/ WritePermanent
+        \/ UserSaysSplit \/ Split \/ Done
 
 Spec == Init /\ [][Next]_vars
 
-TypeOK == /\ {wrote, asked, satisfied, rewritten} \subseteq BOOLEAN
-          /\ open \in 0..MaxOpen /\ level \in {0, 2}
-\* The assistant rewrites nothing the user did not write.
-RewriteNeedsPage == rewritten => wrote
-\* Satisfied needs an open talk.
-SatisfiedNeedsTalk == satisfied => asked
-\* A page edit happens only after the user is satisfied.
-EditOnlyWhenSatisfied == [][rewritten' /= rewritten => satisfied]_vars
-\* A level is recorded only for a page the user wrote.
-LevelNeedsPage == level = 2 => wrote
-\* Ingest never closes a page while a talk is open.
-NoIngestWithOpenTalk == [][open' < open => ~asked]_vars
+TypeOK == /\ {draft, asked, answered, updated, structure, splitSaid} \subseteq BOOLEAN /\ notes \in 0..MaxNotes
+AnswerNeedsDraft == answered => draft
+UpdateNeedsAnswer == updated => answered
+NoteNeedsDraft == notes > 0 => draft
+\* The page changes only after the answer.
+EditOnlyAfterAnswer == [][(updated' /\ ~updated) => answered]_vars
+\* The first permanent note needs an answer and the user's structure.
+FirstNoteNeedsBasis == [][(notes = 0 /\ notes' > 0) => (answered /\ structure)]_vars
+\* More than one note only when the user said split.
+SplitOnlyWhenTold == [][(notes > 0 /\ notes' > notes) => splitSaid]_vars
 ====

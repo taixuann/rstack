@@ -14,7 +14,7 @@ description: Keeps a project's open tasks in Todoist (for the phone and the day-
 3. **The state is the section.** One Todoist section per research state, named `Phase - <State>` (`Phase - Explore`, `Phase - Design`, ...). Create a state's section when its `tasks.md` starts. Do not create sections for states without tasks. A `Project admin` section holds the weekly Sunday check (recurring, user-requested). It lives only in Todoist: leave it alone, and leave it out of counts and the map.
 4. **Headings are tasks, items are subtasks.** Each `tasks.md` heading (Proposal intake, Scope, ...) is one top-level task in the state's section. Each open checkbox under it is a subtask of that task. Two levels only. A sub-point inside an item goes in the Todoist description, not a third level. In `tasks.md` it is an indented `Detail:` line under the item, which is not a checkbox.
 5. **The map ties them.** `docs/rstack/todoist-map.tsv` holds the Todoist project id and, for each task and section, the Todoist id and the `tasks.md` line it was made from. Without a map, ask which Todoist project to use (or create one named after the project), then create the map. Never guess a project.
-6. **Never delete in Todoist.** Do not remove items you did not create, such as a project template. Tell the user instead. Never create a duplicate: look the line up in the map first.
+6. **Delete only what you created or the user names.** Leftovers you did not create (a project template, old sections) are not yours to remove or to keep silently: list them once and ask. Never create a duplicate: look the line up in the map first.
 7. **Nothing leaves this machine except task text.** No signals, subject data, or file contents. Descriptions carry the same plain words as the task, nothing more.
 
 ## Run it
@@ -38,7 +38,7 @@ task	<id>	<parent id or empty>	<heading, or tasks.md line text>
 
 ## Check before you hand it over
 
-- Counts match: open `tasks.md` items equal open Todoist subtasks in the state's section, and each heading with open items has a parent task.
+- Run `todoist-sync/scripts/check_map.py <project>`. It fails on a nested checkbox, an open item with no map row, a row under the wrong heading, or a row for a done item. Fix `tasks.md` or the map until it passes. It checks the map, not Todoist itself, so also compare the `find-tasks` count to the open items.
 - No due date, deadline, priority or label was set by you.
 - Every created id is in the map.
 
