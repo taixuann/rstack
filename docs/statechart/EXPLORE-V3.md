@@ -8,7 +8,7 @@ stateDiagram-v2
   Intake --> Scope: proposal intake done
   state Scope {
     [*] --> Interrogate: aims and gaps written down
-    Interrogate --> QuickSearch: Roadmap, first lessons, a quick search
+    Interrogate --> QuickSearch: overview page, first lessons, a quick search
   }
   Scope --> Deepen: the question is narrow, a gap is named, feasibility judged
   state Deepen {
@@ -24,8 +24,8 @@ stateDiagram-v2
 ```
 
 **Rules the model checks**
-- Roadmap, paper registration and inquiry need an `interrogate` first.
+- The overview page, paper registration and inquiry need an `interrogate` first.
 - Blind analysis, the critic and inquiry run only on a scoped question. Interrogating again clears the scope.
-- A lesson needs a Roadmap. A new lesson or reviewed paper voids the state review; exit needs a fresh one.
+- A lesson needs the user's overview page (the model still names it `roadmap`). A new lesson or reviewed paper voids the state review; exit needs a fresh one.
 
-**Learning in the task list.** `tasks.md` gets a `Learning` heading in every state. Each line is one Roadmap item that the state needs, written as `Learn: <item> (Roadmap)`. It is ticked when the item's `## Understanding` rows reach the level its Enough-means line asks for, so Notion stays the source of truth and `tasks.md` only mirrors it. `make-me-roadmap` adds the lines when it runs at state entry; `evaluate-my-understanding` is the only thing that ticks them. `scripts/sync_readme_tasks.py` then shows the open ones in the README block with no change.
+**Learning in the task list.** Retired. `tasks.md` no longer carries `Learn:` lines. The user's own overview page in Notion is the learning plan, and `make-me-roadmap` only reads it back. `ExploreV3.tla` still uses the word `roadmap` for "the overview page exists". Its logic is unchanged.

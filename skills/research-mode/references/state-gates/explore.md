@@ -11,4 +11,4 @@ Each angle is one adversary for `interrogate`. A finding survives only if it nam
 7. **Key papers reviewed.** Each paper the proposal leans on has a `PASS` review, or is marked `NO_REVIEW` and is not the sole support for any claim.
 8. **Questions resolved.** Every item in `inquiry.md` is answered with a cite, assigned to the supervisor, or queued for search. No claim in `claims.md` rests on an unanswered item.
 9. **Scope.** Was the question narrowed, with a gap and a feasibility judgement, before papers were analysed? If the aims changed, was the scope redone?
-10. **Learning in sync.** Every `Learn:` task is ticked or has an owner. Lessons ingested since the last review are carried into `docs/rstack/explore/`.
+10. **Learning in sync.** The user's overview page has no open point without an owner. Lessons ingested since the last review are carried into `docs/rstack/explore/`.

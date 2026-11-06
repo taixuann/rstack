@@ -20,7 +20,8 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill (after **make-me-roadmap**) to be able to say it back, in any state. Learning is a lane beside every state, and each state's `tasks.md` has a `Learning` heading with one `Learn:` line per Roadmap item the state needs. The learning cycle: **interrogate** (in explore, it finds the gaps) → **make-me-roadmap** → **teach** (with **explain** and **make-the-figure**; both answer the user's Notion comments, and a comment that asks to open a term up becomes a branch, a new Raw page with a Parent line) → ingest (**notion-llm-wiki**) → **evaluate-my-understanding** → back to the roadmap. Learning lives in Notion; see `docs/statechart/LEARNING.md`. Reading one paper into a Source Analysis → the **paper-ingest** skill.
+- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill to be able to say it back, in any state. Learning is a lane beside every state. The user writes their own page in Notion. The cycle is back and forth in chat: **teach** or **explain** (with **make-the-figure**) answer the user, **make-me-roadmap** reads their page and says what is still open, and when the user is satisfied the passage is rewritten in their way. **evaluate-my-understanding** checks on request. A question the user wants opened up can become a branch, a new Raw page with a Parent line. Learning lives in Notion; see `docs/statechart/LEARNING.md`. Reading one paper into a Source Analysis → the **paper-ingest** skill.
+- The project has `docs/rstack/todoist-map.tsv`, or the user asks to put tasks in Todoist or says they ticked tasks there → the **todoist-sync** skill. `tasks.md` stays the master.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
@@ -131,7 +132,7 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
-Learning is a separate lane and has no playbook: `teach`, `explain`, `make-me-roadmap` and `evaluate-my-understanding` run beside any state (see `docs/statechart/LEARNING.md`).
+Learning is a separate lane and has no playbook: `teach`, `explain`, `make-me-roadmap` and `evaluate-my-understanding` run beside any state (see `docs/statechart/LEARNING.md`). Lesson pages follow `references/raw-lesson.template.md` (the user writes, you help, rewrite when they are satisfied), and all lesson text follows `references/plain-writing.md`.
 
 **Phase playbooks (run in the state's order; the state review is the gate out)**
 

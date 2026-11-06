@@ -1,63 +1,58 @@
 ---- MODULE LearningStates ----
 EXTENDS Naturals
-\* One topic's learning in Notion. Raw pages are lessons; ingesting a Raw page closes it.
-\* roadmap: the Roadmap section exists. open: Raw pages now open (the lesson plus its branches).
-\* thread: a comment the user left is unanswered. ingested: an ingested page exists.
-\* testing: the open page holds answers to an understanding test. level: 0 not explained, 2 explained.
-VARIABLES roadmap, open, thread, ingested, testing, level
-vars == <<roadmap, open, thread, ingested, testing, level>>
+\* One topic's learning in Notion, light loop. The user writes the page.
+\* wrote: the user has written a passage. asked: the user asked about it and the talk is open.
+\* satisfied: the user said they are satisfied. rewritten: the assistant rewrote the passage in the user's way.
+\* open: Raw pages now open (the page plus its branches). level: 0 not checked, 2 explained.
+VARIABLES wrote, asked, satisfied, rewritten, open, level
+vars == <<wrote, asked, satisfied, rewritten, open, level>>
 
-MaxOpen == 4   \* the lesson page plus branches down to depth 3
+MaxOpen == 4   \* the page plus branches down to depth 3
 
-Init == /\ roadmap = FALSE /\ open = 0 /\ thread = FALSE
-        /\ ingested = FALSE /\ testing = FALSE /\ level = 0
+Init == /\ wrote = FALSE /\ asked = FALSE /\ satisfied = FALSE /\ rewritten = FALSE
+        /\ open = 0 /\ level = 0
 
-MakeRoadmap == /\ ~roadmap /\ roadmap' = TRUE /\ UNCHANGED <<open, thread, ingested, testing, level>>
+UserWrites == /\ open = 0 /\ open' = 1 /\ wrote' = TRUE
+              /\ UNCHANGED <<asked, satisfied, rewritten, level>>
 
-OpenLesson == /\ roadmap /\ open = 0 /\ ~testing
-              /\ open' = 1 /\ UNCHANGED <<roadmap, thread, ingested, testing, level>>
+\* The user asks. teach or explain answer in chat. The page does not change.
+UserAsks == /\ wrote /\ ~asked /\ asked' = TRUE /\ satisfied' = FALSE
+            /\ UNCHANGED <<wrote, rewritten, open, level>>
 
-\* A branch is a new Raw page, linked to its parent.
-Branch == /\ open \in 1..(MaxOpen - 1) /\ ~testing
-          /\ open' = open + 1 /\ UNCHANGED <<roadmap, thread, ingested, testing, level>>
+\* A question the user wants opened up becomes a new Raw page.
+Branch == /\ open \in 1..(MaxOpen - 1) /\ open' = open + 1
+          /\ UNCHANGED <<wrote, asked, satisfied, rewritten, level>>
 
-UserComments == /\ open > 0 /\ ~thread /\ thread' = TRUE
-                /\ UNCHANGED <<roadmap, open, ingested, testing, level>>
+UserSatisfied == /\ asked /\ ~satisfied /\ satisfied' = TRUE
+                 /\ UNCHANGED <<wrote, asked, rewritten, open, level>>
 
-AnswerComment == /\ thread /\ thread' = FALSE
-                 /\ UNCHANGED <<roadmap, open, ingested, testing, level>>
+\* Only after the user is satisfied, the assistant edits the passage.
+Rewrite == /\ satisfied /\ rewritten' = TRUE /\ asked' = FALSE /\ satisfied' = FALSE
+           /\ UNCHANGED <<wrote, open, level>>
 
-\* The understanding test writes the user's answers onto a new Raw page.
-StartTest == /\ ingested /\ open = 0 /\ ~testing
-             /\ open' = 1 /\ testing' = TRUE
-             /\ UNCHANGED <<roadmap, thread, ingested, level>>
+\* A check runs only on request and only on a page the user wrote.
+Check == /\ wrote /\ \E l \in {0, 2} : level' = l
+         /\ UNCHANGED <<wrote, asked, satisfied, rewritten, open>>
 
-\* Ingest rewrites one Raw page into its ingested page and closes the Raw page.
-\* The level changes only when the closing page was a test page.
-Ingest == /\ open > 0 /\ ~thread
-          /\ open' = open - 1 /\ ingested' = TRUE
-          /\ IF testing /\ open = 1
-               THEN /\ testing' = FALSE /\ \E l \in {0, 2} : level' = l
-               ELSE /\ UNCHANGED <<testing, level>>
-          /\ UNCHANGED <<roadmap, thread>>
+Ingest == /\ open > 0 /\ ~asked /\ open' = open - 1
+          /\ UNCHANGED <<wrote, asked, satisfied, rewritten, level>>
 
 Done == UNCHANGED vars
 
-Next == MakeRoadmap \/ OpenLesson \/ Branch \/ UserComments \/ AnswerComment
-        \/ StartTest \/ Ingest \/ Done
+Next == UserWrites \/ UserAsks \/ Branch \/ UserSatisfied \/ Rewrite \/ Check \/ Ingest \/ Done
 
 Spec == Init /\ [][Next]_vars
 
-TypeOK == /\ roadmap \in BOOLEAN /\ open \in 0..MaxOpen /\ thread \in BOOLEAN
-          /\ ingested \in BOOLEAN /\ testing \in BOOLEAN /\ level \in {0, 2}
-\* No lesson before a roadmap.
-NoLessonWithoutRoadmap == open > 0 => roadmap
-\* A comment thread exists only on an open page.
-ThreadOnOpenPage == thread => open > 0
-\* Explained needs an ingested page that carries the Understanding section.
-ExplainedNeedsIngested == level = 2 => ingested
-\* Only a closing test page may change the level (re-ingest keeps Understanding).
-LevelChangesOnlyByTest == [][level' /= level => testing]_vars
-\* Ingest never runs with an unanswered comment.
-NoIngestWithOpenComment == [][open' < open => ~thread]_vars
+TypeOK == /\ {wrote, asked, satisfied, rewritten} \subseteq BOOLEAN
+          /\ open \in 0..MaxOpen /\ level \in {0, 2}
+\* The assistant rewrites nothing the user did not write.
+RewriteNeedsPage == rewritten => wrote
+\* Satisfied needs an open talk.
+SatisfiedNeedsTalk == satisfied => asked
+\* A page edit happens only after the user is satisfied.
+EditOnlyWhenSatisfied == [][rewritten' /= rewritten => satisfied]_vars
+\* A level is recorded only for a page the user wrote.
+LevelNeedsPage == level = 2 => wrote
+\* Ingest never closes a page while a talk is open.
+NoIngestWithOpenTalk == [][open' < open => ~asked]_vars
 ====

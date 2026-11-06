@@ -32,7 +32,7 @@ Deepen
 - [ ] Write the literature map (`03_literature-map.md`): themes, search log, and the gap
 
 Learning
-- [ ] Write the Roadmap (`make-me-roadmap`), then add one `Learn: <item> (Roadmap)` line per item this state needs
+- [ ] Write your own overview page in Notion (`make-me-roadmap` reads it back and lists what is open)
 
 Proposal synthesis
 - [ ] Write questions and hypotheses (`04_questions-and-hypotheses.md`)

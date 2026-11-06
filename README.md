@@ -31,7 +31,7 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 | `analysis/` | Derived work, each number traced to a script |
 | `manuscripts/`, `presentation/` | Writing and talks |
 
-Learning is not in the project folder. Lessons, ingested pages and the roadmap live in Notion (see `docs/statechart/LEARNING.md`).
+Learning is not in the project folder. Pages the user writes, lessons and ingested pages live in Notion (see `docs/statechart/LEARNING.md`).
 
 Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
 
@@ -68,7 +68,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 | autonomous-run | support | long unattended work, with pause and resume |
 
 - **17 principles** as `principle-*` skills.
-- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `teach` (teach-back lessons in Notion, from the Roadmap section), `explain` (one flowing account of a meaning), `make-the-figure` (one figure, only where words cannot), `make-me-roadmap` (the learning plan, a Roadmap section on the topic's Map of content page), `evaluate-my-understanding` (mastery levels 0 to 4, in each ingested page's Understanding section), `paper-ingest` (deep read of one paper), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
+- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `teach` (teach-back lessons in Notion, worked from the user's own page), `explain` (one flowing account of a meaning), `make-the-figure` (one figure, only where words cannot), `make-me-roadmap` (reads the user's overview page and lists what is still open), `evaluate-my-understanding` (mastery levels 0 to 4, on request, in a short block on the user's page), `paper-ingest` (deep read of one paper), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), `todoist-sync` (keeps open tasks in Todoist and `tasks.md` in step; `tasks.md` is the master), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
 - **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort, plus `source-analyst` (deep read of one paper) and `paper-critic` (independent three-pass review), both on Sonnet at medium effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/literature-review/papers/`, `docs/literature-review/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).

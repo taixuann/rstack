@@ -9,7 +9,7 @@ Make one thing clear. Not a lesson plan, not a quiz. Say what the thing is, how 
 
 ## Rules
 
-0. **Read the limit first.** The project is not teaching biology or physics for its own sake. Read the "Enough means" line of the Raw page (and the row's "Stop here" in the `## Roadmap` section) and stop at it. If the user's question goes below the line, say so and offer a branch (a new Raw page with a `Parent:` line) or the Parked list; do not explain it anyway.
+0. **Read the limit first.** The project is not teaching biology or physics for its own sake. Stop where the user's question stops. If it goes deeper than the project needs, say so and offer a branch (a new Raw page with a `Parent:` line); do not explain it anyway.
 
 1. **Say where it sits first.** Before the mechanism, say what the thing is and where it fits in the whole (zoom from the large object to the part: heart, muscle, one cell). Name every everyday noun the account will use and say what it points at. A cell here is a heart muscle cell, not blood. Say what "inside" and "outside" refer to.
 2. **Tell it as a story when it is a process.** Time order, start to end. Say what happens before naming it. One idea per paragraph.
@@ -22,7 +22,7 @@ Make one thing clear. Not a lesson plan, not a quiz. Say what the thing is, how 
 
 ## When the account goes in a file
 
-If the user reads in Notion, add the account at the end of the open Raw page (or, if the last page is closed, open a new one that continues it), following the Notion writing playbook (placement, header, comment format). A word or question the user wants opened up becomes a new Raw page with `Parent:` and `Depth:` in its header (depth 3 at most). Answer open comment threads in-thread, following the comment rules in the Notion writing playbook. Only lesson text goes to Notion, never signals or subject data. The chat reply is the page title and what to read next, in three lines or fewer.
+Answer in chat first. The user writes the page, and you help in back and forth (`research-mode/references/raw-lesson.template.md`; writing rules `research-mode/references/plain-writing.md`). Put an account on the page only as a "Base knowledge, added by the assistant" block under the user's text, or, once the user says they are satisfied, as a rewrite of their passage in their own way. Only lesson text goes to Notion, never signals or subject data. A word or question the user wants opened up can become a new Raw page with `Parent:` and `Depth:` in its header (depth 3 at most). The chat reply is the account, then one question.
 
 New layout or new kind of topic: write the first step or paragraph as a sample, tell the user where it is, and wait for approval before writing the rest.
 

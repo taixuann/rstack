@@ -1,6 +1,6 @@
 ---- MODULE ExploreV3 ----
 EXTENDS Naturals
-\* Explore, starting at interrogate. interrogated: aims and gaps are written down. roadmap: the Roadmap section exists.
+\* Explore, starting at interrogate. interrogated: aims and gaps are written down. roadmap: the user's overview page exists (the name is from the retired Roadmap section).
 \* lessons: Raw pages ingested in Notion. synced: lessons already carried into docs/rstack/explore/.
 \* registered, analysed, reviewed: papers, as in ExploreStates.
 VARIABLES scoped, intake, interrogated, roadmap, lessons, synced, registered, analysed, reviewed, inquiry, synthesis, review, exit
