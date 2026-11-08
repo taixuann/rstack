@@ -1,0 +1,21 @@
+{
+  "name": "rstack",
+  "interface": {
+    "displayName": "rstack"
+  },
+  "plugins": [
+    {
+      "name": "rstack",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/taixuann/rstack.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Research"
+    }
+  ]
+}

@@ -56,6 +56,11 @@ def problems():
     domain = [d for d in bundled if d not in WORKFLOW and not d.startswith("principle-")]
     principles = [d for d in bundled if d.startswith("principle-")]
     plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["description"]
+    claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
+    codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())
+    for k in ("name", "version", "description"):
+        if claude[k] != codex[k]:
+            errs.append(f".codex-plugin/plugin.json {k} differs from .claude-plugin/plugin.json")
     want = {"playbooks": len(stems), "principles": len(principles), "bundled domain skills": len(domain)}
     for label, n in want.items():
         for name, text in (("plugin.json", plugin), ("README.md", readme)):

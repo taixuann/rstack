@@ -5,7 +5,7 @@ description: "Research agent style for rigorous, evidence-first work in research
 
 # Research mode
 
-Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `research-agent` prompt.
+Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every subagent prompt.
 
 ## Non-negotiables
 
@@ -114,9 +114,9 @@ Statements in `docs/literature-review/` carry a label and move up only through r
 
 ## Subagents
 
-Use `subagent_type: "research-agent"` for any subagent you spawn inside a playbook step. The chat that receives `/research-mode` runs the playbook. Never spawn a `research-agent` to run the playbook itself. Routed workflow skills (`swarm`, `arena`, `interrogate`) set their own agents.
+Spawn subagents for playbook steps with the default agent type, or `critic` where a playbook names it. The chat that receives `/research-mode` runs the playbook. Never spawn a subagent to run the playbook itself. Routed workflow skills (`swarm`, `arena`, `interrogate`) set their own agents.
 
-The bundled agent `research-agent` runs on Haiku at medium effort. Omit `model` when spawning so its own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
+Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to a cheaper model. With no rule, omit `model`.
 
 You own every subagent's work. Review the output and write your own summary instead of passing through theirs. A second opinion is the same prompt against a different model. Agreement is high-signal.
 

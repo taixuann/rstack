@@ -1,0 +1,31 @@
+{
+  "name": "rstack",
+  "version": "0.32.1",
+  "description": "Research counterpart to pstack: research-mode with 22 playbooks, 20 principles, one agent (critic), setup-research, plus 21 bundled domain skills.",
+  "author": {
+    "name": "taixuann"
+  },
+  "homepage": "https://github.com/taixuann/rstack",
+  "repository": "https://github.com/taixuann/rstack",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "rstack",
+    "playbooks",
+    "science"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "rstack",
+    "shortDescription": "Research playbooks with evidence gates",
+    "longDescription": "Research counterpart to pstack: research-mode with 22 playbooks, 20 principles, one agent (critic), setup-research, plus 21 bundled domain skills.",
+    "developerName": "taixuann",
+    "category": "Research",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/taixuann/rstack"
+  }
+}

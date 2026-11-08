@@ -11,6 +11,14 @@ claude plugin install rstack@rstack
 
 Claude Code leaves auto-update off for third-party marketplaces. To turn it on, run `/plugin`, open the Marketplaces tab, select `rstack`, and choose enable auto-update. To update once by hand: `claude plugin update rstack@rstack`.
 
+One script installs or updates rstack on Claude Code, Codex and Antigravity (whichever are present), and is safe to re-run:
+
+```bash
+bash scripts/install.sh            # or: claude | codex | antigravity
+```
+
+For Claude Code on the web, the cloud session cannot see your global plugins. Declare rstack in the repository's `.claude/settings.json` (`extraKnownMarketplaces` and `enabledPlugins`) and push it. It loads from the second session on.
+
 In Claude Code, commands take an `rstack:` prefix, such as `/rstack:research-mode`. rstack is written for Claude Code, so there is no name adapter.
 
 ## Get started
@@ -70,7 +78,7 @@ Each project's `README.md` carries a research state: explore → design → prog
 - **20 principles** as `principle-*` skills.
 - **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), plus the one-line command `unslop`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
-- **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort; `critic` (independent reviewer of a paper's Source Analysis or of an analysis run) on Sonnet at high effort.
+- **Agent:** `critic` (independent reviewer of a paper's Source Analysis or of an analysis run) on Sonnet at high effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/literature-review/papers/`, `docs/literature-review/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
 - **Setup and help:** `setup-research`, `research-help`.
 - **21 bundled domain skills**: 15 copied from the former `openscience-adapter` (literature, experimental design, figures, peer review, and others), four from [K-Dense scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) (MIT: `statistical-analysis`, `statistical-power`, `uncertainty-and-units`, `what-if-oracle`), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
