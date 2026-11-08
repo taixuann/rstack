@@ -20,8 +20,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- The user wants to understand something (a term, a mechanism, an annotation, a result) → the **explain** skill for a plain meaning, the **teach** skill to be able to say it back, in any state. Learning is a lane beside every state. The user writes their own page in Notion. The cycle is back and forth in chat: **teach** or **explain** (with **make-the-figure**) answer the user, **make-me-roadmap** reads their page and says what is still open, and when the user is satisfied the passage is rewritten in their way. **evaluate-my-understanding** checks on request. A question the user wants opened up can become a branch, a new Raw page with a Parent line. Learning lives in Notion; see `docs/statechart/LEARNING.md`. Reading one paper into a Source Analysis → the **paper-ingest** skill.
-- The project has `docs/rstack/todoist-map.tsv`, or the user asks to put tasks in Todoist or says they ticked tasks there → the **todoist-sync** skill. `tasks.md` stays the master.
+- Adding, ticking, or syncing tasks, or the user says they added or ticked tasks in Notion → the **Task tracking** playbook, the only writer of `docs/rstack/tasks.md`.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
@@ -53,6 +52,12 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 - **Explain the Number.** Before you trust or report a measured number. Find what limits it and rule out what else it could be measuring.
 - **Sequence Verifiable Units.** Multi-step work. Each unit ends in a check before the next starts.
 
+**Figures**
+
+- **Color Means One Thing.** Choosing colours or a colormap. One colour per condition across the project, legible in greyscale.
+- **Frame Follows the Data.** Setting up a figure. Closed box or open L-frame from the data, sizes from the preset, 3 to 5 ticks.
+- **Caption States the Conclusion.** Writing a caption for a paper. Finding first, then elements, then n and the error definition.
+
 **Delegation and communication**
 
 - **Guard the Context Window.** Bulk data or long papers. Route reading to workers and keep summaries in the main thread.
@@ -65,7 +70,7 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ```
 data/raw/             immutable source measurements
-docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, source-analysis.md, review.md, alignment.md
+docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, alignment.md
 docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, gap map
 docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
 docs/literature-review/references.yaml which Zotero papers matter and why
@@ -82,13 +87,13 @@ Create missing folders, never rename existing ones. Prose goes in `docs/`, code 
 
 ## Research states
 
-A project's `README.md` front matter carries its state. Each state has `docs/rstack/<state>/tasks.md`, which the README task block mirrors (`scripts/sync_readme_tasks.py`). A new project starts in explore (init is a trigger, not a state). Advance only at an approved gate, then add a State history row and start the new state's `tasks.md`.
+A project's `README.md` front matter carries its state. `docs/rstack/tasks.md` holds one `## Phase: <state>` section per state (Phase > Goal > Task), and the README task block mirrors the current one (`scripts/sync_readme_tasks.py`). A new project starts in explore (init is a trigger, not a state). Advance only at an approved gate, then add a State history row and a Phase section in `tasks.md`.
 
 | State | Focus | Playbooks |
 |---|---|---|
-| explore | scope the question (interrogate, a quick search), then deepen (key papers, inquiry), then synthesize questions and methods | Literature review, Paper ingestion, Inquiry, Proposal synthesis, Investigation |
+| explore | scope the question (interrogate, a quick search), then deepen (key papers, inquiry), then synthesize questions and methods | Literature review, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
-| progressing | do the work | Study analysis, Hillclimb, Data forensics, Prototype, Reproduce |
+| progressing | do the work | Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Prototype, Reproduce |
 | ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
 | closed | done, with reason | Reviewer response |
 
@@ -104,7 +109,6 @@ Statements in `docs/literature-review/` carry a label and move up only through r
 
 **Always pause** before irreversible steps: deleting or overwriting anything in `data/raw/`, overwriting a submitted manuscript, sending messages, spending money on compute or APIs, publishing.
 
-**Session overrides:** "going to bed" or "run until done" → keep going under the Autonomous run playbook.
 
 **No is an acceptable answer.** Asked whether to run an extra analysis or add scope, give your real judgment. Say "this doesn't earn its place" when true. Candor over agreement.
 
@@ -112,7 +116,7 @@ Statements in `docs/literature-review/` carry a label and move up only through r
 
 Use `subagent_type: "research-agent"` for any subagent you spawn inside a playbook step. The chat that receives `/research-mode` runs the playbook. Never spawn a `research-agent` to run the playbook itself. Routed workflow skills (`swarm`, `arena`, `interrogate`) set their own agents.
 
-The bundled agent `research-agent` runs on Haiku at medium effort. `source-analyst` (deep read of one paper) and `paper-critic` (independent review) run on Sonnet at medium effort, always in a fresh context. The critic never reviews an analysis it wrote. Omit `model` when spawning them so their own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
+The bundled agent `research-agent` runs on Haiku at medium effort. Omit `model` when spawning so its own settings apply. Defaults for every spawn: run in the background, give file pointers instead of inlined data, and for other spawns pick the model per the `rstack-models.md` rule if it exists (see `setup-research`). Judgment, prose, and the hardest analysis go to your strongest model. Routine reading, scripting, and formatting go to the haiku agents. With no rule, omit `model`.
 
 You own every subagent's work. Review the output and write your own summary instead of passing through theirs. A second opinion is the same prompt against a different model. Agreement is high-signal.
 
@@ -132,18 +136,19 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
-Learning is a separate lane and has no playbook: `teach`, `explain`, `make-me-roadmap` and `evaluate-my-understanding` run beside any state (see `docs/statechart/LEARNING.md`). Lesson pages follow `references/raw-lesson.template.md` (the user writes, you help, rewrite when they are satisfied), and all lesson text follows `references/plain-writing.md`.
 
 **Phase playbooks (run in the state's order; the state review is the gate out)**
 
 - **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
-- **Paper ingestion.** One paper to a source-grounded Source Analysis, frozen and reviewed by an independent critic.
 - **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
 - **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
 - **Experimental design.** Hypothesis, study design, power, protocol.
-- **Study analysis.** Exploring, analysing, or interpreting data; figures.
+- **Raw intake.** Check and correct raw filenames, date folders and quarantine, with a dry run and the user's approval before any change.
+- **Analysis plan.** Interview, hypotheses, method, a short README plus `docs/`, checks before figures, and scripts from templates, before anything runs. Skills: interrogate, hypotheses, brainstorming, statistical-analysis.
+- **Analysis run.** Run it through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it. Skills: figures, acceptance-checks, statistical-analysis.
+- **Analysis review.** Called, not routine. Re-run (compare two runs), or challenge (swarm, arena or interrogate by the question) before a result is cited. The self-check is part of Analysis run.
 - **Manuscript writing.** Drafting, revising, and auditing manuscripts.
-- **Package results.** Freeze, disposition, and hand off a finished study.
+- **Package results.** Build `analysis/<name>/package/` from the accepted runs: figures named by run id, code, inputs, a `reproduce.py` that needs no rstack, and a README made from files. Interrogate each claim with the user first; never guess a result. Skills: interrogate, acceptance-checks.
 - **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
 
 **Anytime tools (no order; they never advance the state)**
@@ -151,7 +156,6 @@ Learning is a separate lane and has no playbook: `teach`, `explain`, `make-me-ro
 - **Investigation.** Read-only question about the data, a method, or the literature.
 - **Hillclimb.** Sustained improvement of one metric against a target, one change per measurement.
 - **Reproduce.** Re-run a paper's or prior result before building on it.
-- **Data forensics.** Diagnose an anomaly in captured data. The deliverable is a diagnosis.
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
 - **Peer review.** Reviewing someone else's manuscript, proposal, or analysis.
 - **Reviewer response.** Answering reviewer comments point by point.
@@ -159,10 +163,9 @@ Learning is a separate lane and has no playbook: `teach`, `explain`, `make-me-ro
 
 **Support**
 
+- **Task tracking.** The only writer of `docs/rstack/tasks.md` (Phase > Goal > Task) and of the project's tasks in Notion: pull, reconcile, push.
 - **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
 - **Obsidian writing.** Writing notes the user reads and comments on in Obsidian: placement, front matter, Mermaid diagrams, comment threads.
-- **Notion writing.** Writing lessons the user reads and comments on in Notion: Raw pages that stay open until ingested, Mermaid diagrams, native comment threads.
 - **Authoring a skill or playbook.** Writing or editing a SKILL.md or playbook.
-- **Autonomous run.** A long task driven to completion while the user is away, including pause and resume.
 
 Spanning two playbooks: finish the first, save its output to its home folder, then read the second.

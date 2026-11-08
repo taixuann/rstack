@@ -28,10 +28,10 @@ New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck?
 | `docs/inputs/` | What came in: proposals, supervisor notes. Never edited |
 | `docs/literature-review/` | `papers/<cite>/` (one folder per paper), `cross-papers/`, `reports/` (search reports, leads only) |
 | `docs/rstack/<state>/` | The state's tasks, documents, review and decisions |
-| `analysis/` | Derived work, each number traced to a script |
+| `analysis/` | Derived work, each number traced to a script. `analysis/<name>/` holds one analysis; `analysis/lib/` the shared helpers; `analysis/<name>/package/` its self-contained results package |
+| `.rstack/provenance/` | One folder per figure run: inputs with hashes, scripts, lib, environment, log, checks, outputs, review. Tracked in git |
 | `manuscripts/`, `presentation/` | Writing and talks |
 
-Learning is not in the project folder. Pages the user writes, lessons and ingested pages live in Notion (see `docs/statechart/LEARNING.md`).
 
 Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
 
@@ -45,36 +45,53 @@ Each project's `README.md` carries a research state: explore → design → prog
 | playbook | group | for |
 |---|---|---|
 | literature-review | phase | the Zotero loop: ingest papers, run the inquiry, find more, map the gap |
-| paper-ingestion | phase | one paper to a frozen Source Analysis reviewed by an independent critic |
 | inquiry | phase | align the user's reading with the assistant's, interrogate both, extend, search, claim |
 | proposal-synthesis | phase | questions, hypotheses, methods, feasibility, explore exit check |
 | experimental-design | phase | hypothesis, design, power, protocol |
-| study-analysis | phase | analysing data, figures, results |
+| raw-intake | phase | checking and correcting raw filenames and date folders, dry run first, sealed by `.intake.log` |
+| analysis-plan | phase | README, inputs menu and provenance-ready scripts for one analysis |
+| analysis-run | phase | run through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it |
+| analysis-review | phase | changed run (compare, accept one) or challenge (independent critic on a run, then the whole analysis); `check` gates cited results |
 | manuscript-writing | phase | drafting and auditing manuscripts |
-| package-results | phase | freezing and handing off a study |
+| package-results | phase | build a self-contained `package/` from the accepted runs; the user confirms every claim, nothing is guessed |
 | state-review | phase | gate review at every state exit: rules per state, findings become tasks |
 | investigation | anytime | a read-only question |
 | hillclimb | anytime | sustained improvement of one metric |
 | reproduce | anytime | re-running a published or prior result |
-| data-forensics | anytime | diagnosing an anomaly in captured data |
 | prototype | anytime | a throwaway pilot that settles a fork |
 | peer-review | anytime | reviewing others' work |
 | reviewer-response | anytime | answering reviewer comments |
 | presentation | anytime | slides, talks, posters |
+| task-tracking | support | the only writer of `docs/rstack/tasks.md` (Phase > Goal > Task), kept in step with Notion |
 | project-docs | support | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, CLAUDE.md stub, state changes |
 | obsidian-writing | support | notes the user comments on in Obsidian: front matter, Mermaid diagrams, comment threads |
-| notion-writing | support | lessons the user comments on in Notion: Raw pages, open and closed, Mermaid, native comments |
 | authoring-a-skill | support | writing a skill or playbook, with a reuse-first sourcing ladder |
-| autonomous-run | support | long unattended work, with pause and resume |
 
-- **17 principles** as `principle-*` skills.
-- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `teach` (teach-back lessons in Notion, worked from the user's own page), `explain` (one flowing account of a meaning), `make-the-figure` (one figure, only where words cannot), `make-me-roadmap` (reads the user's overview page and lists what is still open), `evaluate-my-understanding` (mastery levels 0 to 4, on request, in a short block on the user's page), `paper-ingest` (deep read of one paper), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), `todoist-sync` (keeps open tasks in Todoist and `tasks.md` in step; `tasks.md` is the master), plus the one-line commands `bro`, `in-your-own-words`, and `unslop`.
+- **20 principles** as `principle-*` skills.
+- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), plus the one-line command `unslop`.
 - **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
-- **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort, plus `source-analyst` (deep read of one paper) and `paper-critic` (independent three-pass review), both on Sonnet at medium effort.
+- **Agents:** `research-agent` (delegate for playbook steps) on Haiku at medium effort; `critic` (independent reviewer of a paper's Source Analysis or of an analysis run) on Sonnet at high effort.
 - **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/literature-review/papers/`, `docs/literature-review/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
 - **Setup and help:** `setup-research`, `research-help`.
-- **32 bundled domain skills**: 25 copied from the former `openscience-adapter` (literature, experimental design, figures, posters, peer review, and others), five from [K-Dense scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) (MIT: `statistical-analysis`, `statistical-power`, `exploratory-data-analysis`, `uncertainty-and-units`, `what-if-oracle`), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
+- **21 bundled domain skills**: 15 copied from the former `openscience-adapter` (literature, experimental design, figures, peer review, and others), four from [K-Dense scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) (MIT: `statistical-analysis`, `statistical-power`, `uncertainty-and-units`, `what-if-oracle`), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
 - **Works best with** [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer): the playbooks name its `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates` and `infographics`. Without it, those steps are skipped.
+
+## The analysis runner
+
+`skills/research-mode/scripts/rstack_run.py` carries the analysis playbooks. Figures are always made through it, never by hand.
+
+| Command | What it does |
+|---|---|
+| `new <project> <name> --figure stage:fig` | scaffold an analysis: README, `inputs.yaml`, `docs/`, scripts, the shared `analysis/lib/` |
+| `run <analysis> --stage check\|main\|verify --figure F` | refuse out of order or without an Objective and Why; run with figrecipe; snapshot everything; run the checks; status verified, check-failed, rejected, failed or completed (a bad run leaves `figures/` as it was) |
+| `tick <analysis> --figure F --approved-by-user [--run ID]` | after you have seen the figure: tick the task, write `docs/results/F.md`; `--run` accepts an earlier verified run |
+| `check <analysis>` | figures match their runs, no figure without a verified run, cited results have a real review and a fresh claim |
+| `diff`, `replay` | compare two runs; rerun a run and compare its figure data |
+| `show <analysis>` | write `provenance.html`: one scroll of figures with objective, claim, review state and tabs for code, inputs, checks, log, environment |
+| `export <analysis> --figure F` | copy the accepted figure out as `<run id>_<figure>.png` |
+| `package <analysis>` | build `package/`: figures, code, inputs, standalone `reproduce.py`, README from your confirmed claims. Refuses anything unsettled |
+
+The `critic` agent reviews a run or the whole analysis independently; `check` makes a cited result need that review.
 
 ## Checks and publishing
 

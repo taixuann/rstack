@@ -14,14 +14,14 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 MODE = SKILLS / "research-mode"
 WORKFLOW = {"research-mode", "setup-research", "research-help", "arena", "swarm", "interrogate",
-            "figure-it-out", "show-me-your-work", "reflect", "correct", "bro", "in-your-own-words", "unslop", "teach", "explain", "make-the-figure", "make-me-roadmap", "evaluate-my-understanding", "paper-ingest", "init", "statechart", "todoist-sync"}
+            "figure-it-out", "show-me-your-work", "reflect", "correct", "unslop", "init", "statechart"}
 # Backticked words in playbooks that are not skill names.
-IGNORE = {"state", "tasks", "true", "false", "yaml", "unread", "snapshotted", "read", "candidate", "frozen",
+IGNORE = {"state", "tick", "check", "critic", "show", "nature-single", "new", "replay", "load", "style", "tasks", "true", "false", "yaml", "unread", "snapshotted", "read", "candidate", "frozen",
           "supported", "rejected", "explore", "design", "progressing", "closed", "ready-for-publish",
           "todo", "model", "haiku", "main", "docs", "data", "raw", "wiki", "analysis", "unknown",
-          "pele", "figures", "mermaid", "parts", "why", "updated", "created", "kind", "voice", "paper", "parent", "depth", "status", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
+          "pele", "figures", "mermaid", "parts", "label", "legend", "path", "nature-open", "nature-heatmap", "nature-violin", "figrecipe", "notion-search", "why", "updated", "created", "kind", "voice", "paper", "parent", "depth", "status", "review", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
           # plugin, repo, agent, and example names
-          "claude-scientific-writer", "scientific-agent-skills", "annotations", "source-analyst", "paper-critic", "docx", "pdf", "pptx", "xlsx"}
+          "claude-scientific-writer", "scientific-agent-skills", "annotations", "docx", "pdf", "pptx", "xlsx"}
 NAME = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 
 

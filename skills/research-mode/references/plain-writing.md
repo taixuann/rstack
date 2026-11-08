@@ -13,7 +13,7 @@ Use these rules for lesson text, explanations and comment replies. They follow t
 7. **Name the thing.** Repeat the noun when "it" or "they" could point at two things.
 8. **No more than three nouns in a row.** Write "the skin contact impedance", not "the electrode skin contact impedance value".
 9. **Numbers and units.** Replace "very small" or "fast" with a number and a unit when you have one. If you have none, say so or leave the word out.
-10. **Define a term in the sentence where it first appears.** This rule is also in `explain`.
+10. **Define a term in the sentence where it first appears.**
 11. **Structure only when it helps.** Use a small heading to split a long explanation by topic. Use a list for steps or parallel items. Use a table only for three or more things that you compare on the same points. Otherwise write short paragraphs.
 
 ## Exceptions

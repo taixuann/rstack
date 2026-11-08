@@ -3,7 +3,7 @@
 
 Usage: init_project.py PROJECT_DIR [--title TITLE]   |   init_project.py --selftest
 Creates the standard folders (with .gitkeep), then README.md, AGENTS.md, CLAUDE.md from
-../references/*.template.*, then docs/rstack/explore/tasks.md, then syncs the README task block.
+../references/*.template.*, then docs/rstack/tasks.md, then syncs the README task block.
 Anything that already exists is skipped and reported, so it also adds rstack to an existing project.
 """
 import argparse, re, subprocess, sys, tempfile
@@ -13,28 +13,29 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REF = HERE.parent / "references"
 FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/literature-review/cross-papers", "docs/literature-review/reports",
-           "docs/rstack/explore", "analysis", "manuscripts", "presentation"]
-EXPLORE_TASKS = """# Tasks: explore
+           "docs/rstack", "analysis", "manuscripts", "presentation"]
+EXPLORE_TASKS = """# Tasks
 
-Proposal intake
+Phase > Goal > Task. Only the task-tracking playbook edits this file.
+
+## Phase: explore
+
+### Goal: Proposal intake
 - [ ] Run the project interview
 - [ ] Write context (`01_context.md`)
 - [ ] Write aims and milestones (`02_aims-and-milestones.md`)
 - [ ] Confirm the open points with the supervisor
 
-Scope
+### Goal: Scope
 - [ ] Run `interrogate` on the proposal: aims, what the user knows, the gaps
 - [ ] Quick scoping search: register a few papers in Zotero, check what already exists
 - [ ] Scope check: the question is narrow, a gap is named, feasibility is judged
 
-Deepen
+### Goal: Deepen
 - [ ] Ingest and review the key papers; run the inquiry
 - [ ] Write the literature map (`03_literature-map.md`): themes, search log, and the gap
 
-Learning
-- [ ] Write your own overview page in Notion (`make-me-roadmap` reads it back and lists what is open)
-
-Proposal synthesis
+### Goal: Proposal synthesis
 - [ ] Write questions and hypotheses (`04_questions-and-hypotheses.md`)
 - [ ] Write methods and feasibility (`05_methods-and-feasibility.md`)
 - [ ] Assemble the proposal chain and run `interrogate` on it
@@ -46,7 +47,7 @@ def readme(title):
     t = t.replace("YYYY-MM-DD", date.today().isoformat()).replace("<Project title>", title)
     t = t.replace("<One sentence on where the project stands.>", "Just initialised. The project interview comes first.")
     # day one has only tasks.md and the literature-review folder: drop links to files that do not exist yet
-    t = re.sub(r"^- Explore:.*$", "- Explore: [tasks](docs/rstack/explore/tasks.md)", t, flags=re.M)
+    t = re.sub(r"^- Explore:.*$", "- Explore: [tasks](docs/rstack/tasks.md)", t, flags=re.M)
     t = re.sub(r"^- Literature review:.*$", "- Literature review: [docs/literature-review/](docs/literature-review/)", t, flags=re.M)
     # the per-question blocks are filled after the interview; drop the template placeholders
     return re.sub(r"## <Work package name>.*?(?=## State history)", "", t, flags=re.S)
@@ -74,7 +75,7 @@ def init(project, title=None):
     put("README.md", readme(title))
     put("AGENTS.md", (REF / "AGENTS.template.md").read_text().replace("<project>", p.name))
     put("CLAUDE.md", (REF / "CLAUDE.template.md").read_text())
-    put("docs/rstack/explore/tasks.md", EXPLORE_TASKS)
+    put("docs/rstack/tasks.md", EXPLORE_TASKS)
     # an existing README without the task markers cannot be synced; the caller reports it
     r = subprocess.run([sys.executable, str(HERE / "sync_readme_tasks.py"), str(p)], capture_output=True, text=True)
     if r.returncode:
@@ -86,15 +87,14 @@ def selftest():
     with tempfile.TemporaryDirectory() as d:
         proj = Path(d) / "res_demo-device"
         made, skipped = init(proj)
-        assert {"README.md", "AGENTS.md", "CLAUDE.md", "docs/rstack/explore/tasks.md"} <= set(made), made
+        assert {"README.md", "AGENTS.md", "CLAUDE.md", "docs/rstack/tasks.md"} <= set(made), made
         r = (proj / "README.md").read_text()
         assert "state: explore" in r and "Demo device" in r and "<Project title>" not in r and "<Work package name>" not in r
-        assert "Tasks (explore): 0/13 done" in r, r
+        assert "Tasks (explore): 0/12 done" in r, r
         assert "res_demo-device" in (proj / "AGENTS.md").read_text()
         for dead in ("00_interview.md", "03_literature-map.md", "references.yaml"):
             assert dead not in r, dead
-        assert not (proj / "docs/learning").exists(), "learning lives in Notion"
-        for f in ("data/raw", "docs/literature-review/reports", "docs/rstack/explore"):
+        for f in ("data/raw", "docs/literature-review/reports", "docs/rstack"):
             assert (proj / f).is_dir()
         (proj / "README.md").write_text("mine")
         made2, skipped2 = init(proj)

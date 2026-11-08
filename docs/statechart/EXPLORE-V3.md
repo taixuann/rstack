@@ -28,4 +28,4 @@ stateDiagram-v2
 - Blind analysis, the critic and inquiry run only on a scoped question. Interrogating again clears the scope.
 - A lesson needs the user's overview page (the model still names it `roadmap`). A new lesson or reviewed paper voids the state review; exit needs a fresh one.
 
-**Learning in the task list.** Retired. `tasks.md` no longer carries `Learn:` lines. The user's own overview page in Notion is the learning plan, and `make-me-roadmap` only reads it back. `ExploreV3.tla` still uses the word `roadmap` for "the overview page exists". Its logic is unchanged.
+**Learning in the task list.** Retired. `docs/rstack/tasks.md` (Phase > Goal > Task) no longer carries `Learn:` lines. Learning is no longer part of rstack. `ExploreV3.tla` still uses the word `roadmap` for "the overview page exists". Its logic is unchanged.

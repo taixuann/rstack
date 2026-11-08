@@ -1,0 +1,8 @@
+# The menu of every file this analysis may use. You write it; each run selects ids from it.
+# path is relative to the project root. use: why the file is included (optional).
+inputs:
+  - id: TODO
+    path: data/raw/TODO
+    label: TODO
+    legend: TODO
+    use: TODO

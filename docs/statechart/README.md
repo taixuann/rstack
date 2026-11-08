@@ -12,6 +12,8 @@ How a project moves through rstack's five states. TLC checked the model: 12 stat
 
 **What the chart leaves out.** Four steps that stay inside one chart state (for example a second review in a state whose review has already passed). Moving back clears what the later state froze or accepted, and you re-clear that gate on the way forward.
 
+**Analysis workflow.** `ANALYSIS.md` charts the run gate and tick (check before main before verify). It was drawn before the review, accept-a-run and package steps were added, so it does not show them yet.
+
 **Make it again**
 
 ```bash

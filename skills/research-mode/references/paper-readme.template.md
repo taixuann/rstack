@@ -24,10 +24,8 @@ parts: [<project parts this paper serves>]
 |---|---|---|---|
 | 1 | this README | where things are, what is open | always first |
 | 2 | [annotations.md](annotations.md) | the user's Zotero annotations, never edited | you want the user's own questions |
-| 3 | [source-analysis.md](source-analysis.md) | the assistant's reading, every statement tagged `[assistant]` | you want what the paper says |
-| 4 | [review.md](review.md) | the critic's audit trail; read only the last section | you doubt a claim in the analysis |
 
-Add an `alignment.md` row when it appears. Learning lives in Notion: link the ingested pages that answered this paper's questions.
+Add an `alignment.md` row when it appears.
 
 ## What is open
 
@@ -36,5 +34,4 @@ Add an `alignment.md` row when it appears. Learning lives in Notion: link the in
 ## Integrity record
 
 - `annotations.md`: snapshot date, sha256. No front matter, so the hash stays fixed.
-- `source-analysis.md`: reviewed sha256 (front matter excluded) and whole-file sha256.
 - `status` and `review` live only in `docs/literature-review/references.yaml`.

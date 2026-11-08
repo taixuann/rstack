@@ -15,7 +15,7 @@ Confirm the project folder (default: a new folder under `research-space/projects
 
 ## 2. Create the structure
 
-Run `../research-mode/scripts/init_project.py <project> [--title "<title>"]`. It creates the folders below with `.gitkeep`, then `README.md` (state `explore`), `AGENTS.md`, `CLAUDE.md` (a stub that imports `AGENTS.md`), and `docs/rstack/explore/tasks.md`, and syncs the README task block. It skips anything that exists and says so. If it reports the task block was not synced (an old README without the markers), add the markers per `../research-mode/references/README.template.md` and run `sync_readme_tasks.py`.
+Run `../research-mode/scripts/init_project.py <project> [--title "<title>"]`. It creates the folders below with `.gitkeep`, then `README.md` (state `explore`), `AGENTS.md`, `CLAUDE.md` (a stub that imports `AGENTS.md`), and `docs/rstack/tasks.md` (Phase > Goal > Task), and syncs the README task block. It skips anything that exists and says so. If it reports the task block was not synced (an old README without the markers), add the markers per `../research-mode/references/README.template.md` and run `sync_readme_tasks.py`.
 
 ```
 data/raw/        immutable source measurements; never edit, never regenerate
@@ -49,7 +49,7 @@ From the answers write, in `docs/rstack/explore/`:
 
 Name each work package in plain words ("Electrode fabrication", "Embedded acquisition"). No codes like WP1 or Q1.1. `research-grants` has useful section structure for aims and timelines.
 
-Then fill the project facts in `AGENTS.md` that the interview answered (data protection and ethics rules when people are recorded; environment and the rerun command stay `TODO: unknown` until known). Replace the generic tasks in `tasks.md` with ones for this project, grouped by work package, and run `../research-mode/scripts/sync_readme_tasks.py <project>`. Link the new files in the README Contents.
+Then fill the project facts in `AGENTS.md` that the interview answered (data protection and ethics rules when people are recorded; environment and the rerun command stay `TODO: unknown` until known). Replace the generic goals and tasks in `tasks.md` with ones for this project (the **Task tracking** playbook owns the file from here on), and run `../research-mode/scripts/sync_readme_tasks.py <project>`. Link the new files in the README Contents.
 
 ## 5. Challenge the scope
 

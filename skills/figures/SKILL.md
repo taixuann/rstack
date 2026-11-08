@@ -1,6 +1,6 @@
 ---
 name: figures
-description: Makes publication-quality plots from data with matplotlib, learning curves, scaling laws, benchmark and ablation comparisons, Pareto trade-offs, heatmaps and confusion matrices, sized for the page, vector, with uncertainty shown. Use whenever results are plotted, charted or visualized for a paper, report or answer, or an existing plot looks unpolished. Not for conceptual diagrams or schematics (use schematics) and never for drawing numbers that did not come from a run.
+description: Makes publication-quality plots from measured data with figrecipe (millimetre layout, journal presets, a recipe saved with every figure), obeying the lab rules: no title, 3 to 5 ticks, decimal labels, SI-prefixed units. Use whenever results are plotted, charted or visualized for a paper, report or answer, or an existing plot looks unpolished. Not for conceptual diagrams or schematics (use schematics) and never for drawing numbers that did not come from a run.
 summary: "Publication plots from real data: sized for the page, vector, uncertainty shown."
 category: core
 role: workflow
@@ -15,127 +15,40 @@ metadata:
 
 # Figures
 
-A figure in a paper is an argument, not a screenshot of an array. It makes one claim, and a
-reader who skips the prose should still get that claim right. Default plotting output does
-not clear that bar: it is sized for a screen, titled where a caption belongs, colored from
-a cycle that collapses in greyscale, and rasterized where the document wants vector.
+A figure is an argument, not a screenshot of an array. It makes one claim, and a reader who skips the prose should still get it right.
 
-## Non-negotiables
+## Rules (checked by `scripts/figrules.py` in the research-mode skill)
 
-1. **Build at the final printed size.** Pick the width from the document (`COLUMN` 3.25 in,
-   `TEXT` 5.5 in, `WIDE` 6.75 in in the style module) and include it with
-   `width=\linewidth`. Never build big and rescale: a 15-inch canvas dropped into a
-   5.5-inch column turns 11 pt tick labels into 4 pt.
-2. **Vector out.** PDF for `\includegraphics`, SVG beside it for preview. A rasterized plot
-   blurs under the zoom every reviewer uses. PNG is only for genuinely raster content: a
-   photograph, a sample grid, an attention map at pixel resolution.
-3. **Every number comes from a run.** Read tracked metrics with the experiments tool
-   (`experiments series`, `experiments compare`) or from the run's own output files. Never
-   plot a remembered, rounded or plausible number, and never leave demo data in a script
-   that ships.
-4. **The caption is the title.** No axes title on a paper figure; panel letters (**a**,
-   **b**) name the parts of a multi-panel figure.
-5. **Show the uncertainty, or say there is none.** One seed is an anecdote. Plot the
-   interval across seeds and state the seed count in the caption; with one run, write
-   "single seed".
-6. **Label axes with units.** "Loss" is a label; "step" without saying whether it counts
-   optimizer steps or tokens is not.
-7. **Colorblind-safe, greyscale-safe.** Use the module's Okabe-Ito palette. Never `jet`,
-   `rainbow` or `hsv`; they invent structure the data does not have. Baselines and chance
-   levels are grey: color belongs to the things being compared.
-8. **One sans-serif face across every figure**, diagrams included. `use_style()` sets it.
-   Pass `use_style(family="serif")` only for a figure carrying heavy math on a serif page.
+1. **No title.** The caption carries the claim. Panel letters name parts of a multi-panel figure.
+2. **3 to 5 major ticks per axis.**
+3. **Decimal tick labels.** Never `1e-6` style. Rescale the data and the unit together with `figrules.si_scale` so the unit reads µA, nA, mV, kΩ.
+4. **Every axis has a quantity and a unit.**
+5. **Every number comes from a run** (inputs listed in the run's `inputs.yaml`). Never plot a remembered or plausible number.
+6. **Show individual measurements** over means and error bars; state n and what the spread is. One sample is an anecdote.
+7. **Colour-blind and greyscale safe.** Use the project's colour file for conditions if it has one. Never `jet`, `rainbow` or `hsv`.
+8. **Build at the printed size.** Use the preset's millimetre width; never rescale in the document.
 
-## Set up once per project
+## How
 
-Copy the style module beside the figure scripts so a figure stays reproducible after this
-session ends. The module lives in this skill's directory at `assets/figstyle.py`; read it
-and write it to `figs/figstyle.py` in the working folder (do not import it from the skill
-path, which is not part of the project).
+Figures are made inside an analysis run (**Analysis run** playbook), never by hand outside it. The project's `analysis/lib/` (copied from rstack by `rstack_run.py lib <project>`) holds `style.py`, `load.py` and `figrules.py`. A figure script is short:
 
 ```python
-from figstyle import COLUMN, PALETTE, figure, save, use_style
+from load import load
+from style import new_figure, save_figure, si_scale
 
-use_style()
-fig, ax = figure(width=COLUMN)
-ax.plot(x, y, color=PALETTE["blue"])
-save(fig, "figs/loss_curve")  # writes .pdf and .svg, prints an audit line
+df, tokens = load("dev1")                       # an id from inputs.yaml; raw files go through raw-viewer
+fig, ax = new_figure("nature-single", axes_width_mm=60, axes_height_mm=50)   # closed box; "nature-open" for an L-frame; copies the preset into the run
+y, unit = si_scale(df["I"].to_numpy(), "A")     # rescale data and unit together: µA, nA, mV, kΩ
+ax.plot(df["V"], y, id="iv"); ax.set_xlabel("Voltage (V)"); ax.set_ylabel(f"Current ({unit})")
+save_figure(fig, "iv")                          # sets about 4 ticks, checks the rules, saves with figrecipe
 ```
 
-Plots that only need matplotlib and numpy run in the session's Python; plots that import
-project code run in the project environment. Keep the script beside its output
-(`figs/loss_curve.py` next to `figs/loss_curve.pdf`); a figure whose script is gone cannot
-be corrected when a reviewer asks for one more seed.
+`save_figure` raises `ValueError` naming every rule that is broken (a title, a wrong tick count, scientific notation). Pick the frame, colours and caption by `principle-frame-follows-the-data`, `principle-color-means-one-thing` and `principle-caption-states-the-conclusion`. A line width or marker size that differs from the preset is allowed and is recorded in the run. It writes `figures/iv/iv.png`, `iv.pdf`, `iv.yaml` (the recipe) and `iv_data/*.csv` (the plotted points, no header). Restyle a saved figure without recomputing: `fr.reproduce(...)`.
 
-## Where the figure goes
-
-Write the figure and its script into the working folder, under `figs/` beside the `.tex`
-for a paper, or under the report's own folder otherwise. Never write a figure you intend to
-show into a temporary directory; link the saved path in the answer.
-
-```latex
-\begin{figure}[t]          % figure* for a WIDE figure in a two-column paper
-  \centering
-  \includegraphics[width=\linewidth]{figs/loss_curve.pdf}
-  \caption{\textbf{LPO reaches the reward plateau in a third of the compute.}
-  Held-out reward against training compute for LPO and two baselines; mean of 5 seeds,
-  bands are 95\% intervals. The dotted line is the pretrained model.}
-  \label{fig:loss}
-\end{figure}
-```
-
-## Write the caption with the figure
-
-Captions in current papers run about 28 words, often three sentences: a short bold phrase
-naming the claim, then the detail a reader needs to trust it.
-
-- Lead with the finding, not the setup. "Training curves for LPO and baselines" names the
-  axes, which the axes already do.
-- The figure must stand alone; a reader who skipped the section should still get the claim.
-- Put the method facts here: seed count, what the band or bar means, smoothing,
-  normalization, which points were fitted and which excluded, whether a frontier line is
-  measured or a guide.
-- Say what is not shown when it matters: a single seed, a truncated axis, a run cut short.
-- Do not restate axis labels in prose.
-
-## Multi-panel figures
-
-- Label every panel `(a)`, `(b)`, ... at the top-left with `panel_labels()`.
-- Share the axis when panels share a quantity (`sharey=True`); two panels of one metric on
-  silently different ranges is the multi-panel version of a truncated bar axis.
-- One legend for the figure, not one per panel.
-- Panels read in argument order, left to right, top to bottom.
-- If the panels do not support one claim, they are separate figures.
-
-Build them with `figure_grid(nrows, ncols, width=TEXT, sharey=True)`.
-
-## Read exactly one reference
-
-Pick by the question the figure answers, not by the shape in mind.
-
-| The figure answers | Read |
-| --- | --- |
-| How does a metric move over training, and is the gap bigger than seed noise? | `references/curves.md` |
-| How does performance change with scale, and what does the trend predict? | `references/scaling.md` |
-| Which method wins across benchmarks, or which ablated component mattered? | `references/comparison.md` |
-| What is traded off against what: reward vs KL, quality vs cost or latency? | `references/pareto.md` |
-| What does this 2D grid, confusion matrix or sweep look like? | `references/matrix.md` |
-
-For a method, architecture or pipeline diagram, load the schematics skill instead: those
-are rendered with `generate_image`, never hand-drawn as TikZ or SVG. When a plot must meet a
-named journal's requirements, or needs a colour, metadata or export audit before submission,
-load scientific-visualization alongside this skill for its publisher profiles and audit CLIs.
+Run figrecipe with `tools/figrecipe/.venv/bin/python`. The venv's console scripts (`figrecipe ...`) have a stale shebang and fail; use `python -m figrecipe`. Give `ax.plot(..., id="name")` an id so the data file has a stable name. Pass `constrained_layout=False` to `fr.subplots` when sizing in mm (`new_figure` does).
 
 ## Before you hand it over
 
-- Read the audit line `save()` prints. It checks the printed width, font embedding, stray
-  axes titles, missing axis labels, text under 5 pt, overlapping text and text off the
-  canvas. `clean` is the bar; anything else is a defect to fix, not a warning to note.
-- If the audit reports no publication font on the machine, say so rather than installing
-  fonts; that changes the environment and needs the user's say.
-- A label placed at a reference line or data point is the usual overlap; move it or give
-  it `backgroundcolor="white"`.
-- Open the PDF and read it at printed size. A tick label unreadable on screen at 100% is
-  unreadable on paper.
-- Every axis labelled with units; no stray title; uncertainty shown with n stated; no legend
-  entry for a series that was cut; the script reruns from scratch and reproduces the file.
+- `check(fig)` passes; open the pdf at printed size and read it.
+- The figure folder holds a `run.txt` from the runner; `rstack_run.py check` passes.
+- The caption states the finding, n, and what any band or bar means.

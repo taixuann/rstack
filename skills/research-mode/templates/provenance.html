@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Provenance</title>
+<style>
+/* Depth comes from surface tone and soft shadow, not outlines. One accent (blue).
+   State colours are Okabe-Ito and always carry a glyph and a word. */
+:root{
+  --bg:#eef0f4; --surface:#fff; --soft:#f3f5f8; --ink:#171a1f; --muted:#626b78; --code-bg:#f3f5f8; --ln:#98a0ab;
+  --accent:#0072B2; --accent-ink:#fff; --glass:rgba(238,240,244,.72);
+  --ok:#007a5a; --pending:#5b6470; --warn:#9a5b00; --bad:#b33c00;
+  --ok-bg:#dff2ea; --pending-bg:#e6e9ee; --warn-bg:#faebcf; --bad-bg:#f9e0d3;
+  --lift:0 1px 2px rgba(20,28,40,.06),0 12px 32px -8px rgba(20,28,40,.16);
+  --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0e1115; --surface:#1a1f26; --soft:#232a33; --ink:#e8ebef; --muted:#97a1ae; --code-bg:#12161b; --ln:#667180;
+  --accent:#56B4E9; --accent-ink:#06121a; --glass:rgba(14,17,21,.7);
+  --ok:#4fd1a5; --pending:#9aa4b0; --warn:#E69F00; --bad:#ff8a4c;
+  --ok-bg:#133229; --pending-bg:#2a313b; --warn-bg:#382b10; --bad-bg:#3c2417;
+  --lift:0 1px 2px rgba(0,0,0,.4),0 16px 40px -10px rgba(0,0,0,.6);
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+header.top{position:sticky;top:0;z-index:5;background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4)}
+.top-in{max-width:1480px;margin:0 auto;padding:.9rem 1.5rem .7rem;display:grid;gap:.5rem}
+.titleline{display:flex;gap:.2rem 1rem;align-items:baseline;flex-wrap:wrap}
+.titleline h1{margin:0;font-size:1.1rem;font-weight:650}
+.titleline .sum{color:var(--muted);font-size:13px}
+.question{font-family:var(--serif);font-size:1.2rem;line-height:1.4;margin:0;max-width:80ch;white-space:pre-wrap}
+nav.figs{position:relative;display:flex;gap:1.4rem;overflow-x:auto;padding:.2rem 0 .1rem;scrollbar-width:none}
+nav.figs .grp{display:flex;gap:.3rem;align-items:center;flex:none}
+nav.figs .gl{color:var(--muted);font-size:12.5px;margin-right:.25rem}
+nav.figs button{font:inherit;font-size:13px;display:inline-flex;gap:.35rem;align-items:center;padding:.3rem .8rem;border-radius:999px;border:0;background:var(--soft);color:var(--ink);cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+nav.figs button:hover{background:var(--pending-bg)}
+nav.figs button[aria-current=true]{background:var(--accent);color:var(--accent-ink)}
+
+main#work{max-width:1480px;margin:0 auto;padding:1rem 1.5rem 30vh}
+.slide{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:2rem;align-items:start;padding:2rem 0;min-height:80vh;scroll-margin-top:9.5rem;transition:filter .45s ease,opacity .45s ease,transform .45s ease}
+.slide:not(.on){filter:blur(7px) saturate(.7);opacity:.38;transform:scale(.975);cursor:pointer}
+.slide:not(.on) *{pointer-events:none}
+.left{display:grid;gap:1rem;min-width:0;align-content:start}
+.right{background:var(--surface);border-radius:22px;box-shadow:var(--lift);min-width:0;display:flex;flex-direction:column;height:min(74vh,44rem);min-height:26rem;overflow:hidden}
+
+.figbar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.figbar h2{margin:0;font-size:1.05rem}
+.chip{display:inline-flex;align-items:center;border-radius:999px;padding:.1rem .65rem;font-size:12px;color:var(--muted);background:var(--pending-bg)}
+.badge{display:inline-flex;gap:.3rem;align-items:center;border-radius:999px;padding:.12rem .7rem;font-size:12.5px;font-weight:600}
+.s-approved{color:var(--ok);background:var(--ok-bg)}
+.s-verified,.s-completed,.s-none{color:var(--pending);background:var(--pending-bg)}
+.s-check-failed{color:var(--warn);background:var(--warn-bg)}
+.s-failed,.s-rejected{color:var(--bad);background:var(--bad-bg)}
+.imgbox{background:#fff;border-radius:22px;box-shadow:var(--lift);display:flex;align-items:center;justify-content:center;min-height:16rem;overflow:hidden;padding:1rem}
+.imgbox img{display:block;max-width:100%;max-height:52vh;width:auto;height:auto}
+.imgbox .none{padding:2rem 1rem;color:#5b6470;text-align:center;font-size:13px}
+.objective{font-family:var(--serif);font-size:1.4rem;line-height:1.3;margin:.4rem 0 0;white-space:pre-wrap}
+.note{margin:0}
+.note dt{font-size:13px;color:var(--muted);margin-top:.7rem}
+.note dd{margin:.1rem 0 0;white-space:pre-wrap;max-width:68ch}
+.todo{color:var(--warn)}
+.note .claim{background:var(--surface);border-radius:12px;padding:.6rem .9rem;box-shadow:var(--lift)}
+.runsel{display:flex;gap:.6rem;align-items:center;font-size:13px;color:var(--muted);min-width:0}
+.runsel select{min-width:0;flex:1;font:inherit;color:var(--ink);background:var(--surface);border:0;border-radius:10px;padding:.45rem .7rem;text-overflow:ellipsis;box-shadow:var(--lift)}
+.meta{color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:.2rem .9rem}
+
+.tabs{display:flex;gap:.2rem;overflow-x:auto;padding:.7rem .8rem .3rem;flex:none;scrollbar-width:none}
+.tabs [role=tab]{font:inherit;font-size:13.5px;color:var(--muted);background:none;border:0;border-radius:999px;padding:.4rem .9rem;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.tabs [role=tab]:hover{background:var(--soft)}
+.tabs [role=tab][aria-selected=true]{color:var(--ink);background:var(--soft);font-weight:600}
+.tabs .n{margin-left:.35rem;color:var(--muted);font-weight:400}
+.panel{padding:.5rem 1.1rem 1.1rem;min-width:0;flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column}
+.panel[hidden]{display:none}
+.panel>div:not(.tw){display:flex;flex-direction:column;flex:1;min-height:0}
+.empty{color:var(--muted);font-style:italic}
+.chips,.files{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.7rem;align-items:center;font-size:13px;color:var(--muted)}
+.files button{font:inherit;font-size:12.5px;padding:.2rem .7rem;border-radius:999px;border:0;background:var(--soft);color:var(--ink);cursor:pointer}
+.files button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+pre.box{margin:0;background:var(--code-bg);border-radius:14px;padding:.7rem 0;overflow:auto;flex:1;min-height:8rem;tab-size:4}
+pre.box code{display:block;min-width:max-content}
+pre.box .l{display:block;padding:0 1rem 0 0;white-space:pre}
+pre.box.num .l::before{content:attr(data-n);display:inline-block;width:3.6em;padding-right:.9em;text-align:right;color:var(--ln);user-select:none}
+pre.box.wrap code{min-width:0}
+pre.box.wrap .l{white-space:pre-wrap;overflow-wrap:anywhere}
+pre.box:not(.num) .l{padding-left:1rem}
+.cap{color:var(--muted);font-size:12px;margin:.5rem 0 0}
+table.t{width:100%;border-collapse:separate;border-spacing:0 .3rem;font-size:13px}
+table.t th{text-align:left;color:var(--muted);font-weight:600;padding:.2rem .6rem}
+table.t td{padding:.55rem .6rem;vertical-align:top;background:var(--soft)}
+table.t td:first-child{border-radius:10px 0 0 10px}table.t td:last-child{border-radius:0 10px 10px 0}
+table.t td.p{overflow-wrap:anywhere}
+ul.flags{margin:0;padding:0;list-style:none;display:grid;gap:.4rem}
+ul.flags li{display:flex;gap:.6rem;padding:.55rem .8rem;border-radius:12px;background:var(--soft)}
+ul.flags .k{font-weight:600;flex:none;min-width:6rem}
+ul.flags li.problem{background:var(--bad-bg)} ul.flags li.warning{background:var(--warn-bg)}
+
+.badge.rv-current,.badge.rv-carried{color:var(--ok);background:var(--ok-bg)}
+.badge.rv-stale,.badge.rv-warn{color:var(--warn);background:var(--warn-bg)}
+.badge.rv-bad{color:var(--bad);background:var(--bad-bg)}
+.badge.rv-none{color:var(--pending);background:var(--pending-bg)}
+.cite{color:var(--accent-ink);background:var(--accent)}
+.notice{display:flex;gap:.5rem;padding:.55rem .8rem;border-radius:12px;background:var(--warn-bg);color:var(--ink);font-size:13.5px}
+.notice b{color:var(--warn);flex:none}
+.accepted{display:inline-flex;gap:.3rem;align-items:center;color:var(--ok);font-size:13px;font-weight:600}
+.rvhead{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-bottom:.7rem}
+.kv{display:flex;flex-wrap:wrap;gap:.3rem .9rem;color:var(--muted);font-size:13px;margin-bottom:.7rem}
+.kv b{color:var(--ink);font-weight:600}
+.rvtext{white-space:pre-wrap;font-family:var(--serif);font-size:1rem;line-height:1.55;max-width:70ch;margin:0}
+.reviewblock{display:grid;gap:1rem;grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin:1rem 0 .5rem}
+.reviewblock section{background:var(--surface);border-radius:22px;box-shadow:var(--lift);padding:1.1rem 1.3rem;min-width:0}
+.reviewblock h2{margin:0 0 .6rem;font-size:1rem}
+.reviewblock .rvtext{max-height:16rem;overflow:auto}
+.sum a{color:var(--bad);font-weight:600}
+@media (max-width:960px){
+  .reviewblock{grid-template-columns:minmax(0,1fr)}
+  ul.flags .k{min-width:0}
+  main#work{padding:.5rem 1rem 3rem}
+  .slide{grid-template-columns:minmax(0,1fr);min-height:0;gap:1.25rem;scroll-margin-top:11rem}
+  .slide:not(.on){filter:none;opacity:1;transform:none;cursor:auto}
+  .slide:not(.on) *{pointer-events:auto}
+  .right{height:auto;min-height:0}
+  .panel{overflow:visible}
+  pre.box{max-height:26rem}
+}
+@media print{
+  :root{--bg:#fff;--surface:#fff;--soft:#f1f1f1;--ink:#000;--muted:#444;--code-bg:#f4f4f4;--lift:none}
+  header.top{position:static;backdrop-filter:none}
+  nav.figs,.tabs,.files,.runsel select{display:none}
+  .slide{display:block;filter:none!important;opacity:1!important;transform:none!important;min-height:0;break-inside:avoid-page}
+  .right{height:auto;overflow:visible;margin-top:1rem}
+  .panel{overflow:visible;display:block}.panel[hidden]{display:block}
+  pre.box{overflow:visible}pre.box .l{white-space:pre-wrap}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.slide,nav.figs button,.tabs [role=tab]{transition:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in" id="top"></div></header>
+<main id="work"></main>
+<script>
+"use strict";
+const DATA = /*__DATA__*/null;
+
+/* Build DOM with textContent only: code, logs and notes are untrusted text and never reach innerHTML. */
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (let [k, v] of Object.entries(attrs || {})) {
+    if (k.startsWith("aria-") && typeof v === "boolean") v = String(v);
+    if (v === false || v == null) continue;
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return e;
+}
+const rc = (el, ...k) => el.replaceChildren(...k.flat().filter(x => x != null && x !== false));
+const GLYPH = { approved: "✓", verified: "◐", completed: "◐", failed: "✕", rejected: "⊘", "check-failed": "▲", none: "○" };
+const LABEL = {
+  approved: "Approved", verified: "Verified, not approved", completed: "Completed (no checks)",
+  failed: "Failed", rejected: "Rejected", "check-failed": "Check failed", none: "Not run yet"
+};
+const STAGES = [["check", "Check"], ["main", "Main"], ["verify", "Verify"]];
+const short = s => (s || "").slice(0, 12);
+function when(id) {
+  const m = /^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})$/.exec(id || "");
+  return m ? `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]}` : (id || "?");
+}
+const lines = t => { const a = String(t).split("\n"); if (a.length && a[a.length - 1] === "") a.pop(); return a; };
+const isEmpty = o => !o || (Array.isArray(o) ? !o.length : typeof o === "object" ? !Object.keys(o).length : !String(o).trim());
+
+/* A figure's current run is the newest approved one; with none, the newest run. */
+/* The accepted run (named by the result file) comes first, then the newest approved run, then the newest run. */
+function acceptedIndex(f) { return f.result ? f.runs.findIndex(r => r.run_id === String(f.result.run)) : -1; }
+function currentIndex(f) { const a = acceptedIndex(f); if (a >= 0) return a; const i = f.runs.findIndex(r => r.approved); return i < 0 ? 0 : i; }
+const stripFront = t => String(t || "").replace(/^---\n[\s\S]*?\n---\n?/, "").trim();
+function frontOf(t) {
+  const m = /^---\n([\s\S]*?)\n---/.exec(String(t || "")); const o = {};
+  if (m) for (const l of m[1].split("\n")) { const k = /^([\w-]+):\s*(.*)$/.exec(l); if (k) o[k[1]] = k[2].replace(/^(['"])(.*)\1$/, "$2"); }
+  return o;
+}
+/* Review badge for a figure or the analysis: {cls, glyph, text} from a state word and the front matter that counts. */
+function reviewBadge(state, fm, cited, subject) {
+  const n = Number(fm && fm.blocking) || 0, waived = !!(fm && fm.waiver);
+  const open = n > 0 && !waived;
+  let cls = "rv-none", glyph = "○", text = state === "no result" ? "No result yet" : "No review";
+  if (state === "run") { cls = "rv-current"; glyph = "✓"; text = "Review of this run"; }
+  else if (state === "current") { cls = "rv-current"; glyph = "✓"; text = "Review current"; }
+  else if (String(state).startsWith("carried")) { cls = "rv-carried"; glyph = "↪"; text = "Review " + state; }
+  else if (state === "stale") { cls = "rv-stale"; glyph = "▲"; text = "Review stale"; }
+  else if (state === "none" && cited) { cls = "rv-bad"; glyph = "✕"; text = "Cited, no review"; }
+  if (open) { cls = "rv-bad"; glyph = "✕"; }
+  const tail = n > 0 ? (waived ? ` · ${n} blocking, waived` : ` · ${n} blocking`) : "";
+  return h("span", { class: "badge " + cls, title: subject }, h("span", { "aria-hidden": "true" }, glyph), text + tail);
+}
+function stateOf(f, r) {
+  if (!f.runs.length || !r) return "none";
+  return r.approved && r.status === "verified" ? "approved" : r.approved ? "approved" : r.status;
+}
+function badge(st) { return h("span", { class: "badge s-" + st }, h("span", { "aria-hidden": "true" }, GLYPH[st] || "?"), LABEL[st] || st); }
+
+function codeBox(text, opts = {}) {
+  const pre = h("pre", { class: "box" + (opts.num ? " num" : "") + (opts.wrap ? " wrap" : ""), tabindex: "0", role: "region", "aria-label": opts.label });
+  const code = h("code");
+  lines(text).forEach((t, i) => code.append(h("span", { class: "l", "data-n": opts.num ? i + 1 : false }, t === "" ? "​" : t)));
+  pre.append(code);
+  return pre;
+}
+
+const UI = {};   // per-figure view state, kept when switching figures
+function workspace(f) {
+  const st = UI[f.figure] || (UI[f.figure] = { run: currentIndex(f), tab: "code", file: null });
+  const cur = currentIndex(f);
+  const r = f.runs[st.run] || null;
+  const state = stateOf(f, r);
+
+  /* left column: the figure and what it is for */
+  const dl = h("dl", { class: "note" });
+  const field = (k, v) => { const todo = !v || /^TODO/.test(v); dl.append(h("dt", {}, k), h("dd", { class: todo ? "todo" : "" }, v || "Missing: add it to docs/method.md")); };
+  field("Why", f.why);
+  if (f.claim) dl.append(h("dt", {}, "Claim"), h("dd", { class: "claim" + (/^TODO/.test(f.claim) ? " todo" : "") }, f.claim));
+  if (f.claim_stale) dl.append(h("dd", { class: "notice" }, h("b", {}, "▲ Claim is older than the result"), `It was written for run ${f.result.claim_for}; the accepted result is run ${f.result.run}. Re-check it, then update claim_for.`));
+  if ((f.lib_changed || []).length) dl.append(h("dd", { class: "notice" }, h("b", {}, "▲ Lib changed since this run"), (f.lib_changed || []).join(", ") + ". The live helper files differ from the copy this run used."));
+  const imgOk = r && typeof r.image === "string" && r.image.startsWith("data:image/png;base64,");
+  const sel = f.runs.length ? h("div", { class: "runsel" }, h("label", { for: "run-sel-" + f.figure }, f.runs.length > 1 ? `Run (${f.runs.length})` : "Run"),
+    h("select", { id: "run-sel-" + f.figure, onchange: e => { st.run = +e.target.value; st.file = null; redraw(f.figure, "run-sel-" + f.figure); } },
+      f.runs.map((x, i) => h("option", { value: i, selected: i === st.run },
+        `${when(x.run_id)} · ${x.status}${x.approved ? " · approved" : ""}${i === acceptedIndex(f) ? " · accepted result" : ""}${x.review ? " · reviewed" : ""}${i === 0 && i !== cur ? " · newest" : ""}`)))) : null;
+  const left = h("section", { class: "left", "aria-label": "Figure " + f.figure },
+    h("div", { class: "figbar" }, h("h2", { class: "mono" }, f.figure), h("span", { class: "chip" }, STAGES.find(s => s[0] === f.stage)?.[1] || f.stage), badge(state),
+      f.done ? null : h("span", { class: "chip" }, "task open"),
+      f.result && f.result.cited ? h("span", { class: "badge cite" }, "Cited") : null,
+      f.result || f.review_state !== "no result" ? reviewBadge(f.review_state, f.review, f.result && f.result.cited, "Review that counts for this figure's accepted run") : null),
+    h("div", { class: "imgbox" }, imgOk
+      ? h("img", { src: r.image, alt: `${f.figure}: ${f.objective || "figure"} (run ${when(r.run_id)})` })
+      : h("div", { class: "none" }, !r ? "Not run yet. Nothing is recorded for this figure." : "This run produced no figure image.")),
+    h("p", { class: "objective" + (!f.objective || /^TODO/.test(f.objective) ? " todo" : "") }, f.objective || "Missing: add the objective to docs/method.md"),
+    dl, sel,
+    h("div", { class: "meta" }, ...(r ? [
+      h("span", {}, "Run ", h("b", {}, when(r.run_id))),
+      f.result && String(f.result.run) === r.run_id ? h("span", { class: "accepted" }, "✓ Accepted result") : null,
+      r.approved ? h("span", {}, "Approved ", h("b", {}, r.approved)) : null,
+      r.note ? h("span", {}, "Note: ", r.note) : null] : [])));
+
+  /* right column: tabs */
+  const right = h("section", { class: "right", "aria-label": "Provenance of " + f.figure });
+  const tabs = h("div", { class: "tabs", role: "tablist", "aria-label": f.figure + " provenance" });
+  const body = h("div", { style: "display:contents" });
+  right.append(tabs, body);
+
+  function panel(k, r) {
+    const none = t => h("p", { class: "empty" }, t);
+    if (k === "code") {
+      const files = [];
+      for (const [n, t] of Object.entries(r.scripts || {}).sort((x, y) => x[0].includes(".checks.") - y[0].includes(".checks."))) files.push({ g: "scripts", n, t });
+      for (const [n, t] of Object.entries(r.lib || {})) files.push({ g: "lib", n, t });
+      const out = [];
+      if ((r.inputs || []).length) out.push(h("div", { class: "chips" }, h("b", {}, "Inputs"),
+        r.inputs.map(i => h("span", { class: "chip", title: `${i.path}\n${i.label || ""}` }, i.id))));
+      if (!files.length) return h("div", {}, out, none("No code was saved for this run."));
+      const sel = files.find(x => x.g + "/" + x.n === st.file) || files[0];
+      st.file = sel.g + "/" + sel.n;
+      const bar = h("div", { class: "files", role: "group", "aria-label": "Code files" });
+      let last = "";
+      for (const x of files) {
+        if (x.g !== last) { bar.append(h("span", { class: "grp" }, x.g)); last = x.g; }
+        bar.append(h("button", { "aria-pressed": x === sel, onclick: () => { st.file = x.g + "/" + x.n; drawTabs(r); } }, x.n));
+      }
+      return h("div", {}, out, bar, codeBox(sel.t, { num: true, label: sel.n }), h("p", { class: "cap" }, `${lines(sel.t).length} lines. Copy of what the run used.`));
+    }
+    if (k === "inputs") {
+      if (!(r.inputs || []).length) return none("No inputs recorded.");
+      const sel = new Set(r.selected_ids || []);
+      return h("div", { class: "tw" }, h("table", { class: "t" },
+        h("thead", {}, h("tr", {}, ["Id", "Label", "Path", "sha256", "Stored"].map(c => h("th", { scope: "col" }, c)))),
+        h("tbody", {}, r.inputs.map(i => h("tr", {},
+          h("td", {}, h("code", {}, i.id)), h("td", {}, i.label || ""),
+          h("td", { class: "p" }, h("code", {}, i.path)),
+          h("td", {}, h("code", { title: i.sha256 }, short(i.sha256))),
+          h("td", {}, i.copy ? "copied" : "hashed only"))))),
+        h("caption", { class: "sr" }, "Inputs of this run"));
+    }
+    if (k === "checks") return isEmpty(r.checks) ? none("No checks output. The run stopped before checks, or has no checks script.") : codeBox(r.checks, { wrap: true, label: "Checks" });
+    if (k === "log") return isEmpty(r.log) ? none("Empty log.") : h("div", {}, codeBox(r.log, { wrap: true, num: true, label: "Log" }), h("p", { class: "cap" }, `${lines(r.log).length} lines.`));
+    if (k === "review") {
+      if (!r.review) return none("No review for this run." + (f.review_state.startsWith("carried") ? ` The result relies on a review ${f.review_state}.` : ""));
+      const fm = frontOf(r.review), body = stripFront(r.review), n = Number(fm.blocking) || 0;
+      return h("div", {},
+        h("div", { class: "rvhead" }, reviewBadge("run", fm, false, "This run's review"), fm.outcome ? h("span", { class: "chip" }, "Outcome: " + fm.outcome) : null),
+        h("div", { class: "kv" }, ["case", "method", "date", "waiver"].filter(k => fm[k]).map(k => h("span", {}, k + " ", h("b", {}, fm[k])))),
+        body ? h("p", { class: "rvtext" }, body) : none("The review file has no text."));
+    }
+    if (k === "env") return isEmpty(r.env) ? none("No environment recorded.") : codeBox(r.env, { wrap: true, label: "Environment" });
+    const items = [
+      ...(r.problems || []).map(t => ["problem", "✕ Problem", t]),
+      ...(r.warnings || []).map(t => ["warning", "▲ Warning", t]),
+      ...(r.overrides || []).map(t => ["override", "◆ Override", t])];
+    if (!items.length) return none("No style overrides, warnings or problems recorded.");
+    return h("ul", { class: "flags" }, items.map(([c, l, t]) => h("li", { class: c }, h("span", { class: "k" }, l), h("span", {}, t))));
+  }
+
+  function drawTabs() {
+    const defs = r ? [
+      ["code", "Code", Object.keys(r.scripts || {}).length + Object.keys(r.lib || {}).length],
+      ["inputs", "Inputs", (r.inputs || []).length],
+      ["checks", "Checks", isEmpty(r.checks) ? 0 : lines(r.checks).length],
+      ["review", "Review", r.review ? 1 : 0],
+      ["log", "Log", isEmpty(r.log) ? 0 : lines(r.log).length],
+      ["env", "Environment", null],
+      ["flags", "Overrides and warnings", (r.overrides || []).length + (r.warnings || []).length + (r.problems || []).length]
+    ] : [];
+    rc(tabs, defs.map(([k, label, n], i) => h("button", {
+      role: "tab", id: `t-${f.figure}-${k}`, "aria-selected": st.tab === k, "aria-controls": `p-${f.figure}-${k}`,
+      tabindex: st.tab === k ? "0" : "-1",
+      onclick: () => { st.tab = k; drawTabs(); },
+      onkeydown: e => {
+        const j = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: defs.length - 1 }[e.key];
+        if (j == null) return;
+        e.preventDefault(); st.tab = defs[(j + defs.length) % defs.length][0]; drawTabs();
+        tabs.querySelector('[aria-selected="true"]').focus();
+      }
+    }, label, n == null ? null : h("span", { class: "n" }, n))));
+    tabs.hidden = !r;
+    rc(body, defs.map(([k]) => {
+      const p = h("div", { class: "panel", role: "tabpanel", id: `p-${f.figure}-${k}`, "aria-labelledby": `t-${f.figure}-${k}`, hidden: st.tab !== k });
+      if (st.tab === k) p.append(panel(k, r));
+      return p;
+    }));
+    if (!r) body.append(h("div", { class: "panel" }, h("p", { class: "empty" }, "No run yet. Run this figure to record its code, inputs and checks.")));
+  }
+  drawTabs();
+  return [left, right];
+}
+
+let D;
+const slideOf = fig => document.getElementById("fig-" + fig);
+function redraw(fig, focusId) {
+  const f = D.figures.find(x => x.figure === fig);
+  rc(slideOf(fig), workspace(f));
+  if (focusId) document.getElementById(focusId)?.focus();
+}
+function goto(fig, instant) { slideOf(fig).scrollIntoView({ block: "start", behavior: instant ? "instant" : "smooth" }); }
+function setOn(fig) {
+  document.querySelectorAll(".slide").forEach(sl => sl.classList.toggle("on", sl.id === "fig-" + fig));
+  document.querySelectorAll("nav.figs button").forEach(b => b.setAttribute("aria-current", b.dataset.f === fig));
+}
+
+function build() {
+  D = DATA;
+  const top = document.getElementById("top"), work = document.getElementById("work");
+  if (!D) { top.append(h("p", {}, "No data. Run rstack_run.py show to fill this page.")); return; }
+  document.title = `Provenance: ${D.analysis}`;
+  D.figures.forEach(f => { f.__state = stateOf(f, f.runs[currentIndex(f)]); });
+  const ok = D.figures.filter(f => f.__state === "approved").length;
+  const strip = h("nav", { class: "figs", "aria-label": "Figures" });
+  for (const [stage, label] of STAGES) {
+    const fs = D.figures.filter(f => f.stage === stage);
+    if (!fs.length) continue;
+    strip.append(h("div", { class: "grp" }, h("span", { class: "gl" }, label), fs.map(f => h("button", {
+      "data-f": f.figure, title: LABEL[f.__state], onclick: () => goto(f.figure)
+    }, h("span", { "aria-hidden": "true" }, GLYPH[f.__state]), f.figure, h("span", { class: "sr" }, ", " + LABEL[f.__state])))));
+  }
+  const probs = D.problems || [], AR = D.analysis_review || { state: "none", front: {}, text: "" };
+  rc(top, h("div", { class: "titleline" }, h("h1", {}, D.analysis), h("span", { class: "sum" }, `${ok} of ${D.figures.length} figures approved. Read from stored runs; nothing was re-run. `,
+      probs.length ? h("a", { href: "#review", onclick: e => { e.preventDefault(); document.getElementById("review").scrollIntoView({ block: "start" }); } }, `▲ ${probs.length} review problem${probs.length > 1 ? "s" : ""}`) : null)),
+    D.question ? h("p", { class: "question" }, D.question) : null, strip);
+  if (!D.figures.length) { work.append(h("p", { class: "empty" }, "This analysis has no figure tasks yet.")); return; }
+
+  const fm = AR.front || {}, arText = stripFront(AR.text);
+  work.append(h("div", { class: "reviewblock", id: "review" },
+    h("section", { "aria-label": "Analysis review" }, h("h2", {}, "Analysis review"),
+      h("div", { class: "rvhead" }, reviewBadge(AR.state, fm, probs.length > 0, "Review of the whole analysis"), fm.outcome ? h("span", { class: "chip" }, "Outcome: " + fm.outcome) : null),
+      h("div", { class: "kv" }, ["date", "method", "waiver"].filter(k => fm[k]).map(k => h("span", {}, k + " ", h("b", {}, String(fm[k]))))),
+      arText ? h("p", { class: "rvtext", tabindex: "0" }, arText) : h("p", { class: "empty" }, AR.state === "none" ? "No review of the whole analysis yet." : "The review has no text.")),
+    h("section", { "aria-label": "Review problems" }, h("h2", {}, `Review problems (${probs.length})`),
+      probs.length ? h("ul", { class: "flags" }, probs.map(t => h("li", { class: "warning" }, h("span", { class: "k" }, "▲ Fix"), h("span", {}, t))))
+        : h("p", { class: "empty" }, "Nothing to fix. Every cited result has a usable review."))));
+
+  const slides = D.figures.map(f => {
+    const sl = h("section", { class: "slide", id: "fig-" + f.figure });
+    // A blurred figure is not clickable inside: the first click or focus brings it to the centre instead.
+    sl.addEventListener("click", e => { if (!sl.classList.contains("on") && matchMedia("(min-width:961px)").matches) { e.preventDefault(); goto(f.figure); } });
+    sl.addEventListener("focusin", () => { if (!sl.classList.contains("on")) goto(f.figure); });
+    work.append(sl); redraw(f.figure);
+    return sl;
+  });
+  // The figure crossing the middle band of the window is the one in focus.
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setOn(e.target.id.slice(4)); }), { rootMargin: "-42% 0px -42% 0px" });
+  slides.forEach(sl => io.observe(sl));
+  const want = decodeURIComponent(location.hash.slice(1));
+  const first = D.figures.some(f => f.figure === want) ? want : D.figures[0].figure;
+  setOn(first); if (first === want) requestAnimationFrame(() => goto(first, true));
+}
+build();
+</script>
+</body>
+</html>

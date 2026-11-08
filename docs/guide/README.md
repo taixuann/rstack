@@ -7,9 +7,8 @@ rstack works best when you describe the goal and how you will know it is done. `
 3. [Scaffold and design](./03-scaffold-and-design.md). Folder blueprint, hypotheses, power.
 4. [Analyse and verify](./04-analyse-and-verify.md). Data, figures, numbers you can trace.
 5. [Literature and writing](./05-literature-and-writing.md). Wiki, citations, manuscripts, reviews.
-6. [Run work while you sleep](./06-overnight.md). Logs, caps, and what always pauses.
-7. [Steer with principle names](./07-principles.md). Names that redirect an agent mid-task.
-8. [Make it yours](./08-make-it-yours.md). Your own playbooks with `figure-it-out`.
+6. [Steer with principle names](./06-principles.md). Names that redirect an agent mid-task.
+7. [Make it yours](./07-make-it-yours.md). Your own playbooks with `figure-it-out`.
 
 Stuck? Type `/research-help` with your question.
 

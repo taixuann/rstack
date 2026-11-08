@@ -9,7 +9,7 @@ Load these skills only as needed:
 - State before data is examined which comparisons you will make and how results are shown (for example means with error bars and the individual points overlaid).
 - `interrogate` to attack the finished design; `arena` when two or more designs are plausible.
 
-The note contains: one primary question and a falsifiable hypothesis, with what would refute it; variables and primary endpoint; the design with a short tradeoffs table against the best alternative; sample size with effect-size source, alpha, power, dropout; protocol and the data to record (and where it lives in `data/raw/`); the pre-stated analysis plan that study-analysis will consume; risks and fallbacks.
+The note contains: one primary question and a falsifiable hypothesis, with what would refute it; variables and primary endpoint; the design with a short tradeoffs table against the best alternative; sample size with effect-size source, alpha, power, dropout; protocol and the data to record (and where it lives in `data/raw/`); the pre-stated analysis plan that Analysis plan will consume; risks and fallbacks.
 
 At the end, set the README hypotheses to `frozen` and offer the design → progressing state change (**Project docs**).
 
