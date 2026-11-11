@@ -45,3 +45,10 @@ Skills for this playbook: `interrogate`, `swarm`, `arena`, `scientific-critical-
 **Gate.** Set `cited: true` in `docs/results/<figure>.md` for each result the manuscript will cite. `rstack_run.py check` then fails unless each cited result has a usable review on its current run (no open blocking finding or a waiver), its claim is written for that run and no longer TODO, and `docs/review.md` exists, covers the current accepted runs and has no open blocker. The progressing gate needs `check` to pass.
 
 **Reply:** the case, findings or differences by severity, the method used, what the reviewer did not check, and whether the run can be accepted.
+
+## Done when
+
+Checked by `scripts/verify_playbook.py` (start it with `start analysis-review analysis=analysis/<name>`). Items: file (a glob with a match), cmd (exit 0), decision (a new decisions.tsv row).
+
+- cmd python3 {scripts}/rstack_run.py check {analysis}
+- decision

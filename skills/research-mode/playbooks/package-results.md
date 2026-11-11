@@ -28,3 +28,13 @@ package/
 9. **Optional, after the package.** A reader-facing report is written from the package files with `analysis-report`, as `docs/report.md` outside `package/`: the question clauses mapped to steps, the provenance, the method, the results, the checks, the limitations and the decision log, all copied from the files. Its interpretation section holds only the user's confirmed claims; anything else is a labelled `[assistant]` hypothesis, kept apart and confirmed by the user, and never the skill's rule to commit to a mechanism the data do not show. What to do next is a separate discussion with `brainstorming`, also outside `package/`.
 
 **Reply:** the package path, the figures in it and the ones left out with the reason, the data not copied, the result of `reproduce.py` in a clean environment, and anything still TODO.
+
+## Done when
+
+Checked by `scripts/verify_playbook.py` (start it with `start package-results analysis=analysis/<name>`). Items: file (a glob with a match), cmd (exit 0), decision (a new decisions.tsv row).
+
+- file {analysis}/package/manifest.json
+- file {analysis}/package/README.md
+- file {analysis}/package/reproduce.py
+- cmd python3 {scripts}/rstack_run.py check {analysis}
+- decision

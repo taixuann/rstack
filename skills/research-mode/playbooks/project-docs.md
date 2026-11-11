@@ -22,7 +22,7 @@ Write or refresh a project's `README.md`, `AGENTS.md`, and `CLAUDE.md` from the 
 | explore | Run the project interview. Write context, aims, and milestones. Register the Zotero collection, ingest and review papers, and run the inquiry. Map the literature and name the gap. Write questions and hypotheses per work package. Outline methods and feasibility. | Proposal chain holds (`interrogate`), `check_references.py` passes, each question has candidate hypotheses |
 | design | Freeze each question's hypotheses. Choose the design. Justify sample size. Write the analysis plan. Attack the design with `interrogate`. Plan data intake and ethics. | Design note and analysis plan frozen |
 | progressing | Intake data with provenance. Run the planned analyses per question. Run sensitivity checks. Accept or reject each result. Rerun the pipeline clean. | Planned analyses done, every result dispositioned, rerun clean |
-| ready-for-publish | Draft the manuscript. Verify numbers and citations. Peer-review pass. Package results. Submit. | Submitted |
+| ready-for-publish | Hand the results to the wstack plugin for the manuscript. Verify numbers and citations. Peer-review pass. Package results. Submit. | Submitted |
 | closed | Record the reason (published or abandoned). Archive the package. | none |
 
 **Skills per state.** Bundled means in rstack. External means install it separately (for example from `claude-scientific-writer` or K-Dense's `scientific-agent-skills`); use it only if installed.
@@ -32,7 +32,7 @@ Write or refresh a project's `README.md`, `AGENTS.md`, and `CLAUDE.md` from the 
 | explore | `literature-review`, `paper-lookup`, `research-lookup`, `openalex-database`, `liteparse`, `zotero-cli`, `brainstorming`, `hypotheses`, `scientific-critical-thinking`, `sources`, `interrogate` | `citation-management`, `scholar-evaluation`, `deep-research` |
 | design | `experimental-design`, `statistical-power`, `hypotheses`, `what-if-oracle`, `arena`, `interrogate` | `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness` |
 | progressing | `statistical-analysis`, `uncertainty-and-units`, `analysis-report`, `figures`, `reproduce`, `swarm` | `neurokit2` (ECG and biosignals) |
-| ready-for-publish | `peer-review` | `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates`, `infographics` |
+| ready-for-publish | `peer-review` | `citation-management` (writing and slides: the wstack plugin) |
 | closed | `sources` | none |
 
 **Reply:** what changed, what remains unknown, and the questions you need answered to fill it.

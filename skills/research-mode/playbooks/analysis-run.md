@@ -30,7 +30,14 @@ Templates: scripts start from `templates/analysis/figure.template.py` and `figur
 8. **Show the user.** Show the figure, `checks.txt` and any style override (a line width or marker size that differs from the preset; allowed, but say why). The user decides.
 9. **Tick: your sign-off.** Until you say OK, the figure is only machine-checked. After the user's ok: `rstack_run.py tick analysis/<name> --figure <figure> --approved-by-user`. It needs a verified run and does three things: ticks that task in the README, adds the run to the **Runs** table, and writes `docs/results/<figure>.md` (the objective, run, inputs, figure path, and a claim for you to fill in with n and what the spread is). Run again after a tick and it records a re-run: the new run replaces the result, the claim is kept to re-check, and the old run is listed as superseded. Never pass the flag before the user has seen the figure. Log the run in `docs/rstack/decisions.tsv` (**show-me-your-work**). When the last task is ticked, tell the user so **Task tracking** can tick the analysis in `tasks.md`.
 9a. **Look back at everything.** `rstack_run.py show analysis/<name>` writes `analysis/<name>/provenance.html`: one card per figure in task order, with the objective, why, the figure, the claim, and tabs for runs, inputs, checks, code, log and environment. It reads stored files only and runs nothing. To prove a figure still reproduces, use `replay` on its run folder.
-9b. **Export for a paper or slide.** `rstack_run.py export analysis/<name> --figure <figure>` copies the accepted run's png and pdf into `manuscripts/figures/` (or `--out DIR`) as `<run id>_<figure>.png`, after checking them against the run's recorded hashes. The file name is the provenance folder name, so a copy anywhere says which run made it. The live `figures/<figure>/<figure>.png` keeps its stable name; manuscripts that must not change on a re-run include the exported file.
+9b. **Export for a paper or slide.** `rstack_run.py export analysis/<name> --figure <figure>` copies the accepted run's png and pdf into `<analysis>/export/` (or `--out DIR`) as `<run id>_<figure>.png`, after checking them against the run's recorded hashes. The file name is the provenance folder name, so a copy anywhere says which run made it. The live `figures/<figure>/<figure>.png` keeps its stable name; a manuscript that must not change on a re-run includes the exported file (the wstack plugin copies from there).
 10. For a sensitivity check, vary one analysis choice in a new run and compare. Report n, spread, and effect sizes, not only p-values. Correct for multiple comparisons when many are tested.
 
 **Reply:** run id, status, what the audit saw, replay result, and whether the task is waiting for the user's ok.
+
+## Done when
+
+Checked by `scripts/verify_playbook.py` (start it with `start analysis-run analysis=analysis/<name>`). Items: file (a glob with a match), cmd (exit 0), decision (a new decisions.tsv row).
+
+- cmd python3 {scripts}/rstack_run.py check {analysis}
+- decision

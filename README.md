@@ -2,114 +2,90 @@
 
 The research counterpart to [pstack](https://github.com/cursor/plugins/tree/main/pstack). pstack helps you write less, higher quality code. rstack helps you run research projects the same way: state the question, pick a playbook, delegate deliberately, and verify every number against a file.
 
+rstack has 21 playbooks, 20 principles and one agent (`critic`), plus 21 bundled domain skills. You never pick among them by hand: `/rstack:research-mode` reads the project's state and the task, then picks the playbook.
+
+## The four parts
+
+```mermaid
+flowchart LR
+  D["2. Design<br/>question, hypothesis, power, protocol"] --> A["1. Analysis<br/>plan, run, review, package"]
+  M["3. Admin<br/>tasks, docs, state gates"] -.keeps in step.-> D
+  M -.keeps in step.-> A
+  S["4. Support<br/>figure it out, correct, reflect"] -.improves.-> D
+  S -.improves.-> A
+```
+
+| Part | Use it when | Playbooks |
+|---|---|---|
+| **1. Analysis** | You have data and need figures and claims you can defend | `analysis-plan`, `analysis-run`, `analysis-review`, `package-results`, and the `critic` agent. Every figure gets its own provenance folder |
+| **2. Experimental design** | You are choosing what to measure, how many, and how to test it | `experimental-design`, with `statistical-power`, `hypotheses` and `what-if-oracle` |
+| **3. Project admin** | You need the project to stay organised and in sync | `task-tracking` (the only writer of `tasks.md`, mirrored to Notion), `project-docs`, `state-review`, plus `init` and `setup-research` |
+| **4. Support** | The task matches no playbook, or the method itself needs fixing | `figure-it-out`, `correct`, `reflect`, and `authoring-a-skill` for managing playbooks |
+
+Before and after those four, rstack also covers the literature loop (`literature-review`, `inquiry`, `proposal-synthesis`) and raw-data intake (`raw-intake`), plus anytime tools (`investigation`, `reproduce`, `prototype`, `hillclimb`). The full list is in [docs/playbooks.md](docs/playbooks.md).
+
+## Principles
+
+Every part follows a small set of principles, written as `principle-*` skills. Some apply everywhere, some to one part only. [docs/guide/06-principles.md](docs/guide/06-principles.md) lists them.
+
+## Works with
+
+rstack does not write papers, teach, or view raw files. It names the tools that do:
+
+| For | Use |
+|---|---|
+| Writing: papers, slides, posters, grants, citations | [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer) |
+| Learning: understand a paper or method, quizzes | `/tutor:teach` |
+| Raw instrument data: inventory and look at `data/raw/` | [raw-viewer](https://github.com/taixuann/raw-viewer) |
+| Papers and notes | Zotero (`scripts/zotero_snapshot.py`) |
+| Design state: full-information design review, and filling the lab `wiki/` (**Protocol wiki**) | `doc-coauthoring` (Anthropic skill): install it before the design state |
+
 ## Install
+
+```bash
+bash scripts/install.sh   # Claude Code, Codex and Antigravity, whichever are present
+```
+
+Or by hand in Claude Code:
 
 ```bash
 claude plugin marketplace add taixuann/rstack
 claude plugin install rstack@rstack
 ```
 
-Claude Code leaves auto-update off for third-party marketplaces. To turn it on, run `/plugin`, open the Marketplaces tab, select `rstack`, and choose enable auto-update. To update once by hand: `claude plugin update rstack@rstack`.
-
-One script installs or updates rstack on Claude Code, Codex and Antigravity (whichever are present), and is safe to re-run:
-
-```bash
-bash scripts/install.sh            # or: claude | codex | antigravity
-```
-
-For Claude Code on the web, the cloud session cannot see your global plugins. Declare rstack in the repository's `.claude/settings.json` (`extraKnownMarketplaces` and `enabledPlugins`) and push it. It loads from the second session on.
-
-In Claude Code, commands take an `rstack:` prefix, such as `/rstack:research-mode`. rstack is written for Claude Code, so there is no name adapter.
+Claude Code leaves auto-update off for third-party marketplaces. Turn it on in `/plugin` > Marketplaces > `rstack`, or update once with `claude plugin update rstack@rstack`. In Claude Code on the web, declare rstack in the repo's `.claude/settings.json` (`extraKnownMarketplaces` and `enabledPlugins`); it loads from the second session on.
 
 ## Get started
 
-1. Run `/rstack:setup-research`. It writes your research profile and, optionally, per-role models.
-2. Use `/rstack:research-mode` whenever you do research that needs rigor.
+1. Run `/rstack:setup-research` to write your research profile.
+2. Start a project with `/rstack:init projects/res_<name>`.
+3. Use `/rstack:research-mode` whenever you do research that needs rigor. Commands take the `rstack:` prefix.
 
-New here? The [guide](./docs/guide/README.md) walks through a first task. Stuck? Ask `/rstack:research-help`.
+New here? The [guide](docs/guide/README.md) walks through a first task. Stuck? Ask `/rstack:research-help`.
 
-## Standard project layout
+## A project at a glance
+
+A project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed. Work must fit the state, and a state changes only at a gate you approve.
 
 | Folder | Holds |
 |---|---|
 | `data/raw/` | Raw data. Immutable |
 | `docs/inputs/` | What came in: proposals, supervisor notes. Never edited |
-| `docs/literature-review/` | `papers/<cite>/` (one folder per paper), `cross-papers/`, `reports/` (search reports, leads only) |
+| `docs/literature-review/` | One folder per paper, cross-paper notes, search reports |
 | `docs/rstack/<state>/` | The state's tasks, documents, review and decisions |
-| `analysis/` | Derived work, each number traced to a script. `analysis/<name>/` holds one analysis; `analysis/lib/` the shared helpers; `analysis/<name>/package/` its self-contained results package |
-| `.rstack/provenance/` | One folder per figure run: inputs with hashes, scripts, lib, environment, log, checks, outputs, review. Tracked in git |
-| `manuscripts/`, `presentation/` | Writing and talks |
+| `analysis/` | Derived work, each number traced to a script. [How it runs](docs/analysis-runner.md) |
+| `.rstack/provenance/` | One folder per figure run: inputs with hashes, scripts, environment, log, checks, review |
 
+## Docs
 
-Each project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed.
-
-`data/raw` is immutable. Everything about one paper lives in `docs/literature-review/papers/<cite>/`, starting at its `README.md`.
-
-## What is inside
-
-- **Mode:** `research-mode` with non-negotiables, a principles index, autonomy, subagent and reply rules.
-- **22 playbooks** in `skills/research-mode/playbooks/`:
-
-| playbook | group | for |
-|---|---|---|
-| literature-review | phase | the Zotero loop: ingest papers, run the inquiry, find more, map the gap |
-| inquiry | phase | align the user's reading with the assistant's, interrogate both, extend, search, claim |
-| proposal-synthesis | phase | questions, hypotheses, methods, feasibility, explore exit check |
-| experimental-design | phase | hypothesis, design, power, protocol |
-| raw-intake | phase | checking and correcting raw filenames and date folders, dry run first, sealed by `.intake.log` |
-| analysis-plan | phase | README, inputs menu and provenance-ready scripts for one analysis |
-| analysis-run | phase | run through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it |
-| analysis-review | phase | changed run (compare, accept one) or challenge (independent critic on a run, then the whole analysis); `check` gates cited results |
-| manuscript-writing | phase | drafting and auditing manuscripts |
-| package-results | phase | build a self-contained `package/` from the accepted runs; the user confirms every claim, nothing is guessed |
-| state-review | phase | gate review at every state exit: rules per state, findings become tasks |
-| investigation | anytime | a read-only question |
-| hillclimb | anytime | sustained improvement of one metric |
-| reproduce | anytime | re-running a published or prior result |
-| prototype | anytime | a throwaway pilot that settles a fork |
-| peer-review | anytime | reviewing others' work |
-| reviewer-response | anytime | answering reviewer comments |
-| presentation | anytime | slides, talks, posters |
-| task-tracking | support | the only writer of `docs/rstack/tasks.md` (Phase > Goal > Task), kept in step with Notion |
-| project-docs | support | README (state, tasks, questions, hypotheses, evidence), AGENTS.md, CLAUDE.md stub, state changes |
-| obsidian-writing | support | notes the user comments on in Obsidian: front matter, Mermaid diagrams, comment threads |
-| authoring-a-skill | support | writing a skill or playbook, with a reuse-first sourcing ladder |
-
-- **20 principles** as `principle-*` skills.
-- **Workflow skills:** `swarm`, `arena`, `interrogate`, `figure-it-out`, `show-me-your-work`, `init` (new project: folders, README, AGENTS, CLAUDE, interview), `statechart` (model a workflow in TLA+, check it with TLC, draw it; from pstack), plus the one-line command `unslop`.
-- **Self-upgrade:** `reflect` (mine a session, then add, edit, or retire playbooks with your approval) and `correct` (make repeated mistakes impossible).
-- **Agent:** `critic` (independent reviewer of a paper's Source Analysis or of an analysis run) on Sonnet at high effort.
-- **Zotero:** `scripts/zotero_snapshot.py` snapshots colour-coded annotations into `docs/literature-review/papers/`, `docs/literature-review/references.yaml` records why each paper matters, and `scripts/check_references.py` checks it. Needs the `zotero-cli` command (`pip install zotero-mcp-server`).
-- **Setup and help:** `setup-research`, `research-help`.
-- **21 bundled domain skills**: 15 copied from the former `openscience-adapter` (literature, experimental design, figures, peer review, and others), four from [K-Dense scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) (MIT: `statistical-analysis`, `statistical-power`, `uncertainty-and-units`, `what-if-oracle`), plus `zotero-cli` from [zotero-mcp](https://github.com/54yyyu/zotero-mcp) (MIT) and `skill-creator` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0). Playbooks call them by name. Anthropic's proprietary `docx`, `pdf`, `pptx` and `xlsx` skills are not bundled because their license forbids redistribution.
-- **Works best with** [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer): the playbooks name its `scientific-writing`, `scientific-schematics`, `citation-management`, `venue-templates` and `infographics`. Without it, those steps are skipped.
-
-## The analysis runner
-
-`skills/research-mode/scripts/rstack_run.py` carries the analysis playbooks. Figures are always made through it, never by hand.
-
-| Command | What it does |
-|---|---|
-| `new <project> <name> --figure stage:fig` | scaffold an analysis: README, `inputs.yaml`, `docs/`, scripts, the shared `analysis/lib/` |
-| `run <analysis> --stage check\|main\|verify --figure F` | refuse out of order or without an Objective and Why; run with figrecipe; snapshot everything; run the checks; status verified, check-failed, rejected, failed or completed (a bad run leaves `figures/` as it was) |
-| `tick <analysis> --figure F --approved-by-user [--run ID]` | after you have seen the figure: tick the task, write `docs/results/F.md`; `--run` accepts an earlier verified run |
-| `check <analysis>` | figures match their runs, no figure without a verified run, cited results have a real review and a fresh claim |
-| `diff`, `replay` | compare two runs; rerun a run and compare its figure data |
-| `show <analysis>` | write `provenance.html`: one scroll of figures with objective, claim, review state and tabs for code, inputs, checks, log, environment |
-| `export <analysis> --figure F` | copy the accepted figure out as `<run id>_<figure>.png` |
-| `package <analysis>` | build `package/`: figures, code, inputs, standalone `reproduce.py`, README from your confirmed claims. Refuses anything unsettled |
-
-The `critic` agent reviews a run or the whole analysis independently; `check` makes a cited result need that review.
-
-## Checks and publishing
-
-- `scripts/check_plugin.py`: playbooks name only skills that exist (bundled or declared in `skills-manifest.yaml`), and the playbook list and counts match the files.
-- `scripts/publish.sh`: runs the checks, mirrors this folder into a clone of the GitHub repo, and commits. Pass `--push` to push and update the installed plugin.
+- [Guide](docs/guide/README.md): a first task, step by step
+- [Playbooks](docs/playbooks.md) and [the analysis runner](docs/analysis-runner.md)
+- [State chart](docs/statechart/README.md) of the project states
 
 ## Maintainers
 
-The canonical copy lives in the `research-space` repo under `rstack/`. Publish a snapshot here by copying `rstack/` into a clone of this repo (`rsync -a --delete --exclude .git rstack/ <clone>/`), committing, and pushing. Do not use `git subtree push`: the research-space history contains skills that cannot be redistributed.
+Edit `rstack/` in the `research-space` repo, then `scripts/check_plugin.py` and `scripts/publish.sh [--push]`. Never use `git subtree push`: that repo's history contains skills that cannot be redistributed.
 
 ## Credits
 
-The workflow skills and mode structure are adapted from pstack (cursor/plugins, MIT License, (c) 2026 Lauren Tan).
+The workflow skills and mode structure are adapted from pstack (cursor/plugins, MIT License, (c) 2026 Lauren Tan). Bundled domain skills come from K-Dense scientific-agent-skills, zotero-mcp and the former openscience-adapter; see each skill's license.

@@ -26,8 +26,6 @@ docs/literature-review/references.yaml which papers matter and why
 docs/inputs/     the user's own words, dated, never edited
 docs/rstack/     written documents of each stage, in <state>/ subfolders
 analysis/        scripts, figures, tables
-manuscripts/     drafts and submission files
-presentation/    slides, posters, talk notes
 ```
 
 `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate. Derived data goes in `analysis/`, never back into `data/raw`.

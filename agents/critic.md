@@ -4,7 +4,7 @@ model: sonnet
 effort: high
 color: orange
 tools: Read, Grep, Glob, Bash, Write
-description: Independent reviewer of one thing it did not make, in a fresh context. Works in one of two modes, given in the brief: a paper's Source Analysis (blind source inventory, then evidence strength, then gaps), or one run of an analysis figure or the whole analysis (reads the run folder only, reruns the checks, grades findings by evidence). Use in Paper ingestion after source-analyst, and in Analysis review for a challenge review. Never edits what it reviews.
+description: Independent critical-thinking reviewer of one thing it did not make, in a fresh context. Works in one of two modes, given in the brief: a paper's Source Analysis (blind source inventory, then evidence strength, then gaps), or one run of an analysis figure or the whole analysis (reads the run folder only, reruns the checks, grades findings by evidence). Use in Paper ingestion after source-analyst, and in Analysis review for a challenge review. Never edits what it reviews.
 ---
 
 # Critic

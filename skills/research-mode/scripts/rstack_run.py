@@ -58,7 +58,7 @@ the runs used, the inputs (raw files copied and hashed, plus the tables raw-view
 a requirements.txt, a standalone reproduce.py, the provenance of each run, and a README and manifest.json generated from files. It is
 refused unless every accepted result has a verified run, a claim that is not TODO and was written for that run, an Objective and a Why,
 `check` passes, and all runs used the same lib. A raw file over --max-raw-mb (default 100) or named in --exclude-raw is listed, not copied.
-export copies the accepted run's png and pdf (hash-checked against run.yaml) to DIR (default <project>/manuscripts/figures) as
+export copies the accepted run's png and pdf (hash-checked against run.yaml) to DIR (default ANALYSIS_DIR/export) as
 <run id>_<figure>.png/.pdf, so the file name is the provenance folder name. Live figures/ keeps its stable name.
 replay reruns a run's saved scripts on its saved selection, refuses if an input changed, and compares
 <figure>_data/ and tables/ with the original run.
@@ -836,7 +836,7 @@ def export(analysis, figure, run_id=None, out=None):
     ry = yaml.safe_load((run / "run.yaml").read_text()) if (run / "run.yaml").is_file() else {}
     if ry.get("status") != "verified":
         sys.exit(f"refused: run {run_id} is not a verified run of {figure!r}")
-    out = Path(out) if out else root / "manuscripts/figures"
+    out = Path(out) if out else analysis / "export"
     out.mkdir(parents=True, exist_ok=True)
     made = []
     for rel, digest in ry["outputs"].items():

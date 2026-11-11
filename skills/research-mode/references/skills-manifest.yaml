@@ -1,12 +1,9 @@
 # Skills that playbooks name but rstack does not bundle. Bundled skills are the folders in skills/.
 # status: external = install separately, optional; the playbook step is skipped without it.
 externals:
-  - {name: scientific-writing, source: claude-scientific-writer, license: MIT, status: external, used_by: [manuscript-writing]}
-  - {name: scientific-schematics, source: claude-scientific-writer, license: MIT, status: external, used_by: [manuscript-writing]}
   - {name: citation-management, source: claude-scientific-writer, license: MIT, status: external, used_by: [literature-review]}
-  - {name: venue-templates, source: claude-scientific-writer, license: MIT, status: external, used_by: [manuscript-writing]}
-  - {name: infographics, source: claude-scientific-writer, license: MIT, status: external, used_by: [presentation]}
   - {name: scholar-evaluation, source: claude-scientific-writer, license: MIT, status: external, used_by: [project-docs]}
+  - {name: doc-coauthoring, source: Anthropic skills, license: unknown, status: external, used_by: [experimental-design, protocol-wiki]}
   - {name: deep-research, source: Anthropic cowork skill, license: not redistributable, status: external, used_by: [literature-review]}
   - {name: neurokit2, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
   - {name: lab-hardware-cad, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}

@@ -13,7 +13,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REF = HERE.parent / "references"
 FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/literature-review/cross-papers", "docs/literature-review/reports",
-           "docs/rstack", "analysis", "manuscripts", "presentation"]
+           "docs/rstack", "analysis"]
 EXPLORE_TASKS = """# Tasks
 
 Phase > Goal > Task. Only the task-tracking playbook edits this file.

@@ -77,8 +77,7 @@ docs/literature-review/references.yaml which Zotero papers matter and why
 docs/inputs/          the user's own words, dated: <date>_<kind>_<slug>.md
 docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
 analysis/             scripts, figures, tables
-manuscripts/          drafts
-presentation/         slides, posters, talk notes
+(writing, reports and presentations belong to the wstack plugin: docs/wstack, docs/reports, docs/writing, docs/presentation. rstack never writes there.)
 ```
 
 `annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. `docs/rstack/<state>/` is the work in progress. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
@@ -94,7 +93,7 @@ A project's `README.md` front matter carries its state. `docs/rstack/tasks.md` h
 | explore | scope the question (interrogate, a quick search), then deepen (key papers, inquiry), then synthesize questions and methods | Literature review, Inquiry, Proposal synthesis, Investigation |
 | design | design the whole study | Experimental design, Prototype |
 | progressing | do the work | Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Prototype, Reproduce |
-| ready-for-publish | write and present | Manuscript writing, Presentation, Peer review, Package results |
+| ready-for-publish | review and package (writing is wstack's) | Peer review, Package results |
 | closed | done, with reason | Reviewer response |
 
 Moving backwards is allowed. Log the reason. Exit checks are in the Project docs playbook, and each exit runs the State review playbook first (rules in `references/state-gates/`).
@@ -106,6 +105,8 @@ Statements in `docs/literature-review/` carry a label and move up only through r
 ## Autonomy
 
 **Just do it.** Reversible work and read-only lookups proceed without asking.
+
+**Verify the run.** For `experimental-design`, `analysis-run`, `analysis-review` and `package-results`, start the check when you pick the playbook: `scripts/verify_playbook.py start <playbook> --project <dir> [analysis=analysis/<name>]`. Its `## Done when` list is checked when you try to stop (a Stop hook on Claude Code) or by `verify_playbook.py check`; fix what it lists before you report done.
 
 **Always pause** before irreversible steps: deleting or overwriting anything in `data/raw/`, overwriting a submitted manuscript, sending messages, spending money on compute or APIs, publishing.
 
@@ -147,7 +148,6 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Analysis plan.** Interview, hypotheses, method, a short README plus `docs/`, checks before figures, and scripts from templates, before anything runs. Skills: interrogate, hypotheses, brainstorming, statistical-analysis.
 - **Analysis run.** Run it through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it. Skills: figures, acceptance-checks, statistical-analysis.
 - **Analysis review.** Called, not routine. Re-run (compare two runs), or challenge (swarm, arena or interrogate by the question) before a result is cited. The self-check is part of Analysis run.
-- **Manuscript writing.** Drafting, revising, and auditing manuscripts.
 - **Package results.** Build `analysis/<name>/package/` from the accepted runs: figures named by run id, code, inputs, a `reproduce.py` that needs no rstack, and a README made from files. Interrogate each claim with the user first; never guess a result. Skills: interrogate, acceptance-checks.
 - **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
 
@@ -159,13 +159,13 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
 - **Peer review.** Reviewing someone else's manuscript, proposal, or analysis.
 - **Reviewer response.** Answering reviewer comments point by point.
-- **Presentation.** Slides, talks, posters.
 
 **Support**
 
 - **Task tracking.** The only writer of `docs/rstack/tasks.md` (Phase > Goal > Task) and of the project's tasks in Notion: pull, reconcile, push.
 - **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
 - **Obsidian writing.** Writing notes the user reads and comments on in Obsidian: placement, front matter, Mermaid diagrams, comment threads.
+- **Protocol wiki.** Fill the lab's `wiki/` of reusable protocols with `doc-coauthoring`: question sweep, section by section, reader test. Wiki first or design first.
 - **Authoring a skill or playbook.** Writing or editing a SKILL.md or playbook.
 
 Spanning two playbooks: finish the first, save its output to its home folder, then read the second.

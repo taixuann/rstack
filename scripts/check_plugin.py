@@ -2,7 +2,7 @@
 """Check rstack's own consistency. Run from anywhere: scripts/check_plugin.py
 
 1. Every skill-like name in backticks in a playbook is bundled or declared in references/skills-manifest.yaml.
-2. The playbook list in research-mode/SKILL.md and the README table match the playbook files.
+2. The playbook list in research-mode/SKILL.md and docs/playbooks.md match the playbook files.
 3. Counts in README.md and .claude-plugin/plugin.json match the folders.
 Exit 1 and print each problem when a check fails.
 """
@@ -50,9 +50,10 @@ def problems():
         if not any(words <= set(re.findall(r"[a-z]+", t.lower())) for t in titles):
             errs.append(f"playbook {s} has no matching bullet in research-mode/SKILL.md")
     readme = (ROOT / "README.md").read_text()
+    table = (ROOT / "docs/playbooks.md").read_text()
     for s in stems:
-        if f"| {s} |" not in readme:
-            errs.append(f"README table has no row for {s}")
+        if f"| {s} |" not in table:
+            errs.append(f"docs/playbooks.md has no row for {s}")
     domain = [d for d in bundled if d not in WORKFLOW and not d.startswith("principle-")]
     principles = [d for d in bundled if d.startswith("principle-")]
     plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["description"]
