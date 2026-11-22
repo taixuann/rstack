@@ -1,0 +1,11 @@
+- id: C1
+  statement: "Fixture claim one."
+  figure: F1
+  numbers:
+    - {id: C1.n1, quantity: peak current, value: '3.24', unit: mA, uncertainty: '0.05', uncertainty_kind: SD, n: 5, source: analysis/cv/summary.csv}
+    - {id: C1.n2, quantity: peak potential, value: '0.412', unit: V, uncertainty: '0.003', uncertainty_kind: SD, n: 5, source: analysis/cv/summary.csv}
+- id: C2
+  statement: "Fixture claim two."
+  figure: F1
+  numbers:
+    - {id: C2.n1, quantity: retention, value: '91.5', unit: '%', uncertainty: '1.2', uncertainty_kind: SD, n: 3, source: analysis/cv/summary.csv}

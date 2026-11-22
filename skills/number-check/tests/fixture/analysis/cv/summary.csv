@@ -1,0 +1,4 @@
+quantity,value,unit,sd,n
+peak current,3.24,mA,0.05,5
+peak potential,0.412,V,0.003,5
+retention,91.5,%,1.2,3

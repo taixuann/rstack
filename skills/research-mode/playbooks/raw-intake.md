@@ -1,6 +1,6 @@
 ### Raw intake
 
-State: progressing. Output: correctly named raw files in `data/raw/YYYY-MM-DD/`, each finished folder sealed by `.intake.log`. This is the only step allowed to change `data/raw/`, and only by renaming, moving, and quarantining. File contents never change.
+Phase: analysis. Output: correctly named raw files in `data/raw/YYYY-MM-DD/`, each finished folder sealed by `.intake.log`. This is the only step allowed to change `data/raw/`, and only by renaming, moving, and quarantining. File contents never change.
 
 Filename: `DDMMYY-HHMMSS_instrument.mode_[device-id]_library.study[_r.[remarks]][_f.[flags]][_NNN].ext`. The date folder only keeps a day's files together.
 

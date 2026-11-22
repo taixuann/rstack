@@ -30,7 +30,7 @@ kills the unusual candidates first.
 
 1. **Map before you generate.** Ten minutes on what is established, what is contested and
    what is assumed produces better candidates than an hour of free association. Use the
-   user's notes and, when the field is unfamiliar, one research-lookup or a shallow
+   user's notes and, when the field is unfamiliar, one `/hyperresearch` light run or a shallow
    literature-review round.
 2. **Generate wide, by named moves.** Aim for fifteen to thirty candidates across the moves
    below. Write each as one line: the change and the outcome it would show. Do not judge
@@ -82,6 +82,8 @@ analysis, assumption reversal, analogical transfer) for a longer session.
   is not on the shortlist.
 
 ## Deliverable
+
+Save the note to `docs/rstack/brainstorm/<slug>.md` in a research project, never in `docs/rstack/<state>/`.
 
 ```markdown
 ## Map

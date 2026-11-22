@@ -1,5 +1,5 @@
 const name = (v) => !v.intake ? "Proposal intake" : v.exit ? "Design" : v.review ? "State review passed"
-  : v.synthesis ? "Proposal synthesis" : v.inquiry ? "Inquiry" : "Literature review";
+  : v.synthesis ? "Report bootstrap" : v.inquiry ? "Inquiry" : "Literature review";
 export const title = "The explore state, from intake to design";
 export const state = (v) => [name(v), v.reviewed > 0 ? "a paper has passed" : "no paper passed yet"];
 export const group = (v) => v.exit ? "end" : v.review ? "ready" : "working";

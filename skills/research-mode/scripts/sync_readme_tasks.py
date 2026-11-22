@@ -12,8 +12,12 @@ from pathlib import Path
 START, END, SHOW = "<!-- tasks:start -->", "<!-- tasks:end -->", 5
 
 
+OLD = {"analysis": "progressing", "write": "ready-for-publish"}  # names used before 0.34.0
+
+
 def phase(state, tasks_text):
-    m = re.search(rf"^## Phase: {re.escape(state)}\s*$(.*?)(?=^## Phase:|\Z)", tasks_text, re.M | re.S)
+    names = "|".join(re.escape(n) for n in (state, OLD.get(state, state)))
+    m = re.search(rf"^## Phase: (?:{names})\s*$(.*?)(?=^## Phase:|\Z)", tasks_text, re.M | re.S)
     return m.group(1) if m else ""
 
 
@@ -32,6 +36,7 @@ def sync(project):
     readme = Path(project) / "README.md"
     text = readme.read_text()
     state = re.search(r"^state:\s*(\S+)", text, re.M).group(1)
+    state = {v: k for k, v in OLD.items()}.get(state, state)
     tasks = Path(project) / "docs/rstack/tasks.md"
     if not tasks.exists():
         sys.exit(f"missing {tasks}")

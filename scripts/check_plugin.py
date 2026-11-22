@@ -17,11 +17,11 @@ WORKFLOW = {"research-mode", "setup-research", "research-help", "arena", "swarm"
             "figure-it-out", "show-me-your-work", "reflect", "correct", "unslop", "init", "statechart"}
 # Backticked words in playbooks that are not skill names.
 IGNORE = {"state", "tick", "check", "critic", "show", "nature-single", "new", "replay", "load", "style", "tasks", "true", "false", "yaml", "unread", "snapshotted", "read", "candidate", "frozen",
-          "supported", "rejected", "explore", "design", "progressing", "closed", "ready-for-publish",
+          "supported", "rejected", "explore", "design", "analysis", "closed", "write",
           "todo", "model", "haiku", "main", "docs", "data", "raw", "wiki", "analysis", "unknown",
           "pele", "figures", "mermaid", "parts", "label", "legend", "path", "nature-open", "nature-heatmap", "nature-violin", "figrecipe", "notion-search", "why", "updated", "created", "kind", "voice", "paper", "parent", "depth", "status", "review", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
           # plugin, repo, agent, and example names
-          "claude-scientific-writer", "scientific-agent-skills", "annotations", "docx", "pdf", "pptx", "xlsx"}
+          "claude-scientific-writer", "scientific-agent-skills", "experiment", "operator", "inputs", "mode", "question", "source", "critique-passed", "draft-ready", "report-approved", "progressing", "ready-for-publish", "annotations", "docx", "pdf", "pptx", "xlsx"}
 NAME = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 
 

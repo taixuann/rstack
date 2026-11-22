@@ -1,12 +1,12 @@
 ### Analysis review
 
-State: progressing. Review is called, not a stage every analysis passes through. Start from why you are here:
+Phase: analysis. Review is called, not a stage every analysis passes through. Start from why you are here:
 
 | Case | When | Weight |
 |---|---|---|
 | Self-check | After every run | Built into **Analysis run**: checks, figure rules, replay. No `review.md`. |
 | Changed run | A parameter, an input selection, a script, the shared lib or the environment changed. Same figure, different provenance. | Compare the two runs, then accept one. |
-| Challenge | A result will carry a claim, is surprising, a supervisor asks, or the progressing gate needs it | An independent reviewer attacks one run, or the whole analysis. |
+| Challenge | A result will carry a claim, is surprising, a supervisor asks, or the analysis gate needs it | An independent reviewer attacks one run, or the whole analysis. |
 
 The figure name is the question; each run is the evidence for it. One figure can have many runs, each with its own provenance, and any verified run can be accepted. If the changed run answers a different question, make a new figure task instead.
 
@@ -40,9 +40,11 @@ Skills for this playbook: `interrogate`, `swarm`, `arena`, `scientific-critical-
 3b. **A surprising result, or one that contradicts a hypothesis.** Use `brainstorming` moves (failure analysis, inversion, a changed constraint) to list alternative explanations, then `hypotheses` to turn each into a test. They are labelled `[assistant]` hypotheses, never conclusions; the test is a new run (Changed run), and the result decides.
 4. **Severity and the blocker rule.** Each finding is blocks acceptance, should fix, or note, with its evidence; findings without evidence are dropped. `blocking:` in the front matter counts the blocking findings still open. `check` also refuses a review that still has TODO in it, or whose `blocking:` differs from the number of rows with severity `blocks acceptance` in its findings table, so the count cannot hide a blocker and the template cannot pass as a review. A blocker is closed in exactly two ways: a new verified run that fixes it (which then needs its own review), or a `waiver:` line the user wrote in the front matter with the reason. The agent never writes a waiver.
 5. **Whole-analysis pass.** Before a manuscript cites results, one review over every accepted result into `docs/review.md`: do the claims agree with each other, is every hypothesis in the README decided as its table says, is anything cherry-picked (a run chosen among several), does a check-stage finding contradict a main-stage claim.
-6. **Disposition.** The user accepts, rejects, or asks for a new run. Work that follows becomes tasks through **Task tracking**; the fix is a new run.
+6. **Disposition.** The user accepts, rejects, or asks for a new run. Work that follows becomes tasks through **Project admin** (Tasks job); the fix is a new run.
 
-**Gate.** Set `cited: true` in `docs/results/<figure>.md` for each result the manuscript will cite. `rstack_run.py check` then fails unless each cited result has a usable review on its current run (no open blocking finding or a waiver), its claim is written for that run and no longer TODO, and `docs/review.md` exists, covers the current accepted runs and has no open blocker. The progressing gate needs `check` to pass.
+**Report index (optional).** When an accepted result answers a question and the user asks, add a row to `docs/reports/<question>/results/README.md`: the claim, the number, its unit, and a link to the result page. Link, never copy a number. Write nothing there unasked.
+
+**Gate.** Set `cited: true` in `docs/results/<figure>.md` for each result the manuscript will cite. `rstack_run.py check` then fails unless each cited result has a usable review on its current run (no open blocking finding or a waiver), its claim is written for that run and no longer TODO, and `docs/review.md` exists, covers the current accepted runs and has no open blocker. The analysis gate needs `check` to pass.
 
 **Reply:** the case, findings or differences by severity, the method used, what the reviewer did not check, and whether the run can be accepted.
 

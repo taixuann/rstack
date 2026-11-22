@@ -2,7 +2,7 @@
 
 The research counterpart to [pstack](https://github.com/cursor/plugins/tree/main/pstack). pstack helps you write less, higher quality code. rstack helps you run research projects the same way: state the question, pick a playbook, delegate deliberately, and verify every number against a file.
 
-rstack has 21 playbooks, 20 principles and one agent (`critic`), plus 21 bundled domain skills. You never pick among them by hand: `/rstack:research-mode` reads the project's state and the task, then picks the playbook.
+rstack has 21 playbooks, 24 principles and one agent (`critic`, six modes), plus 23 bundled domain skills. You never pick among them by hand: `/rstack:research-mode` reads the project's state and the task, then picks the playbook.
 
 ## The four parts
 
@@ -19,10 +19,14 @@ flowchart LR
 |---|---|---|
 | **1. Analysis** | You have data and need figures and claims you can defend | `analysis-plan`, `analysis-run`, `analysis-review`, `package-results`, and the `critic` agent. Every figure gets its own provenance folder |
 | **2. Experimental design** | You are choosing what to measure, how many, and how to test it | `experimental-design`, with `statistical-power`, `hypotheses` and `what-if-oracle` |
-| **3. Project admin** | You need the project to stay organised and in sync | `task-tracking` (the only writer of `tasks.md`, mirrored to Notion), `project-docs`, `state-review`, plus `init` and `setup-research` |
+| **3. Project admin** | You need the project to stay organised and in sync | `project-admin` (tasks, docs, exit review, phase briefs; the only writer of `tasks.md`, mirrored to Todoist), plus `init` and `setup-research` |
 | **4. Support** | The task matches no playbook, or the method itself needs fixing | `figure-it-out`, `correct`, `reflect`, and `authoring-a-skill` for managing playbooks |
 
-Before and after those four, rstack also covers the literature loop (`literature-review`, `inquiry`, `proposal-synthesis`) and raw-data intake (`raw-intake`), plus anytime tools (`investigation`, `reproduce`, `prototype`, `hillclimb`). The full list is in [docs/playbooks.md](docs/playbooks.md).
+Before and after those four, rstack also covers the literature loop (`literature-review`, `inquiry`, `report-bootstrap`) and raw-data intake (`raw-intake`), the write phase (`paper-preparation`, `paper-writing`, `paper-critique`, `presentation`, `peer-review`, `reviewer-response`; the user writes every paragraph), plus `reproduce`, `hillclimb`, `experiment-log` and `protocol-wiki`. The full list is in [docs/playbooks.md](docs/playbooks.md).
+
+![rstack playbook map: playbooks by phase, with the skills, scripts and tools each one calls](docs/diagrams/playbook-map.svg)
+
+Regenerate it with `docs/diagrams/regen.sh` after playbooks change.
 
 ## Principles
 
@@ -30,11 +34,11 @@ Every part follows a small set of principles, written as `principle-*` skills. S
 
 ## Works with
 
-rstack does not write papers, teach, or view raw files. It names the tools that do:
+rstack coaches papers and slides but never writes their prose; it does not teach or view raw files. It names the tools that do:
 
 | For | Use |
 |---|---|
-| Writing: papers, slides, posters, grants, citations | [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer) |
+| Posters, grants, thesis chapters (planned, not built) | [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer) |
 | Learning: understand a paper or method, quizzes | `/tutor:teach` |
 | Raw instrument data: inventory and look at `data/raw/` | [raw-viewer](https://github.com/taixuann/raw-viewer) |
 | Papers and notes | Zotero (`scripts/zotero_snapshot.py`) |
@@ -42,16 +46,21 @@ rstack does not write papers, teach, or view raw files. It names the tools that 
 
 ## Install
 
-```bash
-bash scripts/install.sh   # Claude Code, Codex and Antigravity, whichever are present
-```
-
-Or by hand in Claude Code:
+One command per host (GitHub: `taixuann/rstack`):
 
 ```bash
-claude plugin marketplace add taixuann/rstack
-claude plugin install rstack@rstack
+claude plugin marketplace add taixuann/rstack && claude plugin install rstack@rstack   # Claude Code
 ```
+
+```bash
+codex plugin marketplace add taixuann/rstack && codex plugin add rstack@rstack   # Codex
+```
+
+```bash
+agy plugin install https://github.com/taixuann/rstack   # Antigravity (converts the Claude Code manifest)
+```
+
+Or run `bash scripts/install.sh [claude|codex|antigravity|all]` from a clone to install or update on every host present (Antigravity: clones into `~/.gemini/config/plugins/rstack`).
 
 Claude Code leaves auto-update off for third-party marketplaces. Turn it on in `/plugin` > Marketplaces > `rstack`, or update once with `claude plugin update rstack@rstack`. In Claude Code on the web, declare rstack in the repo's `.claude/settings.json` (`extraKnownMarketplaces` and `enabledPlugins`); it loads from the second session on.
 
@@ -65,7 +74,7 @@ New here? The [guide](docs/guide/README.md) walks through a first task. Stuck? A
 
 ## A project at a glance
 
-A project's `README.md` carries a research state: explore → design → progressing → ready-for-publish → closed. Work must fit the state, and a state changes only at a gate you approve.
+A project's `README.md` carries a research state: explore → design → analysis → write → closed. Work must fit the state, and a state changes only at a gate you approve.
 
 | Folder | Holds |
 |---|---|

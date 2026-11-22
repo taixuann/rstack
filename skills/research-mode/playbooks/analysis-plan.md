@@ -1,6 +1,6 @@
 ### Analysis plan
 
-State: progressing (design if the analysis is already planned). Output: `analysis/<name>/` with `README.md`, `inputs.yaml`, `scripts/`. Nothing runs here. The README is the contract that **Analysis run** and **Analysis review** are held to. It stays short, one screen; the reasoning lives in `docs/`.
+Phase: analysis (design if the analysis is already planned). Output: `analysis/<name>/` with `README.md`, `inputs.yaml`, `scripts/`. Nothing runs here. The README is the contract that **Analysis run** and **Analysis review** are held to. It stays short, one screen; the reasoning lives in `docs/`.
 
 ```
 analysis/<name>/
@@ -19,7 +19,7 @@ Skills for this playbook: `interrogate` (interview mode, then adversarial), `hyp
 
 Start the folder with `rstack_run.py new <project> <name> --figure check:<fig> --figure main:<fig>`. It creates the README, `inputs.yaml`, `docs/method.md`, `docs/plan-review.md`, the shared lib, and for each figure a script, a checks file and a task, all from `templates/analysis/` in the research-mode skill, with `TODO` where you must write. Nothing existing is overwritten. Steps 5 to 8 fill those files in.
 
-1. **Find what exists.** Read the design note, the project's questions and hypotheses, and earlier analyses. If this analysis repeats one, say why. If no question exists yet, stop and write it first (step 3). Drop whatever does not serve the question (**principle-subtract-before-you-add**).
+1. **Find what exists.** Read the design note (section 7 of `method/design.md` names this analysis, its question and inputs; start from that row, and say so if you depart from it), the project's questions and hypotheses, and earlier analyses. If this analysis repeats one, say why. If no question exists yet, stop and write it first (step 3). Drop whatever does not serve the question (**principle-subtract-before-you-add**).
 2. **Interview the user.** Use `interrogate` in interview mode, in short rounds of one to four questions, each built on the last answer: what the analysis decides; what the user expects and what would surprise them; what they would do for each outcome; which files and conditions matter and why; what could go wrong with the data. Write answers down in the user's words. Anything unknown is `TODO: unknown` with an owner; never fill it in.
 2a. **Restate the question with its binding clauses** (`analysis-report`, rule 1): population, time window, inclusion and exclusion rules, the exact metric and its unit, the direction that counts as better, thresholds, and what would count as no effect. Quote any ambiguous wording and write down the reading adopted. Then write the checklist the results must satisfy: every clause, every group or comparison it names or implies, every output it asks for. It goes in `docs/method.md`; the plan-review and the critic check the results against it. A specification in the request is run as written; a better method you prefer is a sensitivity analysis beside it, never instead.
 3. **Hypotheses.** Use `hypotheses`: each one a falsifiable sentence with its prediction, the result that would refute it, and a label, exploratory or confirmatory (**principle-exploratory-vs-confirmatory**). If the direction itself is still open ("which analysis is worth doing?"), use `brainstorming` first, then come back. If answering needs data that does not exist yet, stop: that is a study to design in the `design` state with `experimental-design`, not an analysis.
@@ -52,6 +52,6 @@ Start the folder with `rstack_run.py new <project> <name> --figure check:<fig> -
     - every figure has an Objective, a Why, quantities and units
     - the README Tasks list has one task per figure and table, each naming its figure, and every check has a written criterion and a `<figure>.checks.py`
     - the interrogate findings are resolved or deliberately deferred
-11. **Approval.** Show the user the README, `docs/method.md` and the script outline. Do not run until they approve. Then add one task, "Analysis `<name>`", under the right goal of `docs/rstack/tasks.md` through **Task tracking**; it is ticked when this README's Tasks are all done.
+11. **Approval.** Show the user the README, `docs/method.md` and the script outline. Do not run until they approve. Then add one task, "Analysis `<name>`", under the right goal of `docs/rstack/tasks.md` through **Project admin** (Tasks job); it is ticked when this README's Tasks are all done.
 
 **Reply:** the README summary, where `docs/method.md` and `docs/plan-review.md` are, the interrogate findings and what was decided, what is still `TODO: unknown`, and whether the ready check passes.

@@ -31,6 +31,11 @@ def check_raw(root):
     for f in sorted((root / "docs/literature-review/reports").glob("*")):
         if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
             errs.append(f"reports/{f.name}: name must be <date>_<tool>_<slug>.md")
+    for f in sorted((root / "docs/literature-review").glob("*.md")):  # HyperResearch report links
+        if f.is_symlink() and not f.exists():
+            errs.append(f"{f.name}: the link points at nothing; the HyperResearch report moved or was deleted")
+        elif f.is_symlink() and not re.fullmatch(DATED + r"_[a-z0-9-]+\.md", f.name):
+            errs.append(f"{f.name}: report link name must be <date>_<slug>.md")
     return errs
 
 
@@ -168,6 +173,13 @@ def selftest():
         (root / "docs/literature-review/reports/summary.md").write_text("x")
         e = " ".join(check_raw(root))
         assert "reports/summary.md" in e, e
+        lr = root / "docs/literature-review"
+        (lr / "2026-11-21_gap.md").symlink_to(root / "nowhere.md")
+        (lr / "bad.md").symlink_to(root / "nowhere.md")
+        e = " ".join(check_raw(root))
+        assert "2026-11-21_gap.md: the link points at nothing" in e and "bad.md: the link points at nothing" in e, e
+        (root / "ok.md").write_text("x"); (lr / "bad.md").unlink(); (lr / "bad.md").symlink_to(root / "ok.md")
+        assert "bad.md: report link name" in " ".join(check_raw(root))
     print("selftest ok")
 
 

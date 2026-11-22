@@ -11,8 +11,8 @@ Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's a
 
 The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.
 
-- First message on a task → read `research-profile.md` in the research-space root if it exists (written by `setup-research`), and the `state` in the project's `README.md` front matter. If the request does not fit the state, say so and propose the state change (**Project docs** playbook). Then tell the user, in your own words, the research question, the decision it supports, and the smallest output that meets it. Don't wait for confirmation. If the evidence rules out what the user asked for, show it and stop. Restate the question in each subagent brief and open each final report with it.
-- About to ask "which approach" or "what should this do" → classify it first. If the answer is a fact you could observe by running something (a pilot on one subject, a quick plot, a power calculation), it is not the human's to answer. Run the Prototype playbook and let the result decide. Reserve the question for a real preference or scientific judgment no run can settle.
+- First message on a task → read `research-profile.md` in the research-space root if it exists (written by `setup-research`), and the `state` in the project's `README.md` front matter. If the request does not fit the state, say so and propose the phase change (**Project admin** playbook). Then tell the user, in your own words, the research question, the decision it supports, and the smallest output that meets it. Don't wait for confirmation. If the evidence rules out what the user asked for, show it and stop. Restate the question in each subagent brief and open each final report with it.
+- About to ask "which approach" or "what should this do" → classify it first. If the answer is a fact you could observe by running something (a pilot on one subject, a quick plot, a power calculation), it is not the human's to answer. Run it, log it in the Experiment log, and let the result decide. Reserve the question for a real preference or scientific judgment no run can settle.
 - Any code that touches data → name the data shape first (**principle-model-the-domain**). Raw data is read-only (**principle-raw-data-is-read-only**).
 - Any measured number → **principle-explain-the-number** before you report it.
 - Planning an analysis → write hypotheses and the analysis plan first (**principle-exploratory-vs-confirmatory**).
@@ -20,7 +20,8 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- Adding, ticking, or syncing tasks, or the user says they added or ticked tasks in Notion → the **Task tracking** playbook, the only writer of `docs/rstack/tasks.md`.
+- Adding, ticking, or syncing tasks, or the user says they added or ticked tasks in Todoist → the **Project admin** playbook (Tasks job), the only writer of `docs/rstack/tasks.md`.
+- Writing a manuscript or slides (write phase) → the user writes every paragraph; you prepare the report, ask questions, and critique. **principle-the-user-writes-the-prose**, **principle-report-before-prose**, **principle-fixes-need-a-yes**, **principle-ask-do-not-fill**. Gates move only through `scripts/writing.py gate`.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
@@ -68,35 +69,28 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 ## Standard project layout
 
-```
-data/raw/             immutable source measurements
-docs/literature-review/papers/<cite>/  everything for one paper: README.md (start here), annotations.md, alignment.md
-docs/literature-review/cross-papers/   synthesis across papers: comparisons, themes, gap map
-docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
-docs/literature-review/references.yaml which Zotero papers matter and why
-docs/inputs/          the user's own words, dated: <date>_<kind>_<slug>.md
-docs/rstack/<state>/  written documents of each stage, plus decisions.tsv
-analysis/             scripts, figures, tables
-(writing, reports and presentations belong to the wstack plugin: docs/wstack, docs/reports, docs/writing, docs/presentation. rstack never writes there.)
-```
+The folder standard is `references/layout.md`: every folder, what it holds, which playbook writes it, and whether it is read-only. `scripts/check_layout.py <project>` flags unknown folders. Every playbook opens with the rows it reads and writes.
 
-`annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. `docs/rstack/<state>/` is the work in progress. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
+`annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
 
 Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate.
 
-## Research states
+## Research phases
 
-A project's `README.md` front matter carries its state. `docs/rstack/tasks.md` holds one `## Phase: <state>` section per state (Phase > Goal > Task), and the README task block mirrors the current one (`scripts/sync_readme_tasks.py`). A new project starts in explore (init is a trigger, not a state). Advance only at an approved gate, then add a State history row and a Phase section in `tasks.md`.
+A project's `README.md` front matter carries its state (the phase). `docs/rstack/tasks.md` holds one `## Phase: <phase>` section per phase (Phase > Goal > Task), and the README task block mirrors the current one (`scripts/sync_readme_tasks.py`). A new project starts in explore (init is a trigger, not a state). Advance only at an approved gate, then add a State history row and a Phase section in `tasks.md`. The old names `progressing` and `ready-for-publish` still read as `analysis` and `write`.
 
-| State | Focus | Playbooks |
+Each phase has a brief at `references/phases/<phase>.md`: entry check, playbooks in order, reads and writes, exit gate angles, starting tasks, skills. Assign a bot a phase by pointing it at that file and `playbooks/project-admin.md`.
+
+| Phase | Focus | Playbooks, in order |
 |---|---|---|
-| explore | scope the question (interrogate, a quick search), then deepen (key papers, inquiry), then synthesize questions and methods | Literature review, Inquiry, Proposal synthesis, Investigation |
-| design | design the whole study | Experimental design, Prototype |
-| progressing | do the work | Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Prototype, Reproduce |
-| ready-for-publish | review and package (writing is wstack's) | Peer review, Package results |
+| explore | scope the question, deepen, then synthesize questions and methods | Literature review, Inquiry, Report bootstrap |
+| design | design the whole study and keep its log | Experimental design, Experiment log |
+| analysis | do the work | Experiment log (while experiments run), Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Reproduce, Package results |
+| write | the user writes; you prepare, guide, critique | Paper preparation, Paper writing, Paper critique, Presentation, Peer review |
 | closed | done, with reason | Reviewer response |
+| any | | Inquiry, Project admin, Protocol wiki, Authoring a skill |
 
-Moving backwards is allowed. Log the reason. Exit checks are in the Project docs playbook, and each exit runs the State review playbook first (rules in `references/state-gates/`).
+Moving backwards is allowed. Log the reason. Each exit runs the exit review first (Project admin).
 
 ## Understanding ladder
 
@@ -138,34 +132,45 @@ Open a todo list whose first items are the matched playbook's steps, copied in v
 A large or cross-cutting effort, or work the user reviews after stepping away, routes to **figure-it-out** even when a narrower playbook fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke playbook for the task.
 
 
-**Phase playbooks (run in the state's order; the state review is the gate out)**
+**Explore**
 
 - **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
-- **Inquiry.** Align the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
-- **Proposal synthesis.** Questions, hypotheses, methods, feasibility, and the exit check of explore.
-- **Experimental design.** Hypothesis, study design, power, protocol.
+- **Inquiry.** Any phase. Before a search or a design, consult the wiki, interview, brainstorm and interrogate. In explore it also aligns the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
+- **Report bootstrap.** Questions, hypotheses, methods and feasibility, then opens each question's report folder (the intention in the user's words, and `fundamental/` for the background) and runs the exit check of explore. Documents only; never `data/raw/` or `analysis/`.
+
+**Design**
+
+- **Experimental design.** Hypothesis, study design, power, protocol. Reads the wiki when `wiki/` exists.
+- **Experiment log.** Record what was done as run, against the frozen design.
+
+**Analysis**
+
 - **Raw intake.** Check and correct raw filenames, date folders and quarantine, with a dry run and the user's approval before any change.
-- **Analysis plan.** Interview, hypotheses, method, a short README plus `docs/`, checks before figures, and scripts from templates, before anything runs. Skills: interrogate, hypotheses, brainstorming, statistical-analysis.
-- **Analysis run.** Run it through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it. Skills: figures, acceptance-checks, statistical-analysis.
-- **Analysis review.** Called, not routine. Re-run (compare two runs), or challenge (swarm, arena or interrogate by the question) before a result is cited. The self-check is part of Analysis run.
-- **Package results.** Build `analysis/<name>/package/` from the accepted runs: figures named by run id, code, inputs, a `reproduce.py` that needs no rstack, and a README made from files. Interrogate each claim with the user first; never guess a result. Skills: interrogate, acceptance-checks.
-- **State review.** Gate review at every state exit: `interrogate` from the state's rule file, findings become tasks.
-
-**Anytime tools (no order; they never advance the state)**
-
-- **Investigation.** Read-only question about the data, a method, or the literature.
+- **Analysis plan.** Interview, hypotheses, method, a short README plus `docs/`, checks before figures, and scripts from templates, before anything runs.
+- **Analysis run.** Run it through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it.
+- **Analysis review.** Called, not routine. Re-run (compare two runs), or challenge (swarm, arena or interrogate by the question) before a result is cited.
 - **Hillclimb.** Sustained improvement of one metric against a target, one change per measurement.
 - **Reproduce.** Re-run a paper's or prior result before building on it.
-- **Prototype.** A throwaway pilot that settles an empirical fork by observing it.
-- **Peer review.** Reviewing someone else's manuscript, proposal, or analysis.
+- **Package results.** Build `analysis/<name>/package/` from the accepted runs: figures named by run id, code, inputs, a `reproduce.py` that needs no rstack, and a README made from files.
+
+**Write** (the user writes every paragraph)
+
+- **Paper preparation.** Target and evidence report from the analysis outputs, one report per topic, frozen at the `report-approved` gate.
+- **Paper writing.** Guided by questions from main points to paragraphs; the number check runs on each draft.
+- **Paper critique.** Independent critic modes (reader, evidence, referee, prose), a findings ledger, the `critique-passed` gate.
+- **Presentation.** Slides from the same report.
+- **Peer review.** Reviewing a manuscript, proposal, or analysis, yours or someone else's.
+
+**Closed**
+
 - **Reviewer response.** Answering reviewer comments point by point.
 
-**Support**
+**Any phase**
 
-- **Task tracking.** The only writer of `docs/rstack/tasks.md` (Phase > Goal > Task) and of the project's tasks in Notion: pull, reconcile, push.
-- **Project docs.** Write or refresh a project's README (state, tasks, questions with hypotheses and evidence), AGENTS.md and its CLAUDE.md stub, and change state.
-- **Obsidian writing.** Writing notes the user reads and comments on in Obsidian: placement, front matter, Mermaid diagrams, comment threads.
-- **Protocol wiki.** Fill the lab's `wiki/` of reusable protocols with `doc-coauthoring`: question sweep, section by section, reader test. Wiki first or design first.
+- **Project admin.** Tasks (the only writer of `docs/rstack/tasks.md`, mirrored to Todoist), docs (README, AGENTS, CLAUDE), exit review, the phase brief, and the phase change.
+- **Protocol wiki.** Navigate the lab's `wiki/` through its own router; use `brainstorming`, `interrogate` and `doc-coauthoring`.
 - **Authoring a skill or playbook.** Writing or editing a SKILL.md or playbook.
+
+Notes the user reads and comments on in Obsidian use the **obsidian-notes** skill.
 
 Spanning two playbooks: finish the first, save its output to its home folder, then read the second.

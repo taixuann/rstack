@@ -16,7 +16,7 @@ FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/lit
            "docs/rstack", "analysis"]
 EXPLORE_TASKS = """# Tasks
 
-Phase > Goal > Task. Only the task-tracking playbook edits this file.
+Phase > Goal > Task. Only the Project admin playbook edits this file.
 
 ## Phase: explore
 
@@ -35,7 +35,7 @@ Phase > Goal > Task. Only the task-tracking playbook edits this file.
 - [ ] Ingest and review the key papers; run the inquiry
 - [ ] Write the literature map (`03_literature-map.md`): themes, search log, and the gap
 
-### Goal: Proposal synthesis
+### Goal: Report bootstrap
 - [ ] Write questions and hypotheses (`04_questions-and-hypotheses.md`)
 - [ ] Write methods and feasibility (`05_methods-and-feasibility.md`)
 - [ ] Assemble the proposal chain and run `interrogate` on it

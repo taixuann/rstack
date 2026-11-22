@@ -1,11 +1,11 @@
 # Skills that playbooks name but rstack does not bundle. Bundled skills are the folders in skills/.
 # status: external = install separately, optional; the playbook step is skipped without it.
 externals:
-  - {name: citation-management, source: claude-scientific-writer, license: MIT, status: external, used_by: [literature-review]}
-  - {name: scholar-evaluation, source: claude-scientific-writer, license: MIT, status: external, used_by: [project-docs]}
+  - {name: scholar-evaluation, source: claude-scientific-writer, license: MIT, status: external, used_by: [project-admin]}
   - {name: doc-coauthoring, source: Anthropic skills, license: unknown, status: external, used_by: [experimental-design, protocol-wiki]}
-  - {name: deep-research, source: Anthropic cowork skill, license: not redistributable, status: external, used_by: [literature-review]}
-  - {name: neurokit2, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
-  - {name: lab-hardware-cad, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
-  - {name: analytical-method-validation, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
-  - {name: iso-standards-readiness, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-docs]}
+  - {name: tutor:teach, source: tutor plugin, license: unknown, status: external, used_by: [report-bootstrap], optional: true}
+  - {name: hyperresearch, source: hyperresearch CLI and skills, license: unknown, status: external, used_by: [literature-review, inquiry]}
+  - {name: neurokit2, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-admin]}
+  - {name: lab-hardware-cad, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-admin]}
+  - {name: analytical-method-validation, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-admin]}
+  - {name: iso-standards-readiness, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-admin]}

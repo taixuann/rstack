@@ -5,9 +5,9 @@ Operating rules for agents in `<project>`. This file holds the project's rules. 
 ## State rules
 
 - Read `state` in the `README.md` front matter before any task.
-- Work must fit the state. Allowed: explore → Literature review, Inquiry, Proposal synthesis, Investigation. design → Experimental design, Prototype. progressing → Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Prototype, Reproduce. ready-for-publish → Peer review, Package results (writing and slides are the wstack plugin's). closed → Reviewer response. If the request does not fit, say so and propose the state change.
-- Run the State review playbook before any state change. Advance the state only at an approved gate (below), and add a row to the README State history. Moving backwards is allowed. Log the reason.
-- `docs/rstack/tasks.md` (Phase > Goal > Task) is the source of truth for tasks. Edit it through the Task tracking playbook, then run `scripts/sync_readme_tasks.py <project>` (in the `research-mode` skill folder) so the README task block matches.
+- Work must fit the state. Allowed in any state: Inquiry, Project admin, Protocol wiki. explore → Literature review, Inquiry, Report bootstrap. design → Experimental design, Experiment log. analysis → Experiment log, Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Reproduce, Package results. write → Paper preparation, Paper writing, Paper critique, Presentation, Peer review (the user writes every paragraph). closed → Reviewer response. If the request does not fit, say so and propose the state change.
+- Run the exit review (Project admin) before any state change. Advance the state only at an approved gate (below), and add a row to the README State history. Moving backwards is allowed. Log the reason.
+- `docs/rstack/tasks.md` (Phase > Goal > Task) is the source of truth for tasks. Edit it through the Project admin playbook (Tasks job), then run `scripts/sync_readme_tasks.py <project>` (in the `research-mode` skill folder) so the README task block matches.
 - Write each stage's documents under `docs/rstack/<state>/`.
 
 ## Layout and write permissions
@@ -20,9 +20,9 @@ Operating rules for agents in `<project>`. This file holds the project's rules. 
 | `docs/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought) | Append new dated files; never edit |
 | `docs/literature-review/reports/` | Deep-research and HyperResearch outputs. Leads, not read papers | Append new dated files; never edit; use nothing until checked against a paper |
 | `docs/literature-review/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |
-| `docs/rstack/<state>/` | Stage documents; `docs/rstack/tasks.md` holds the tasks; explore also holds the raw `00_interview.md` (append, never edit) | Write |
+| `docs/rstack/<state>/` | Stage documents; `docs/rstack/tasks.md` holds the tasks; explore also holds the raw `00_interview.md` (append, never edit). Brainstorm notes go in `docs/rstack/brainstorm/`, Inquiry files in `docs/rstack/inquiry/`, never in a state folder | Write |
 | `analysis/` | Scripts, figures, tables | Write |
-| `docs/wstack/`, `docs/reports/`, `docs/writing/`, `docs/presentation/` | Written by the wstack plugin: control files, reports, manuscripts, slides | Read only for rstack; numbers in them come from `analysis/` |
+| `docs/rstack/writing/`, `docs/reports/`, `docs/writing/`, `docs/presentation/` | Control files, reports, manuscripts, slides (see `references/layout.md`) | Write only through the write-phase playbooks; the user writes all prose; numbers come from `analysis/` |
 
 ## Zotero highlight colours
 

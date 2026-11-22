@@ -109,3 +109,5 @@ and scoring conventions.
   rejected for taste, and a paper with one is not accepted for polish.
 - Numbers you recomputed are shown with your method.
 - What you could not check is listed as unchecked, not assumed fine.
+
+For materials and device papers (thin films, sensors, wearables, electrochemistry), also read `references/materials-devices.md`.

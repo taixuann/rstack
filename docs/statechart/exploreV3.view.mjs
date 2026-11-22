@@ -1,5 +1,5 @@
 const name = (v) => !v.intake ? "Proposal intake" : !v.interrogated ? "Interrogate" : v.exit ? "Design" : v.review ? "State review passed"
-  : v.synthesis ? "Proposal synthesis" : v.inquiry ? "Inquiry" : (v.scoped ? "Deepen: key papers and lessons" : "Scope: question, gap, feasibility");
+  : v.synthesis ? "Report bootstrap" : v.inquiry ? "Inquiry" : (v.scoped ? "Deepen: key papers and lessons" : "Scope: question, gap, feasibility");
 export const title = "Explore: scope, then deepen";
 export const state = (v) => [name(v), v.roadmap ? "roadmap written" : "no roadmap"];
 export const group = (v) => v.exit ? "end" : v.review ? "ready" : "working";

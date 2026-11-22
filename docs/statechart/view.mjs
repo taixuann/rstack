@@ -1,4 +1,4 @@
-const names = { explore: "Explore", design: "Design", progressing: "Progressing", publish: "Ready for publish" };
+const names = { explore: "Explore", design: "Design", analysis: "Analysis", write: "Write" };
 export const title = "A research project, from first idea to closed";
 export const state = (v) =>
   v.phase === "closed"

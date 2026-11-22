@@ -11,7 +11,7 @@ State after init: `explore`. Init is a trigger, not a state.
 
 ## 1. Orient
 
-Confirm the project folder (default: a new folder under `research-space/projects/`, named `res_<name>`) and whether it is new or existing. For an existing folder, list what is already there. Never rename, move, or overwrite. Map legacy folders instead of moving them (`docs/manuscripts` to `manuscripts`, `docs/presentation` to `presentation`, `docs/experiments` to `docs/rstack/design`) and ask before moving anything.
+Confirm the project folder (default: a new folder under `research-space/projects/`, named `res_<name>`) and whether it is new or existing. For an existing folder, list what is already there. Never rename, move, or overwrite. Map legacy folders instead of moving them (`manuscripts/` to `docs/writing/<piece>/`, `presentation/` to `docs/presentation/<piece>/`, `docs/experiments` to `docs/reports/<question>/`; `scripts/check_layout.py` lists what does not fit) and ask before moving anything.
 
 ## 2. Create the structure
 
@@ -21,7 +21,7 @@ Run `../research-mode/scripts/init_project.py <project> [--title "<title>"]`. It
 data/raw/        immutable source measurements; never edit, never regenerate
 docs/literature-review/papers/<cite>/  one folder per paper: README, annotations, analysis, review
 docs/literature-review/cross-papers/   synthesis across papers
-docs/literature-review/reports/        deep-research and HyperResearch outputs: leads, not read papers
+docs/literature-review/<date>_<slug>.md  symlinks to HyperResearch final reports: leads, not read papers
 docs/literature-review/references.yaml which papers matter and why
 docs/inputs/     the user's own words, dated, never edited
 docs/rstack/     written documents of each stage, in <state>/ subfolders
@@ -47,7 +47,7 @@ From the answers write, in `docs/rstack/explore/`:
 
 Name each work package in plain words ("Electrode fabrication", "Embedded acquisition"). No codes like WP1 or Q1.1. `research-grants` has useful section structure for aims and timelines.
 
-Then fill the project facts in `AGENTS.md` that the interview answered (data protection and ethics rules when people are recorded; environment and the rerun command stay `TODO: unknown` until known). Replace the generic goals and tasks in `tasks.md` with ones for this project (the **Task tracking** playbook owns the file from here on), and run `../research-mode/scripts/sync_readme_tasks.py <project>`. Link the new files in the README Contents.
+Then fill the project facts in `AGENTS.md` that the interview answered (data protection and ethics rules when people are recorded; environment and the rerun command stay `TODO: unknown` until known). Replace the generic goals and tasks in `tasks.md` with ones for this project (the **Project admin** (Tasks job) playbook owns the file from here on), and run `../research-mode/scripts/sync_readme_tasks.py <project>`. Link the new files in the README Contents.
 
 ## 5. Challenge the scope
 

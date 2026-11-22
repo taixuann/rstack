@@ -6,7 +6,7 @@ How a project moves through rstack's five states. TLC checked the model: 12 stat
 
 **Rules the model checks**
 - No analysis starts before the design is frozen (the design review sets `frozen`).
-- No write-up starts before every result has a disposition (the progressing review sets `accepted`).
+- No write-up starts before every result has a disposition (the analysis review sets `accepted`).
 - A project is only published with its results accepted.
 - A closed project has a reason (published or abandoned), and only a closed one does.
 
@@ -52,7 +52,7 @@ stateDiagram-v2
     s10: Review pending
     s11: Review passed
   }
-  state "Ready for publish" as s12 {
+  state "Write" as s12 {
     s13: Review pending
     s14: Review passed
   }

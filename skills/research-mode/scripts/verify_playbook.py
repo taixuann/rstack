@@ -95,10 +95,10 @@ def selftest():
         start("experimental-design", d, {})
         assert check(d)[1], "empty project must fail"
         assert hook.__name__
-        des = Path(d) / "docs/rstack/design"
-        des.mkdir()
-        (des / "README.md").write_text("x"); (des / "e01_a.md").write_text("x")
-        (Path(d) / "docs/rstack/samples.csv").write_text("unit\n")
+        des = Path(d) / "docs/reports/q"
+        des.mkdir(parents=True)
+        for n in ("method/design.md", "method/resources.md", "method/samples.csv"):
+            (des / n).parent.mkdir(exist_ok=True); (des / n).write_text("x")
         (Path(d) / "docs/rstack/decisions.tsv").write_text("row\n")
         name, miss = check(d)
         assert not miss, miss
