@@ -32,17 +32,21 @@ Regenerate it with `docs/diagrams/regen.sh` after playbooks change.
 
 Every part follows a small set of principles, written as `principle-*` skills. Some apply everywhere, some to one part only. [docs/guide/06-principles.md](docs/guide/06-principles.md) lists them.
 
-## Works with
+## Install these separately
 
-rstack coaches papers and slides but never writes their prose; it does not teach or view raw files. It names the tools that do:
+rstack coaches papers and slides but never writes their prose; it does not teach, view raw files or search the web itself. It calls these tools, which install outside rstack. Without one, only the step that uses it is skipped. `/rstack:setup-research` lists which are missing.
 
-| For | Use |
-|---|---|
-| Posters, grants, thesis chapters (planned, not built) | [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer) |
-| Learning: understand a paper or method, quizzes | `/tutor:teach` |
-| Raw instrument data: inventory and look at `data/raw/` | [raw-viewer](https://github.com/taixuann/raw-viewer) |
-| Papers and notes | Zotero (`scripts/zotero_snapshot.py`) |
-| Design state: full-information design review, and filling the lab `wiki/` (**Protocol wiki**) | `doc-coauthoring` (Anthropic skill): install it before the design state |
+| Tool | Used for | Where it installs | How |
+|---|---|---|---|
+| [`/hyperresearch`](https://github.com/jordan-gibbs/hyperresearch) | Literature search and deep research (**Literature review**, **Inquiry**) | A Python CLI in your environment, plus skills inside the folder you run it in. Run it from `~/academic-space` (the folder above `research-space`), so every project shares one vault | `pip install hyperresearch`, then `hyperresearch install` in that folder |
+| [raw-viewer](https://github.com/taixuann/raw-viewer) | Inventory and look at `data/raw/` | A CLI on your PATH (`~/.local/bin/raw-viewer`) and a macOS app | Follow that repository's README; the `setup-rawviewer` skill configures a project |
+| `zotero-cli` | Read and write the Zotero library (papers, annotations) | A CLI on your PATH (`~/.local/bin/zotero-cli`), installed as a `uv` tool from [zotero-mcp](https://github.com/54yyyu/zotero-mcp). rstack bundles only the skill that teaches Claude to use it. Zotero itself runs on your computer | `uv tool install zotero-mcp-server`, then see the bundled `zotero-cli` skill for its first-run check |
+| `doc-coauthoring` | Writing the lab `wiki/` and `fundamental/` with you; design review (**Protocol wiki**, **Report bootstrap**) | `~/.claude/skills/doc-coauthoring/` (a skill folder, per user) | Copy the `doc-coauthoring` folder from [anthropics/skills](https://github.com/anthropics/skills) into `~/.claude/skills/` |
+| [`/tutor:teach`](https://github.com/kubilaiswf/claude-tutor) | Learning a concept or paper, outside the project | A Claude Code plugin | `claude plugin marketplace add kubilaiswf/claude-tutor && claude plugin install tutor@claude-tutor` |
+| [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer) | Posters, grants, thesis chapters (planned, not built) | A Claude Code plugin | `claude plugin marketplace add K-Dense-AI/claude-scientific-writer` |
+| Todoist (MCP) | Mirror of `tasks.md` | Your host's MCP connector list | Add the Todoist connector in your host |
+
+The optional domain skills (`neurokit2`, `lab-hardware-cad`, `analytical-method-validation`, `iso-standards-readiness`, `scholar-evaluation`) are listed with their sources in `skills/research-mode/references/skills-manifest.yaml`.
 
 ## Install
 
@@ -97,4 +101,6 @@ Edit `rstack/` in the `research-space` repo, then `scripts/check_plugin.py` and 
 
 ## Credits
 
-The workflow skills and mode structure are adapted from pstack (cursor/plugins, MIT License, (c) 2026 Lauren Tan). Bundled domain skills come from K-Dense scientific-agent-skills, zotero-mcp and the former openscience-adapter; see each skill's license.
+- **Principles.** The 24 `principle-*` skills are written by the maintainer, taixuann.
+- **Domain skills.** Most of the bundled domain skills are adapted from K-Dense's [scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) and [claude-scientific-writer](https://github.com/K-Dense-AI/claude-scientific-writer) (MIT). Each adapted skill records its `upstream` and license in its own front matter; `LICENSE` lists the rest (zotero-mcp, Anthropic's `skill-creator`, Pele).
+- **Workflow and modes.** Adapted from pstack (cursor/plugins, MIT License, (c) 2026 Lauren Tan).
