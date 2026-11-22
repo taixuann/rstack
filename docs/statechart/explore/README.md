@@ -1,6 +1,6 @@
 # Explore: scope, then deepen (draft, not yet applied to the playbooks)
 
-TLC checked `ExploreV3.tla` (one lesson, two papers): 276 states, 1162 steps, all rules hold, no deadlock. It supersedes `EXPLORE.md`.
+TLC checked `ExploreV3.tla` (one lesson, two papers): 276 states, 1162 steps, all rules hold, no deadlock. It supersedes `ExploreStates.tla`, kept here for history.
 
 ```mermaid
 stateDiagram-v2

@@ -11,7 +11,7 @@ How one analysis moves from plan to claim. TLC checked `AnalysisStates.tla`: 9 s
 
 **What the model leaves out.** One task per group (the real README has many). The re-run case: an input or the code changing sends every result back to "Check tasks to run" and withdraws the claim. A failed check, which the plan handles as an exclusion or a recorded deviation. The "nothing more happens" step after a claim.
 
-**Make it again:** from this folder, `../../skills/statechart/scripts/statechart AnalysisStates.tla --config AnalysisStates.cfg --view analysis.view.mjs --out <new folder>`.
+**Make it again:** from this folder, `../../../skills/statechart/scripts/statechart AnalysisStates.tla --config AnalysisStates.cfg --view analysis.view.mjs --out <new folder>`.
 
 ```mermaid
 ---

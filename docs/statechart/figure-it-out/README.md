@@ -21,4 +21,4 @@ stateDiagram-v2
 
 The chart leaves out the inconclusive and retry steps, which stay inside "Run the loop".
 
-**Make it again:** from this folder, `../../skills/statechart/scripts/statechart FigureItOutStates.tla --config FigureItOutStates.cfg --view figure.view.mjs --out <new folder>`.
+**Make it again:** from this folder, `../../../skills/statechart/scripts/statechart FigureItOutStates.tla --config FigureItOutStates.cfg --view figure.view.mjs --out <new folder>`.

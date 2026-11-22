@@ -7,6 +7,8 @@ license: MIT (copied from the pstack plugin, (c) 2026 Lauren Tan)
 
 # Statechart
 
+In rstack, use this for state machines only, such as the charts in `docs/statechart/`. Overview pictures of how parts connect go to `/diagram-design:diagram-design` (see `docs/overview/`).
+
 The chart shows how a system moves between states, in the words of the person who reads it. That person, the reader, decides whether the behavior is right.
 
 ## Run

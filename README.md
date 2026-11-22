@@ -24,9 +24,11 @@ flowchart LR
 
 Before and after those four, rstack also covers the literature loop (`literature-review`, `inquiry`, `report-bootstrap`) and raw-data intake (`raw-intake`), the write phase (`paper-preparation`, `paper-writing`, `paper-critique`, `presentation`, `peer-review`, `reviewer-response`; the user writes every paragraph), plus `reproduce`, `hillclimb`, `experiment-log` and `protocol-wiki`. The full list is in [docs/playbooks.md](docs/playbooks.md).
 
-![rstack playbook map: playbooks by phase, with the skills, scripts and tools each one calls](docs/diagrams/playbook-map.svg)
+![rstack phases: a project moves from explore to closed](docs/overview/phase-overview.svg)
 
-Regenerate it with `docs/diagrams/regen.sh` after playbooks change.
+The full playbook map, with every skill, script and tool each playbook calls, is in [docs/overview](docs/overview/README.md).
+
+Regenerate it with `docs/overview/regen.sh` after playbooks change.
 
 ## Principles
 
@@ -93,7 +95,7 @@ A project's `README.md` carries a research state: explore → design → analysi
 
 - [Guide](docs/guide/README.md): a first task, step by step
 - [Playbooks](docs/playbooks.md) and [the analysis runner](docs/analysis-runner.md)
-- [State chart](docs/statechart/README.md) of the project states
+- [Overview diagrams](docs/overview/README.md) and [state charts](docs/statechart/README.md) of the project states
 
 ## Maintainers
 
