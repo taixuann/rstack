@@ -2,11 +2,13 @@
 
 Phase: analysis. Output: correctly named raw files in `data/raw/YYYY-MM-DD/`, each finished folder sealed by `.intake.log`. This is the only step allowed to change `data/raw/`, and only by renaming, moving, and quarantining. File contents never change.
 
-Filename: `DDMMYY-HHMMSS_instrument.mode_[device-id]_library.study[_r.[remarks]][_f.[flags]][_NNN].ext`. The date folder only keeps a day's files together.
+Filename: `YYYYMMDD-HHMMSS_instrument.mode_[device-id]_library.study[_r.[remarks]][_f.[flags]][_NNN].ext`. The date folder only keeps a day's files together.
+
+Specific principles: `principle-raw-data-is-read-only`, `principle-prove-it-works`.
 
 Rules the script follows (`scripts/raw_intake.py`):
 
-- Date and time come from the file's own header, read through `raw-viewer files inspect` (instrument profiles belong to raw-viewer; this step only reads them). Without raw-viewer, or for a file no profile matches, the filename's `DDMMYY-HHMMSS` stays. A missing `HHMMSS` becomes `000000`. A missing `DDMMYY` comes from the folder name. A filename time is never overwritten by a missing header.
+- Date and time come from the file's own header, read through `raw-viewer files inspect` (instrument profiles belong to raw-viewer; this step only reads them). Without raw-viewer, or for a file no profile matches, the filename's `YYYYMMDD-HHMMSS` stays. A missing `HHMMSS` becomes `000000`. A missing `YYYYMMDD` comes from the folder name. A filename time is never overwritten by a missing header.
 - `r.x` and `f.x` get brackets. The file moves to the folder of its final date.
 - Files matching a glob in `data/profiles/intake.json` (`{"skip": ["*.ibw", "*_keysight-b1500a.*"]}`) are left exactly as they are, with no checks. The file is optional.
 - `backup*`, `*.tmp`, `~*` and empty (0-byte) files go to `.quarantine/`, untouched, with no log inside.
@@ -18,6 +20,6 @@ Rules the script follows (`scripts/raw_intake.py`):
 3. **Wait for the user's approval** of that folder. A new instrument or a new kind of change needs a fresh approval.
 4. **Apply.** Same command with `--apply`. Each move is hash-checked before and after; any mismatch rolls every move back. `.intake.log` is written last.
 5. **Verify.** Check the line `raw-viewer header date/time read for N of M files`: N far below M means the profile is missing. Re-run without `--apply`: it should report the folder sealed. Count `.quarantine/` and moved files against the log.
-6. **Record.** One row in `docs/rstack/decisions.tsv`: folder, counts, anything left for the user, and the log path.
+6. **Link and record.** Link the sealed `data/raw/` folder in the matching `docs/reports/<question>/method/log.md` (**Experiment log**) when that date belongs to a logged session. Then run **Project admin** (Keeping records) to append one row to `docs/rstack/decisions.tsv` (folder, counts, anything left for the user, and the log path) and update `docs/rstack/tasks.md` if needed.
 
 **Reply:** folder, counts (renamed, moved, quarantined, left for you), and what needs the user.

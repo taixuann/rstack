@@ -37,11 +37,16 @@ A panel role's list sets the fan-out: one subagent per entry.
 
 ## 3. External skills and tools
 
-Report what is missing and how to get it. Install nothing yourself.
+Report what is missing and how to get or update it. Install nothing yourself.
 
 1. Read `../research-mode/references/skills-manifest.yaml`. For each external, say whether it is in the session's installed skill list, which phase uses it (`used_by`), and where it comes from (`source`). For a missing one, print the install step the source's own page gives; if you do not know it, say `TODO: unknown` and name the source.
-2. Read `tools/README.md` in the research-space root if it exists: each tool, its entry command, and the playbook that uses it. Check that the entry command is on the PATH. A missing README or an unlisted tool is a finding, not something to guess.
-3. List the gaps by phase, most blocking first. A missing external only skips an optional step; say which.
+2. Check external CLI tools and workspace tools that `rstack` depends on (listed in `../../README.md` under "Install these separately"):
+   - Global CLIs on `PATH`: `qmd` (`npm install -g @tobilu/qmd` / `npm update -g @tobilu/qmd`), `zotero-cli` (`uv tool install zotero-mcp-server`), `raw-viewer`.
+   - Workspace `tools/`: `figrecipe` (`tools/figrecipe/.venv/bin/python` and `tools/figrecipe/presets/`), plus any tools listed in `tools/README.md`.
+   - Vault-level CLI: `hyperresearch` (`~/academic-space` or `research-space`).
+   - User/project skills: `doc-coauthoring` (`~/.claude/skills/doc-coauthoring/` or `<project>/.claude/skills/doc-coauthoring/`).
+3. Read `tools/README.md` in the research-space root if it exists: each tool, its entry command, and the playbook that uses it. Check that the entry command is on the PATH (or in `tools/<name>/.venv`). A missing README or an unlisted tool is a finding, not something to guess.
+4. List the gaps by phase, most blocking first. A missing external only skips an optional step; say which.
 
 ## 4. Confirm
 

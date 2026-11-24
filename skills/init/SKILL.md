@@ -15,17 +15,20 @@ Confirm the project folder (default: a new folder under `research-space/projects
 
 ## 2. Create the structure
 
-Run `../research-mode/scripts/init_project.py <project> [--title "<title>"]`. It creates the folders below with `.gitkeep`, then `README.md` (state `explore`), `AGENTS.md`, `CLAUDE.md` (a stub that imports `AGENTS.md`), and `docs/rstack/tasks.md` (Phase > Goal > Task), and syncs the README task block. It skips anything that exists and says so. If it reports the task block was not synced (an old README without the markers), add the markers per `../research-mode/references/README.template.md` and run `sync_readme_tasks.py`.
+Run `../research-mode/scripts/init_project.py <project> [--title "<title>"]`. It creates the folders below with `.gitkeep`, then `README.md` (state `explore`), `AGENTS.md`, `CLAUDE.md` (a stub that imports `AGENTS.md`), `docs/rstack/README.md`, and `docs/rstack/tasks.md` (Phase > Goal > Task), and syncs the task block. It skips anything that exists and says so. If it reports the task block was not synced (an old `docs/rstack/README.md` without the markers), add the markers per `../research-mode/templates/project/rstack-README.md` and run `sync_readme_tasks.py`.
 
 ```
-data/raw/        immutable source measurements; never edit, never regenerate
-docs/literature-review/papers/<cite>/  one folder per paper: README, annotations, analysis, review
-docs/literature-review/cross-papers/   synthesis across papers
-docs/literature-review/<date>_<slug>.md  symlinks to HyperResearch final reports: leads, not read papers
+data/raw/                              immutable source measurements; never edit, never regenerate
+docs/rstack/                           phase state & exit gate control (README.md), tasks.md, decisions.tsv, d-inquiry/
+docs/reports/                          one folder per question (README.md, fundamental/, method/, results/)
+docs/literature-review/papers/<cite>/  one folder per paper: README, annotations, alignment
+docs/literature-review/hyperresearch-reports/ HyperResearch and deep-research reports (leads)
 docs/literature-review/references.yaml which papers matter and why
-docs/inputs/     the user's own words, dated, never edited
-docs/rstack/     written documents of each stage, in <state>/ subfolders
-analysis/        scripts, figures, tables
+docs/writing/                          manuscript drafts and talk notes
+docs/figures/                          shared diagrams and figures
+docs/inputs/                           the user's own words, dated, never edited
+docs/understanding/                    project learning notes (`learn-mode`)
+analysis/                              scripts, figures, tables
 ```
 
 `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate. Derived data goes in `analysis/`, never back into `data/raw`.
@@ -38,12 +41,12 @@ Do not invent devices, subject counts, rates, dates, or citations. Anything unan
 
 ## 4. Write the front docs
 
-From the answers write, in `docs/rstack/`:
+From the answers write directly into the root `README.md` (Context, Aim & Milestones, work packages) and `docs/rstack/README.md` (phase state & explore exit-gate checklist):
 
-| File | Holds |
+| Where | Holds |
 |---|---|
-| `01_context.md` | Background and problem statement, stakeholders, stack, constraints |
-| `02_aims-and-milestones.md` | Aim, 3 to 5 objectives, work packages, milestones with dates, deliverables |
+| `README.md` | Project overview: `state:`, Context (background, stakeholders, stack, constraints), Aim & Milestones (3–5 objectives, work packages, milestones with dates), Tasks, Contents (`docs/`), State history |
+| `docs/rstack/README.md` | Current phase state, exit-gate checklist for advancing to `design`, and index of `tasks.md`, `decisions.tsv`, `d-inquiry/` |
 
 Name each work package in plain words ("Electrode fabrication", "Embedded acquisition"). No codes like WP1 or Q1.1. `research-grants` has useful section structure for aims and timelines.
 

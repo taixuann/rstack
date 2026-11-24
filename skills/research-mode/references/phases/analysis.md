@@ -8,11 +8,10 @@
 3. Analysis run (one figure or table, with provenance)
    Experiment log runs alongside while the experiments are carried out (what was done, as run, in `method/log.md`).
 4. Analysis review (called, not a stage every run passes)
-5. Hillclimb (optional, bounded improvement of a metric)
-6. Reproduce (a clean rerun)
-7. Package results (last: a folder someone else can run)
+5. Analysis reconcile (consolidate Check/Main/Verify into `analysis/<name>/docs/results.md` and push to `docs/reports/<question>/results/README.md`)
+6. Package results (last: a folder someone else can run)
 
-**Reads and writes.** Reads `docs/reports/<question>/` (`README.md`, `method/design.md`), `data/raw/`. Writes `data/raw/` (raw-intake only), `analysis/<name>/`, `analysis/<name>/docs/results/`, `.rstack/`, `docs/rstack/results.md`, `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
+**Reads and writes.** Reads `docs/reports/<question>/` (`README.md`, `method/procedure.md` or `method/design.md`), `data/raw/`. Writes `data/raw/` (raw-intake only), `analysis/<name>/`, `analysis/<name>/docs/results/`, `.rstack/`, `docs/reports/<question>/results/README.md`, `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
 
 **Starting tasks.** Intake data with provenance. Run the planned analyses per question. Run sensitivity checks. Accept or reject each result. Rerun the pipeline clean. Package the results. Tailor them to the project.
 
@@ -28,4 +27,4 @@
 
 **Done when.** Planned analyses done, every result dispositioned, rerun clean, package built.
 
-**Skills.** Bundled (in rstack): `statistical-analysis`, `uncertainty-and-units`, `analysis-report`, `figures`, `reproduce`, `swarm`, `acceptance-checks`. External (install separately; use only if installed, and `setup-research` lists what is missing): `neurokit2` (ECG and biosignals).
+**Skills.** Bundled (in rstack): `statistical-analysis`, `uncertainty-and-units`, `analysis-report`, `figures`, `reproduce`, `hillclimb`, `swarm`, `acceptance-checks`. External (install separately; use only if installed, and `setup-research` lists what is missing): `neurokit2` (ECG and biosignals).

@@ -4,7 +4,7 @@ Turns the questions into reports and designs: opens each question's report folde
 
 ## Owns
 
-- report-bootstrap
+- report-init
 - experimental-design
 - experiment-log
 - inquiry in design mode (rounds A and B on one experiment)
@@ -13,8 +13,8 @@ Turns the questions into reports and designs: opens each question's report folde
 
 - `docs/rstack/04_*` and `05_*`
 - `docs/reports/<q>/`: `README.md` body (objective, intention, hypotheses, plan), `fundamental/`, `method/design.md`, `resources.md`, `samples.csv`, `log.md`
-- `docs/rstack/d-inquiry/inquiry-<experiment>-wiki.md`
-- `docs/rstack/d-brainstorm/`
+- `docs/inputs/<date>_inquiry_<experiment>-wiki.md`
+- `docs/inputs/<date>_brainstorm_*.md`
 
 ## Hands off
 

@@ -1,0 +1,4 @@
+# Project-wide condition colors (principle-color-means-one-thing).
+# Map each condition/material/group name to one colourblind-safe, greyscale-legible hex color.
+colors:
+  # example_condition: "#0072B2"

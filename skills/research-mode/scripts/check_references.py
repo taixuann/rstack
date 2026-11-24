@@ -13,13 +13,12 @@ import yaml
 
 STATUS = {"unread", "snapshotted", "read"}
 REVIEW = {"needs_review", "pass", "repair", "blocked", "no_review"}
-KINDS = {"understanding", "learning", "supervisor", "result-thought", "interview"}
-SOURCES = {"chat", "interview", "supervisor-message"}
-CONFIRMED = {"user", "supervisor"}
+KINDS = {"understanding", "learning", "supervisor", "result-thought", "interview", "inquiry", "brainstorm"}
+SOURCES = {"chat", "interview", "supervisor-message", "assistant"}  # assistant: the inquiry and brainstorm notes it wrote
+CONFIRMED = {"user", "supervisor", "no"}  # no: assistant-written, not yet confirmed
 INPUT_FIELDS = {"created", "kind", "voice", "source", "topic", "report", "confirmed"}  # the body is never edited; only this front matter grows
 DATED = r"\d{4}-\d{2}-\d{2}"
-USED_IN = {"01_context", "02_aims-and-milestones", "03_literature-map",
-           "04_questions-and-hypotheses", "05_methods-and-feasibility"}
+USED_IN = {"01_context", "02_aims-and-milestones"}
 
 
 def check_raw(root):
@@ -45,14 +44,17 @@ def check_raw(root):
             errs.append(f"inputs/{f.name}: confirmed '{fm['confirmed']}' must be one of {sorted(CONFIRMED)}")
         if fm["report"] != "none" and not (root / "docs/reports" / fm["report"]).is_dir():
             errs.append(f"inputs/{f.name}: report '{fm['report']}' is not a folder in docs/reports/ (use none if it feeds no report)")
-    for f in sorted((root / "docs/literature-review/reports").glob("*")):
-        if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
-            errs.append(f"reports/{f.name}: name must be <date>_<tool>_<slug>.md")
-    for f in sorted((root / "docs/literature-review").glob("*.md")):  # HyperResearch report links
-        if f.is_symlink() and not f.exists():
-            errs.append(f"{f.name}: the link points at nothing; the HyperResearch report moved or was deleted")
-        elif f.is_symlink() and not re.fullmatch(DATED + r"_[a-z0-9-]+\.md", f.name):
-            errs.append(f"{f.name}: report link name must be <date>_<slug>.md")
+    for f in sorted((root / "docs/literature-review/hyperresearch-reports").glob("*")):
+        if f.name.startswith("."):
+            continue
+        if not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
+            errs.append(f"hyperresearch-reports/{f.name}: name must be <date>_<tool>_<slug>.md")
+            continue
+        link = front(f.read_text()).get("inquiry", "")
+        if not link:
+            errs.append(f"hyperresearch-reports/{f.name}: front matter needs inquiry: <file in docs/rstack/d-inquiry/>, or none, or TODO: unknown")
+        elif link not in ("none", "TODO: unknown") and not (root / "docs/rstack/d-inquiry" / link).is_file():
+            errs.append(f"hyperresearch-reports/{f.name}: inquiry '{link}' is not a file in docs/rstack/d-inquiry/")
     return errs
 
 
@@ -66,14 +68,17 @@ def check_readmes(root):
     """Every paper folder has a README.md, and the project README links it."""
     errs = []
     top = root / "README.md"
-    top_text = top.read_text() if top.exists() else None
+    rstack_top = root / "docs/rstack/README.md"
+    top_text = (top.read_text() if top.exists() else "") + "\n" + (rstack_top.read_text() if rstack_top.exists() else "")
+    has_readme = top.exists() or rstack_top.exists()
     for d in sorted((root / "docs/literature-review/papers").glob("*")):
         if not d.is_dir():
             continue
         rel = f"docs/literature-review/papers/{d.name}/README.md"
+        short = f"../literature-review/papers/{d.name}/README.md"
         if not (d / "README.md").exists():
-            errs.append(f"papers/{d.name}: README.md missing; write it from references/paper-readme.template.md")
-        elif top_text is not None and rel not in top_text:
+            errs.append(f"papers/{d.name}: README.md missing; write it from templates/literature/paper-readme.md")
+        elif has_readme and rel not in top_text and short not in top_text:
             errs.append(f"README.md: Contents does not link {rel}")
     return errs
 
@@ -91,6 +96,8 @@ def check_notes(root):
         m = re.match(r"---\n(.*?)\n---\n", text, re.S)
         keys = set(re.findall(r"^(\w+):", m.group(1), re.M)) if m else set()
         need = {"created", "updated", "kind", "voice"}
+        if "hyperresearch-reports" in f.parts:
+            need = {"created", "kind", "tool", "source", "status"}  # raw leads, never edited, so no updated or voice
         if "inputs" in f.parts:
             need = {"created", "kind", "voice"}  # inputs are never edited, so no updated; check_raw checks the rest
         if "papers" in f.parts:
@@ -107,6 +114,29 @@ def check_notes(root):
         opened, closed, threads = ids(r"<!--c:(\w+)-->"), ids(r"<!--/c:(\w+)-->"), ids(r"<!--co:(\w+)")
         if not (opened == closed == threads):
             errs.append(f"{rel}: unbalanced comment markers {sorted(opened ^ closed | opened ^ threads)}; restore them, never delete half a comment")
+    return errs
+
+
+LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
+DOCPATH = re.compile(r"`(docs/[A-Za-z0-9_./-]+\.(?:md|tsv|yaml|csv|html))`")
+
+
+def check_links(root):
+    """A relative markdown link, or a backticked docs/ path, in a project document must exist. Catches renames done by hand."""
+    errs = []
+    for f in sorted((root / "docs").rglob("*.md")):
+        rel = f.relative_to(root)
+        if rel.parts[1] == "inputs" or "hyperresearch-reports" in rel.parts:
+            continue  # raw: what came in is never edited, so its links are not ours to fix
+        text = f.read_text()
+        for m in LINK.findall(text):
+            if re.match(r"[a-z]+:", m) or m.startswith("/"):
+                continue
+            if not (f.parent / m).exists():
+                errs.append(f"{rel}: link not found: {m}")
+        for m in DOCPATH.findall(text):
+            if not (root / m).exists():
+                errs.append(f"{rel}: path not found: {m}")
     return errs
 
 
@@ -141,7 +171,7 @@ def check(ref_file):
         for u in p.get("used_in") or []:
             if u not in USED_IN:
                 errs.append(f"{k}: unknown used_in {u}")
-    return errs + check_raw(root) + check_readmes(root) + check_notes(root)
+    return errs + check_raw(root) + check_readmes(root) + check_notes(root) + check_links(root)
 
 
 def selftest():
@@ -175,6 +205,10 @@ def selftest():
         e = " ".join(check(f))
         assert "papers/b: README.md missing" in e, e
         (root / "docs/literature-review/papers/b/README.md").write_text("x")
+        (root / "docs/rstack/n.md").write_text("see `docs/inputs/brainstorm-old.md` and [x](gone.md)")
+        e = " ".join(check(f))
+        assert "path not found: docs/inputs/brainstorm-old.md" in e and "link not found: gone.md" in e, e
+        (root / "docs/rstack/n.md").unlink()
         e = " ".join(check(f))
         assert "Contents does not link docs/literature-review/papers/b/README.md" in e, e
         (root / "README.md").write_text("docs/literature-review/papers/b/README.md")
@@ -194,17 +228,25 @@ def selftest():
         assert "papers/b" not in " ".join(check(f)), check(f)
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
-        (root / "docs/literature-review/reports").mkdir(parents=True)
-        (root / "docs/literature-review/reports/summary.md").write_text("x")
+        rp = root / "docs/literature-review/hyperresearch-reports"
+        rp.mkdir(parents=True)
+        (rp / "summary.md").write_text("x")
         e = " ".join(check_raw(root))
-        assert "reports/summary.md" in e, e
-        lr = root / "docs/literature-review"
-        (lr / "2026-11-21_gap.md").symlink_to(root / "nowhere.md")
-        (lr / "bad.md").symlink_to(root / "nowhere.md")
+        assert "hyperresearch-reports/summary.md" in e, e
+        (rp / "summary.md").unlink()
+        r = rp / "2026-11-24_hyperresearch_roadmap.md"
+        r.write_text("---\ncreated: x\n---\nx")
         e = " ".join(check_raw(root))
-        assert "2026-11-21_gap.md: the link points at nothing" in e and "bad.md: the link points at nothing" in e, e
-        (root / "ok.md").write_text("x"); (lr / "bad.md").unlink(); (lr / "bad.md").symlink_to(root / "ok.md")
-        assert "bad.md: report link name" in " ".join(check_raw(root))
+        assert "roadmap.md: front matter needs inquiry" in e, e
+        r.write_text("---\ninquiry: 2026-11-05_brief.md\n---\nx")
+        e = " ".join(check_raw(root))
+        assert "inquiry '2026-11-05_brief.md' is not a file" in e, e
+        (root / "docs/rstack/d-inquiry").mkdir(parents=True)
+        (root / "docs/rstack/d-inquiry/2026-11-05_brief.md").write_text("x")
+        assert "hyperresearch-reports" not in " ".join(check_raw(root))
+        for ok in ("none", "TODO: unknown"):
+            r.write_text(f"---\ninquiry: {ok}\n---\nx")
+            assert "hyperresearch-reports" not in " ".join(check_raw(root))
     print("selftest ok")
 
 

@@ -2,11 +2,11 @@
 """Check rstack's own consistency. Run from anywhere: scripts/check_plugin.py
 
 1. Every skill-like name in backticks in a playbook is bundled or declared in references/skills-manifest.yaml.
-2. The playbook list in research-mode/SKILL.md and docs/playbooks.md match the playbook files.
+2. The playbook list in research-mode/SKILL.md and docs/references/playbooks.md match the playbook files.
 3. Counts in README.md and .claude-plugin/plugin.json match the folders.
 4. No text names a retired skill, playbook, folder or phase list (RETIRED below). A rename adds its old name there, so every leftover fails here.
 6. Every backticked path into the plugin (skills/, references/, templates/, playbooks/, scripts/, agents/, assets/) names a file that exists.
-5. The "Allowed" line of references/AGENTS.template.md lists the same playbooks per phase as the table in research-mode/SKILL.md.
+5. The "Allowed" line of templates/project/AGENTS.md lists the same playbooks per phase as the table in research-mode/SKILL.md.
 Exit 1 and print each problem when a check fails.
 """
 import json, re, sys
@@ -16,8 +16,10 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 MODE = SKILLS / "research-mode"
-WORKFLOW = {"research-mode", "setup-research", "research-help", "arena", "swarm", "interrogate",
-            "figure-it-out", "show-me-your-work", "reflect", "correct", "unslop", "init", "statechart"}
+PRINCIPLES = MODE / "principles"
+WORKFLOW = {"research-mode", "setup-research", "research-help", "using-rstack", "learn-mode", "wiki-mode",
+            "playbook-control", "arena", "swarm", "interrogate", "figure-it-out", "show-me-your-work",
+            "reflect", "correct", "unslop", "init", "statechart"}
 # Backticked words in playbooks that are not skill names.
 IGNORE = {"state", "tick", "check", "critic", "show", "nature-single", "new", "replay", "load", "style", "tasks", "true", "false", "yaml", "unread", "snapshotted", "read", "candidate", "frozen",
           "supported", "rejected", "explore", "design", "analysis", "closed", "write",
@@ -27,13 +29,15 @@ IGNORE = {"state", "tick", "check", "critic", "show", "nature-single", "new", "r
           "claude-scientific-writer", "scientific-agent-skills", "experiment", "operator", "inputs", "mode", "question", "source", "critique-passed", "draft-ready", "report-approved", "progressing", "ready-for-publish", "annotations", "docx", "pdf", "pptx", "xlsx"}
 # Old name -> what replaced it. Add a row in the same change as a rename or removal.
 RETIRED = {
-    r"proposal-synthesis": "report-bootstrap",
+    r"proposal-synthesis|report-bootstrap|Report bootstrap": "report-init",
     r"playbooks/prototype|\*\*Prototype\*\*": "dropped; a pilot is an experiment of type pilot",
     r"docs/rstack/p-(explore|design|analysis|write|closed)": "flat docs/rstack/ with phase: in front matter",
     r"\bwstack\b": "folded into rstack",
     r"/tutor:teach|make-me-roadmap|evaluate-my-understanding|/rstack:(teach|explain|branch|paper-ingest)": "removed; learning notes use doc-coauthoring",
     r"\bNotion\b|notion-search": "tasks are in Todoist",
     r"design, progressing": "the phases are explore, design, analysis, write, closed",
+    r"playbooks/(hillclimb|reproduce)": "moved to bundled skills (hillclimb, reproduce)",
+    r"03_literature-map|04_questions-and-hypotheses|05_methods-and-feasibility": "retired; questions, hypotheses, and methods live in docs/reports/<question>/",
 }
 RETIRED_SKIP = {"check_plugin.py", "check_layout.py"}  # define the names / test the flag on purpose
 NAME = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
@@ -46,12 +50,14 @@ def skill_tokens(text):
 def problems():
     errs = []
     bundled = {p.name for p in SKILLS.iterdir() if p.is_dir()}
+    principles = sorted(p.stem for p in PRINCIPLES.glob("*.md"))
+    principle_tokens = {f"principle-{p}" for p in principles}
     manifest = yaml.safe_load((MODE / "references/skills-manifest.yaml").read_text())
     external = {e["name"] for e in manifest["externals"]}
     pbs = sorted(MODE.glob("playbooks/*.md"))
     for pb in pbs:
         for t in sorted(skill_tokens(pb.read_text())):
-            if t not in bundled | external | IGNORE:
+            if t not in bundled | external | principle_tokens | IGNORE:
                 errs.append(f"{pb.name}: `{t}` is not bundled, not in the manifest, and not ignored")
     stems = [p.stem for p in pbs]
     mode_text = (MODE / "SKILL.md").read_text()
@@ -64,12 +70,11 @@ def problems():
         if not any(words <= set(re.findall(r"[a-z]+", t.lower())) for t in titles):
             errs.append(f"playbook {s} has no matching bullet in research-mode/SKILL.md")
     readme = (ROOT / "README.md").read_text()
-    table = (ROOT / "docs/playbooks.md").read_text()
+    table = (ROOT / "docs/references/playbooks.md").read_text()
     for s in stems:
         if f"| {s} |" not in table:
-            errs.append(f"docs/playbooks.md has no row for {s}")
-    domain = [d for d in bundled if d not in WORKFLOW and not d.startswith("principle-")]
-    principles = [d for d in bundled if d.startswith("principle-")]
+            errs.append(f"docs/references/playbooks.md has no row for {s}")
+    domain = [d for d in bundled if d not in WORKFLOW]
     plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["description"]
     claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
     codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())
@@ -122,17 +127,17 @@ def dead_paths():
 
 
 def template_allowed(mode_text):
-    """The per-phase playbooks in AGENTS.template.md must be the ones in the phase table of research-mode/SKILL.md."""
+    """The per-phase playbooks in templates/project/AGENTS.md must be the ones in the phase table of research-mode/SKILL.md."""
     norm = lambda x: re.sub(r"[^a-z]+", " ", re.sub(r"\(.*?\)", "", x.lower())).strip()
     table = {m[0]: {norm(x) for x in m[1].split(",")}
              for m in re.findall(r"^\| (explore|design|analysis|write|closed) \|[^|]*\| ([^|]*) \|", mode_text, re.M)}
-    line = next((l for l in (MODE / "references/AGENTS.template.md").read_text().splitlines() if "Allowed" in l), "")
+    line = next((l for l in (MODE / "templates/project/AGENTS.md").read_text().splitlines() if "Allowed" in l), "")
     errs = []
     for ph, want in table.items():
         m = re.search(rf"{ph} → ([^.]*)\.", line)
         got = {norm(x) for x in m.group(1).split(",")} if m else set()
         if got != want:
-            errs.append(f"AGENTS.template.md allows {sorted(got)} in {ph}, SKILL.md table has {sorted(want)}")
+            errs.append(f"templates/project/AGENTS.md allows {sorted(got)} in {ph}, SKILL.md table has {sorted(want)}")
     return errs
 
 

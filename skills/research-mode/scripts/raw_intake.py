@@ -4,12 +4,12 @@
 Usage: raw_intake.py FOLDER [FOLDER ...] [--apply]   |   raw_intake.py --selftest
 FOLDER is a date folder, or data/raw itself (every unsealed date folder under it).
 
-Grammar: DDMMYY-HHMMSS_instrument.mode_[device-id]_library.study[_r.[remarks]][_f.[flags]][_NNN].ext
+Grammar: YYYYMMDD-HHMMSS_instrument.mode_[device-id]_library.study[_r.[remarks]][_f.[flags]][_NNN].ext
 Rules (all fixes are mechanical; nothing is invented):
   - Date and time come from the file's own header, read through `raw-viewer files inspect` (profiles live in
     raw-viewer, not here). Without raw-viewer or a matching profile the filename's
-    DDMMYY-HHMMSS is kept. A missing HHMMSS becomes 000000. A missing DDMMYY comes from the folder name.
-  - r.x / f.x get brackets. The file moves to the date folder of its final DDMMYY. A date more than 31 days from
+    YYYYMMDD-HHMMSS is kept. A missing HHMMSS becomes 000000. A missing YYYYMMDD comes from the folder name.
+  - r.x / f.x get brackets. The file moves to the date folder of its final YYYYMMDD. A date more than 31 days from
     its folder is not trusted: the file is left for the human.
   - Files matching a glob in <project>/data/profiles/intake.json "skip" are left exactly as they are.
   - backup*, *.tmp, ~* and empty (0-byte) files go to .quarantine/ untouched. Anything else that breaks the grammar is left for the human.
@@ -20,9 +20,9 @@ from datetime import datetime
 from pathlib import Path
 
 FOLDER = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-NAME = re.compile(r"^(\d{6})(?:-(\d{6}))?_(.*)\.([A-Za-z0-9]+)$")
+NAME = re.compile(r"^(\d{8})(?:-(\d{6}))?_(.*)\.([A-Za-z0-9]+)$")
 TAIL = re.compile(r"^(?P<core>.*?)(?:_r\.(?P<r>\[[^\]]*\]|[^_\[\]]+))?(?:_f\.(?P<f>\[[^\]]*\]|[^_\[\]]+))?(?:_(?P<n>\d{3}))?$")
-GRAMMAR = re.compile(r"^\d{6}-\d{6}_[a-z0-9-]+\.[a-z0-9-]+_\[[^\]]+\]_[a-z0-9-]+\.[a-z0-9-]+(_r\.\[[^\]]*\])?(_f\.\[[^\]]*\])?(_\d{3})?\.[A-Za-z0-9]+$")
+GRAMMAR = re.compile(r"^\d{8}-\d{6}_[a-z0-9-]+\.[a-z0-9-]+_\[[^\]]+\]_[a-z0-9-]+\.[a-z0-9-]+(_r\.\[[^\]]*\])?(_f\.\[[^\]]*\])?(_\d{3})?\.[A-Za-z0-9]+$")
 ARTIFACT = re.compile(r"^(backup.*|.*\.tmp|~.*)$")
 IGNORE = {".DS_Store", ".intake.log"}
 RAW_VIEWER = shutil.which("raw-viewer")
@@ -38,7 +38,7 @@ def sha256(p):
 
 
 def header_stamp(p):
-    """Return (DDMMYY, HHMMSS or None) from the file's own header, read through `raw-viewer files inspect`.
+    """Return (YYYYMMDD, HHMMSS or None) from the file's own header, read through `raw-viewer files inspect`.
     Nothing is returned when raw-viewer is missing, has no profile for the file, or the header has no Date."""
     if not RAW_VIEWER:
         return None, None
@@ -53,7 +53,7 @@ def header_stamp(p):
         return None, None
     STATS["read"] += 1
     tm = re.match(r"(\d{2}):(\d{2}):(\d{2})", meta.get("Time", ""))
-    return day.strftime("%d%m%y"), "".join(tm.groups()) if tm else None
+    return day.strftime("%Y%m%d"), "".join(tm.groups()) if tm else None
 
 
 def skip_globs(folder):
@@ -64,7 +64,7 @@ def skip_globs(folder):
 
 def valid(dd, t):
     try:
-        datetime.strptime(dd, "%d%m%y")
+        datetime.strptime(dd, "%Y%m%d")
         datetime.strptime(t, "%H%M%S")
         return True
     except ValueError:
@@ -72,7 +72,7 @@ def valid(dd, t):
 
 
 def iso(dd):
-    return datetime.strptime(dd, "%d%m%y").strftime("%Y-%m-%d")
+    return datetime.strptime(dd, "%Y%m%d").strftime("%Y-%m-%d")
 
 
 def plan_file(p, folder):
@@ -97,7 +97,7 @@ def plan_file(p, folder):
         core += f"_{key}.{v}" if v else ""
     core += f"_{tail['n']}" if tail["n"] else ""
     hd, ht = header_stamp(p)
-    fd = datetime.strptime(folder.name, "%Y-%m-%d").strftime("%d%m%y")
+    fd = datetime.strptime(folder.name, "%Y-%m-%d").strftime("%Y%m%d")
     if hd:
         if dd and hd != dd:
             tags.append("date-from-header(differs)")
@@ -117,7 +117,7 @@ def plan_file(p, folder):
     new = f"{dd}-{t}_{core}.{ext}"
     if not valid(dd, t) or not GRAMMAR.match(new):
         return {"kind": "human", "new": new, "dest": folder, "tags": ["breaks-grammar"]}
-    if abs((datetime.strptime(dd, "%d%m%y") - datetime.strptime(folder.name, "%Y-%m-%d")).days) > 31:
+    if abs((datetime.strptime(dd, "%Y%m%d") - datetime.strptime(folder.name, "%Y-%m-%d")).days) > 31:
         return {"kind": "human", "new": new, "dest": folder, "tags": ["implausible-date"]}  # e.g. an instrument clock stuck in 2010
     dest = folder.parent / iso(dd)
     if dest != folder:
@@ -230,52 +230,52 @@ def selftest():
 
         def fake(p):  # stands in for raw-viewer: reads the LabVIEW Date/Time lines
             m = re.search(r"Date\t(\d{4})/(\d{2})/(\d{2})\nTime\t(\d{2}):(\d{2}):(\d{2})", p.read_text(errors="ignore"))
-            return (f"{m[3]}{m[2]}{m[1][2:]}", m[4] + m[5] + m[6]) if m else (None, None)
+            return (f"{m[1]}{m[2]}{m[3]}", m[4] + m[5] + m[6]) if m else (None, None)
         globals()["header_stamp"] = fake
         k = "LabVIEW Measurement\t\nDate\t2026/09/24\nTime\t10:36:15.79\n***End_of_Header***\n"
         files = {
-            "230926-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt": k,       # header moves date + time
-            "230926-101010_autolab-usth.cv_[au]_cv.characterization_r.ph-8.4_001.txt": "a;b\n",  # brackets
-            "230926_horiba-labram.raman_[p.1]_raman.sers.txt": "x\n",                         # missing HHMMSS
-            "230926-120000_horiba-labram.raman_[p.2]_raman.sers.txt": "y\n",                  # compliant
-            "backup_3.txt": "scratch", "230926-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[empty].txt": "", "weird name.txt": "z", ".DS_Store": "",
+            "20260923-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt": k,       # header moves date + time
+            "20260923-101010_autolab-usth.cv_[au]_cv.characterization_r.ph-8.4_001.txt": "a;b\n",  # brackets
+            "20260923_horiba-labram.raman_[p.1]_raman.sers.txt": "x\n",                         # missing HHMMSS
+            "20260923-120000_horiba-labram.raman_[p.2]_raman.sers.txt": "y\n",                  # compliant
+            "backup_3.txt": "scratch", "20260923-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[empty].txt": "", "weird name.txt": "z", ".DS_Store": "",
         }
         for n, c in files.items():
             (d / n).write_text(c)
         items = dict((p.name, pl) for p, pl in build(d))
-        assert items["230926-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt"]["new"].startswith("240926-103615_")
-        assert items["230926-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt"]["dest"].name == "2026-09-24"
-        assert items["230926-101010_autolab-usth.cv_[au]_cv.characterization_r.ph-8.4_001.txt"]["new"].endswith("r.[ph-8.4]_001.txt")
-        assert items["230926_horiba-labram.raman_[p.1]_raman.sers.txt"]["new"].startswith("230926-000000_")
-        assert items["230926-120000_horiba-labram.raman_[p.2]_raman.sers.txt"]["kind"] == "ok"
-        far = d / "241110-160606_horiba-labram.raman_[s.1]_raman.sers.txt"
+        assert items["20260923-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt"]["new"].startswith("20260924-103615_")
+        assert items["20260923-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt"]["dest"].name == "2026-09-24"
+        assert items["20260923-101010_autolab-usth.cv_[au]_cv.characterization_r.ph-8.4_001.txt"]["new"].endswith("r.[ph-8.4]_001.txt")
+        assert items["20260923_horiba-labram.raman_[p.1]_raman.sers.txt"]["new"].startswith("20260923-000000_")
+        assert items["20260923-120000_horiba-labram.raman_[p.2]_raman.sers.txt"]["kind"] == "ok"
+        far = d / "20261110-160606_horiba-labram.raman_[s.1]_raman.sers.txt"
         far.write_text("i")
         assert dict((p.name, pl) for p, pl in build(d))[far.name]["tags"] == ["implausible-date"]
         far.unlink()
-        for n in ("241110-160606_oxford-mfp.contact-afm_[s.1]_afm.step-height.ibw",
-                  "190626-102850_keysight-b1500a.dual-sweep_[k.1]_iv.dual-sweep_r.x.csv"):
+        for n in ("20261110-160606_oxford-mfp.contact-afm_[s.1]_afm.step-height.ibw",
+                  "20260619-102850_keysight-b1500a.dual-sweep_[k.1]_iv.dual-sweep_r.x.csv"):
             (d / n).write_text("s")
             assert dict((p.name, pl) for p, pl in build(d))[n]["kind"] == "skipped"
             (d / n).unlink()
-        assert items["230926-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[empty].txt"]["tags"] == ["quarantine-empty"]
+        assert items["20260923-000000_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[empty].txt"]["tags"] == ["quarantine-empty"]
         assert items["backup_3.txt"]["kind"] == "quarantine" and items["weird name.txt"]["kind"] == "human"
         main([str(raw)])                                    # dry run changes nothing
         assert (d / "backup_3.txt").exists() and not (d / ".intake.log").exists()
         main([str(raw), "--apply"])
         assert (d / ".quarantine/backup_3.txt").exists() and (d / ".intake.log").exists()
-        assert (raw / "2026-09-24/240926-103615_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt").exists()
+        assert (raw / "2026-09-24/20260924-103615_keithley-2400.dual-sweep_[a.1]_iv.dual-sweep_r.[x].txt").exists()
         assert not (d / ".quarantine/.intake.log").exists() and (d / "weird name.txt").exists()
         main([str(raw), "--apply"])                          # sealed: second run is a no-op
         # collision rolls back
         e = raw / "2026-10-01"
         e.mkdir()
-        (e / "011026_horiba-labram.raman_[p.1]_raman.sers.txt").write_text("a")
-        (e / "011026-000000_horiba-labram.raman_[p.1]_raman.sers.txt").write_text("b")
+        (e / "20261001_horiba-labram.raman_[p.1]_raman.sers.txt").write_text("a")
+        (e / "20261001-000000_horiba-labram.raman_[p.1]_raman.sers.txt").write_text("b")
         assert sorted(pl["kind"] for _, pl in build(e)) == ["human", "ok"]  # the existing name is untouched, the colliding one waits for you
         # a hash mismatch rolls every rename back and writes no log
         f = raw / "2026-10-02"
         f.mkdir()
-        (f / "021026_horiba-labram.raman_[p.1]_raman.sers.txt").write_text("a")
+        (f / "20261002_horiba-labram.raman_[p.1]_raman.sers.txt").write_text("a")
         orig, n = globals()["sha256"], [0]
         def lying(path):
             n[0] += 1
@@ -288,7 +288,7 @@ def selftest():
             pass
         finally:
             globals()["sha256"] = orig
-        assert (f / "021026_horiba-labram.raman_[p.1]_raman.sers.txt").exists() and not (f / ".intake.log").exists()
+        assert (f / "20261002_horiba-labram.raman_[p.1]_raman.sers.txt").exists() and not (f / ".intake.log").exists()
     print("selftest ok")
 
 

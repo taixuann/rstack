@@ -7,7 +7,7 @@ license: MIT (copied from the pstack plugin, (c) 2026 Lauren Tan)
 
 # Statechart
 
-In rstack, use this for state machines only, such as the charts in `docs/statechart/`. Overview pictures of how parts connect go to `/diagram-design:diagram-design` (see `docs/overview/`).
+In rstack, use this for state machines only, such as the TLA+ models in `docs/references/statechart/`. Overview pictures of how parts connect go to `/diagram-design:diagram-design`.
 
 The chart shows how a system moves between states, in the words of the person who reads it. That person, the reader, decides whether the behavior is right.
 
@@ -85,4 +85,4 @@ Give each chart and its Mermaid text to the person who must decide. Add one line
 When the model describes code, replay each bug path against the real code, as a test or a live repro, one step for each action. If a bug does not occur, think that the model is wrong until you show that it is not.
 
 ---
-Copied from the pstack plugin (cursor/plugins, MIT License, (c) 2026 Lauren Tan). The `scripts/test` folder is not bundled. rstack uses it to draw its own lifecycle and explore charts in `docs/statechart/`.
+Copied from the pstack plugin (cursor/plugins, MIT License, (c) 2026 Lauren Tan). The `scripts/test` folder is not bundled. rstack uses it to draw its own lifecycle and explore charts in `docs/references/statechart/`.

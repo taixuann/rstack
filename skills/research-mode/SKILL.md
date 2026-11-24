@@ -9,9 +9,9 @@ Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's a
 
 ## Non-negotiables
 
-The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.
+The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose file in `principles/` you read this session.
 
-- First message on a task → read `research-profile.md` in the research-space root if it exists (written by `setup-research`), and the `state` in the project's `README.md` front matter. If the request does not fit the state, say so and propose the phase change (**Project admin** playbook). Then tell the user, in your own words, the research question, the decision it supports, and the smallest output that meets it. Don't wait for confirmation. If the evidence rules out what the user asked for, show it and stop. Restate the question in each subagent brief and open each final report with it.
+- First message on a task → read `research-profile.md` in the research-space root if it exists (written by `setup-research`). For the active phase `state`: when the task targets a specific report (`docs/reports/<question>/README.md`), read that report's `state:` (so one report can advance to `design` or `analysis` independently); otherwise read the project `state:` in `README.md` and the Aspect Checklist in `docs/rstack/README.md`. If the request does not fit the active state, say so and propose the state change (**Project admin** playbook). Then tell the user, in your own words, the research question, the decision it supports, and the smallest output that meets it. Don't wait for confirmation. If the evidence rules out what the user asked for, show it and stop. Restate the question in each subagent brief and open each final report with it.
 - About to ask "which approach" or "what should this do" → classify it first. If the answer is a fact you could observe by running something (a pilot on one subject, a quick plot, a power calculation), it is not the human's to answer. Run it, log it in the Experiment log, and let the result decide. Reserve the question for a real preference or scientific judgment no run can settle.
 - Any code that touches data → name the data shape first (**principle-model-the-domain**). Raw data is read-only (**principle-raw-data-is-read-only**).
 - Any measured number → **principle-explain-the-number** before you report it.
@@ -20,17 +20,20 @@ The Principles section below grounds every trigger. In your reply, name each pri
 - Parallel fan-out (one worker per paper, dataset, or sub-question) → the **swarm** skill. Competing designs, analyses, or drafts → **arena**.
 - Contested design, analysis, or draft → **interrogate** before it ships.
 - Starting a new project, or adding rstack to one → the **init** skill (not the built-in `/init`).
-- Adding, ticking, or syncing tasks, or the user says they added or ticked tasks in Todoist → the **Project admin** playbook (Tasks job), the only writer of `docs/rstack/tasks.md`.
+- Adding, ticking, or syncing tasks, or the user says they added or ticked tasks in Todoist → the **Project admin** playbook (Tasks job), the only writer of `docs/rstack/tasks.md`. After any decision lands or a playbook finishes, run **Project admin** (Keeping records) to log the decision in `docs/rstack/decisions.tsv`, refresh `docs/reports/<question>/README.md` when affected, and update `tasks.md` if tasks changed (reserve full Todoist/exit-review sync for milestone or phase boundaries).
 - Writing a manuscript or slides (write phase) → the user writes every paragraph; you prepare the report, ask questions, and critique. **principle-the-user-writes-the-prose**, **principle-report-before-prose**, **principle-fixes-need-a-yes**, **principle-ask-do-not-fill**. Gates move only through `scripts/writing.py gate`.
 - Long, autonomous, or multi-step work, or any task the user steps away from → a decision trail via **show-me-your-work**.
 - Any prose surface, your reply included → **principle-minimize-reader-load**: short declarative sentences, defined terms, no filler.
 - Before declaring done → **principle-prove-it-works**.
-- The operator corrects the same mistake twice → tell them `/correct` makes it impossible. After substantial work they want to learn from → `/reflect` upgrades, adds, or retires playbooks. Both are user-invoked.
+- The operator corrects the same mistake twice → tell them `/correct` (under `/playbook-control`) makes it impossible. After substantial work they want to learn from → `/reflect` (under `/playbook-control`) upgrades, adds, or retires playbooks. Both are user-invoked.
 - Broken skill mid-task → say so and work around it visibly. Don't silently patch it.
 
 ## Principles
 
-Read the leaf skill in full for any principle you apply. Each leaf is the **principle-<title>** skill, title in kebab case.
+Read the principle file in full for any principle you apply. Each principle `principle-<title>` lives at `principles/<title>.md` inside `research-mode`.
+
+- **General (always active across every playbook):** `question-first`, `sources-not-memory`, `prove-it-works`, `minimize-reader-load`, `never-block-on-the-human`, `guard-the-context-window`, `sequence-verifiable-units`.
+- **Specific (per playbook):** each playbook declares its own `Specific principles:` line; load and apply those alongside the general ones.
 
 **Core**
 
@@ -71,7 +74,7 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 The folder standard is `references/layout.md`: every folder, what it holds, which playbook writes it, and whether it is read-only. `scripts/check_layout.py <project>` flags unknown folders. Every playbook opens with the rows it reads and writes.
 
-`annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`, `interview`; input front matter is in `references/layout.md`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
+`annotations.md` and the user's inputs are what came in and are never edited. Analyses and reviews are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`, `interview`, `inquiry`, `brainstorm`; input front matter is in `references/layout.md`. Nothing in `docs/literature-review/hyperresearch-reports/` is used until checked against a paper.
 
 Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate.
 
@@ -83,12 +86,12 @@ Each phase has a brief at `references/phases/<phase>.md`: entry check, playbooks
 
 | Phase | Focus | Playbooks, in order |
 |---|---|---|
-| explore | scope the question, deepen, then synthesize questions and methods | Literature review, Inquiry, Report bootstrap |
+| explore | scope the question, deepen, then synthesize questions and methods | Literature review, Report init |
 | design | design the whole study and keep its log | Experimental design, Experiment log |
-| analysis | do the work | Experiment log (while experiments run), Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Reproduce, Package results |
+| analysis | do the work | Experiment log (while experiments run), Raw intake, Analysis plan, Analysis run, Analysis review, Analysis reconcile, Package results |
 | write | the user writes; you prepare, guide, critique | Paper preparation, Paper writing, Paper critique, Presentation, Peer review |
 | closed | done, with reason | Reviewer response |
-| any | | Inquiry, Project admin, Protocol wiki, Authoring a skill |
+| any | | Inquiry, Project admin |
 
 Moving backwards is allowed. Log the reason. Each exit runs the exit review first (Project admin).
 
@@ -134,9 +137,8 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 
 **Explore**
 
-- **Literature review.** The Zotero loop: register the collection, ingest papers, run the inquiry, find more, map the gap.
-- **Inquiry.** Any phase. Before a search or a design, consult the wiki, interview, brainstorm and interrogate. In explore it also aligns the user's reading with the assistant's, interrogate both, extend beyond the papers, search, and write claims.
-- **Report bootstrap.** Questions, hypotheses, methods and feasibility, then opens each question's report folder (the intention in the user's words, and `fundamental/` for the background) and runs the exit check of explore. Documents only; never `data/raw/` or `analysis/`.
+- **Literature review.** Brainstorm and interrogate gaps into `d-inquiry/<date>_<inquiry-problems>.md`, run `/hyperresearch` on approval, file the report with metadata/backlinks, and feed candidates to Zotero.
+- **Report init.** Interview (`interrogate` + `brainstorming`) to scope a report (`fundamental/`, `method/`, `analysis/`, `results/` or `N/A`), run `Inquiry` (`qmd`) if needed, open `docs/reports/<question>/`, and hand follow-up tasks to **Project admin**. Documents only; never `data/raw/` or `analysis/`.
 
 **Design**
 
@@ -149,8 +151,7 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 - **Analysis plan.** Interview, hypotheses, method, a short README plus `docs/`, checks before figures, and scripts from templates, before anything runs.
 - **Analysis run.** Run it through `rstack_run.py`: one provenance folder per figure, checks, replay, tick after the user sees it.
 - **Analysis review.** Called, not routine. Re-run (compare two runs), or challenge (swarm, arena or interrogate by the question) before a result is cited.
-- **Hillclimb.** Sustained improvement of one metric against a target, one change per measurement.
-- **Reproduce.** Re-run a paper's or prior result before building on it.
+- **Analysis reconcile.** Reconcile accepted runs into `analysis/<name>/docs/results/`, update `docs/reports/<question>/results/README.md` and hypothesis statuses, and pass `rstack_run.py check`.
 - **Package results.** Build `analysis/<name>/package/` from the accepted runs: figures named by run id, code, inputs, a `reproduce.py` that needs no rstack, and a README made from files.
 
 **Write** (the user writes every paragraph)
@@ -167,10 +168,9 @@ A large or cross-cutting effort, or work the user reviews after stepping away, r
 
 **Any phase**
 
+- **Inquiry.** Cross-phase internal query (`qmd` on `-c <project>` and `-c wiki`), design-time experiment inquiry, and Zotero paper alignment/interrogation.
 - **Project admin.** Tasks (the only writer of `docs/rstack/tasks.md`, mirrored to Todoist), docs (README, AGENTS, CLAUDE), exit review, the phase brief, and the phase change.
-- **Protocol wiki.** Navigate the lab's `wiki/` through its own router; use `brainstorming`, `interrogate` and `doc-coauthoring`.
-- **Authoring a skill or playbook.** Writing or editing a SKILL.md or playbook.
 
-Notes the user reads and comments on in Obsidian use the **obsidian-notes** skill.
+For project understanding notes use **learn-mode**; for cross-project lab wiki protocols use **wiki-mode**; for meta-workflow governance (`figure-it-out`, `correct`, `reflect`, `skill-creator`) use **playbook-control**. Notes the user reads and comments on in Obsidian use the **obsidian-notes** skill.
 
 Spanning two playbooks: finish the first, save its output to its home folder, then read the second.

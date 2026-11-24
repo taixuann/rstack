@@ -1,6 +1,11 @@
+---
+state: explore
+updated: YYYY-MM-DD
+---
+
 # <question, as a sentence>
 
-The index of this question. Everything that answers it is linked from here; the work is in the files next to it. Created by **Report bootstrap**; the user names the folder.
+The index of this question. Everything that answers it is linked from here; the work is in the files next to it. Created by **Report init**; the user names the folder.
 
 **Status:** planned / designed / running / analysed / written. **Phase:** TODO.
 
@@ -20,7 +25,7 @@ TODO: the question, the decision it supports, and what counts as success, in the
 
 ## Plan
 
-What must be shown to answer the question, and what proof would count: TODO. Methods and feasibility: link to `docs/rstack/05_methods-and-feasibility.md`. Wiki pages used: TODO.
+What must be shown to answer the question, and what proof would count: TODO. Methods and feasibility: TODO (link to `method/` once designed). Wiki pages used: TODO.
 
 ## Contents
 

@@ -14,9 +14,9 @@ Then open one session per role, in the project folder, and give it the start tex
 
 | Role | Playbooks | Phases |
 |---|---|---|
-| [admin](admin.md) | project-admin, authoring-a-skill | any |
-| [scholar](scholar.md) | literature-review, inquiry (explore mode), protocol-wiki | explore |
-| [planner](planner.md) | report-bootstrap, experimental-design, experiment-log, inquiry (design mode) | explore end, design, analysis (log) |
+| [admin](admin.md) | project-admin, playbook-control | any |
+| [scholar](scholar.md) | literature-review, inquiry (explore mode), wiki-mode | explore |
+| [planner](planner.md) | report-init, experimental-design, experiment-log, inquiry (design mode) | explore end, design, analysis (log) |
 | [analyst](analyst.md) | raw-intake, analysis-plan, analysis-run, analysis-review (compare and accept), hillclimb, reproduce, package-results | analysis |
 | [critic](critic.md) | paper-critique, peer-review, analysis-review (challenge) | analysis, write, exit reviews |
 | [writer](writer.md) | paper-preparation, paper-writing, reviewer-response | write, closed |

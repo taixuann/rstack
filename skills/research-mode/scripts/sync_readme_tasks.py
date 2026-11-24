@@ -21,30 +21,36 @@ def phase(state, tasks_text):
     return m.group(1) if m else ""
 
 
-def block(state, tasks_text):
+def block(state, tasks_text, tasks_link="tasks.md"):
     tasks_text = phase(state, tasks_text)
     items = re.findall(r"^\s*- \[([ xX])\] (.+)$", tasks_text, re.M)
     done = sum(1 for m, _ in items if m != " ")
     openq = [t for m, t in items if m == " "][:SHOW]
-    lines = [START, f"**Tasks ({state}): {done}/{len(items)} done.** Full list: [docs/rstack/tasks.md](docs/rstack/tasks.md)", ""]
+    lines = [START, f"**Tasks ({state}): {done}/{len(items)} done.** Full list: [{tasks_link}]({tasks_link})", ""]
     lines += [f"- [ ] {t}" for t in openq] or ["All tasks done. Review the exit check."]
     lines.append(END)
     return "\n".join(lines)
 
 
 def sync(project):
-    readme = Path(project) / "README.md"
-    text = readme.read_text()
-    state = re.search(r"^state:\s*(\S+)", text, re.M).group(1)
+    p = Path(project)
+    root_readme = p / "README.md"
+    state = re.search(r"^state:\s*(\S+)", root_readme.read_text(), re.M).group(1)
     state = {v: k for k, v in OLD.items()}.get(state, state)
-    tasks = Path(project) / "docs/rstack/tasks.md"
+    tasks = p / "docs/rstack/tasks.md"
     if not tasks.exists():
         sys.exit(f"missing {tasks}")
-    if START not in text or END not in text:
+    rstack_readme = p / "docs/rstack/README.md"
+    if rstack_readme.exists() and START in rstack_readme.read_text() and END in rstack_readme.read_text():
+        target, link = rstack_readme, "tasks.md"
+    elif START in root_readme.read_text() and END in root_readme.read_text():
+        target, link = root_readme, "docs/rstack/tasks.md"
+    else:
         sys.exit("README has no task markers")
-    new = re.sub(re.escape(START) + r".*?" + re.escape(END), lambda _: block(state, tasks.read_text()), text, flags=re.S)
-    readme.write_text(new)
-    print(f"synced {readme} from {tasks}")
+    text = target.read_text()
+    new = re.sub(re.escape(START) + r".*?" + re.escape(END), lambda _: block(state, tasks.read_text(), link), text, flags=re.S)
+    target.write_text(new)
+    print(f"synced {target} from {tasks}")
 
 
 def selftest():

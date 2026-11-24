@@ -10,7 +10,7 @@ Usage:
   rstack_run.py tick ANALYSIS_DIR --figure NAME --approved-by-user [--run RUN_ID]
   rstack_run.py check ANALYSIS_DIR
   rstack_run.py show ANALYSIS_DIR
-  rstack_run.py package ANALYSIS_DIR [--out DIR] [--replace] [--max-raw-mb N] [--exclude-raw ID,ID] [--python PY]
+  rstack_run.py package ANALYSIS_DIR [--out DIR] [--figures FIG,FIG] [--replace] [--max-raw-mb N] [--exclude-raw ID,ID] [--python PY]
   rstack_run.py export ANALYSIS_DIR --figure NAME [--run RUN_ID] [--out DIR]
   rstack_run.py --selftest
 
@@ -183,6 +183,10 @@ def install_lib(project):
             print(f"installed {f.name}")
         elif sha256(dst / f.name) != sha256(f):
             print(f"{f.name}: differs from the rstack template; the project copy is kept")
+    cfile = project / "analysis/colors.yaml"
+    if not cfile.exists() and (src / "colors.yaml").is_file():
+        shutil.copy(src / "colors.yaml", cfile)
+        print("installed analysis/colors.yaml")
 
 
 def new_analysis(project, name, figures):
@@ -659,11 +663,17 @@ def tick(analysis, figure, approved, run_id=None):
 PACKAGE_TEMPLATES = Path(__file__).resolve().parent.parent / "templates/package"
 
 
-def _package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=None):
+def _package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=None, figures=()):
     root, out = project_of(analysis), Path(out) if out else analysis / "package"
     results = sorted((analysis / "docs/results").glob("*.md"))
     if not results:
         sys.exit("refused: docs/results/ has no accepted result; tick a verified run first")
+    if figures:
+        by_stem = {r.stem: r for r in results}
+        missing = [f for f in figures if f not in by_stem]
+        if missing:
+            sys.exit(f"refused: no accepted result for figure(s): {', '.join(missing)}")
+        results = [by_stem[f] for f in figures]
     notes, accepted, problems = figure_notes(analysis), {}, []
     qm = re.search(r"^## Question\s*$(.*?)(?=^## )", (analysis / "README.md").read_text(), re.M | re.S)
     if not qm or qm.group(1).strip().startswith("TODO") or not qm.group(1).strip():
@@ -759,12 +769,12 @@ def _package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=N
     return out
 
 
-def package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=None):
+def package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=None, figures=()):
     """Build the package; a build that is refused halfway leaves no folder behind."""
     dst = Path(out) if out else analysis / "package"
     kept = dst.exists() and any(dst.iterdir()) and not replace
     try:
-        return _package(analysis, out, max_raw_mb, exclude, replace, py)
+        return _package(analysis, out, max_raw_mb, exclude, replace, py, figures)
     except SystemExit:
         if not kept:
             shutil.rmtree(dst, ignore_errors=True)
@@ -1064,8 +1074,9 @@ def selftest():
         (pk / "data/raw/x.csv").write_text("tampered")
         rp = subprocess.run([sys.executable, str(pk / "reproduce.py")], capture_output=True, text=True)
         assert rp.returncode == 1 and "data/raw/x.csv" in rp.stdout, rp.stdout
-        package(a, pk, replace=True, exclude=["x"], py=sys.executable)
+        package(a, pk, replace=True, exclude=["x"], py=sys.executable, figures=["f1"])
         assert "excluded by --exclude-raw" in (pk / "README.md").read_text() and not (pk / "data/raw/x.csv").exists()
+        refused(lambda: package(a, Path(d) / "pkg_bad", py=sys.executable, figures=["nope"]), "no accepted result for figure")
         rf1.write_text(rf1.read_text().replace("Current rises with voltage (n = 2).", "TODO: later"))
         refused(lambda: package(a, Path(d) / "pkg2", py=sys.executable), "still TODO")
         rf1.write_text(rf1.read_text().replace("TODO: later", "Current rises with voltage (n = 2)."))
@@ -1117,7 +1128,7 @@ def main():
     t = sub.add_parser("tick"); t.add_argument("analysis"); t.add_argument("--figure", required=True); t.add_argument("--approved-by-user", action="store_true"); t.add_argument("--run")
     c = sub.add_parser("check"); c.add_argument("analysis")
     sh_ = sub.add_parser("show"); sh_.add_argument("analysis")
-    pk_ = sub.add_parser("package"); pk_.add_argument("analysis"); pk_.add_argument("--out"); pk_.add_argument("--replace", action="store_true")
+    pk_ = sub.add_parser("package"); pk_.add_argument("analysis"); pk_.add_argument("--out"); pk_.add_argument("--figures", default=""); pk_.add_argument("--replace", action="store_true")
     pk_.add_argument("--max-raw-mb", type=float, default=100); pk_.add_argument("--exclude-raw", default=""); pk_.add_argument("--python")
     ex_ = sub.add_parser("export"); ex_.add_argument("analysis"); ex_.add_argument("--figure", required=True); ex_.add_argument("--run"); ex_.add_argument("--out")
     a = ap.parse_args()
@@ -1146,7 +1157,7 @@ def main():
         an = Path(a.analysis).resolve()
         py = a.python or default_python(project_of(an))
         preflight(py)
-        package(an, a.out, a.max_raw_mb, [i for i in a.exclude_raw.split(",") if i], a.replace, py)
+        package(an, a.out, a.max_raw_mb, [i for i in a.exclude_raw.split(",") if i], a.replace, py, [i for i in a.figures.split(",") if i])
         return None
     if a.cmd == "export":
         return export(Path(a.analysis).resolve(), a.figure, a.run, a.out) and None

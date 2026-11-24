@@ -6,16 +6,17 @@ Finds out what is known: the wiki, the user's reading and the literature. Active
 
 - literature-review
 - inquiry (explore mode: wiki, interview, brainstorm, then the standard inquiry and claims)
-- protocol-wiki
+- wiki-mode
 
 ## May write
 
 - `docs/literature-review/` (never `annotations.md`)
-- `docs/rstack/d-inquiry/` except `inquiry-<experiment>-wiki.md` (the planner's)
-- `docs/rstack/d-brainstorm/`
+- `docs/rstack/d-inquiry/`
+- `docs/inputs/<date>_inquiry_*.md` except `<date>_inquiry_<experiment>-wiki.md` (the planner's)
+- `docs/inputs/<date>_brainstorm_*.md`
 - `docs/rstack/` documents other than 04 and 05
 - `docs/inputs/` only on the user's behalf, dated, never edited after
-- `wiki/` through protocol-wiki only, with the user present
+- `wiki/` through wiki-mode only, with the user present
 
 ## Hands off
 

@@ -3,11 +3,10 @@
 **Entry check.** Explore exit passed: questions and candidate hypotheses exist.
 
 **Playbooks, in order.**
-1. Inquiry on each experiment (reads the wiki, interview, brainstorm, interrogate)
-2. Experimental design (the self-contained note, resources, preparation, protocol)
-3. Experiment log (continues in the analysis phase while the experiments run) (as the experiments run: what was done, as run, against the design; the report later cites it)
+1. Experimental design (brainstorm & interrogate → Inquiry via `qmd` on project/`wiki` → resources, `procedure.md` + `samples.csv` or hardware/software `design.md` → freeze & offer `analysis/` prep)
+2. Experiment log (continues in the analysis phase while the experiments run: Inquiry + interrogate + brainstorming to route to the right report `method/log.md`, log deviations, and ask before linking data or running `Raw intake`)
 
-**Reads and writes.** Reads `docs/rstack/`; the wiki is read only by Inquiry (via `wiki/CLAUDE.md`), and the design note copies what it needs. Writes `docs/reports/<question>/` (`method/design.md`, `method/resources.md`, `method/samples.csv`, `method/log.md`), `docs/rstack/d-inquiry/inquiry-<experiment>-wiki.md` (Inquiry's notes), `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
+**Reads and writes.** Reads `docs/rstack/` and `docs/reports/<question>/README.md`; the wiki is read only via Inquiry (`qmd -c wiki`), and the design/procedure note copies what it needs. Writes `docs/reports/<question>/` (`method/resources.md`, `method/procedure.md` or `method/design.md`, `method/samples.csv`, `method/log.md`), `docs/inputs/<date>_inquiry_<experiment>-wiki.md` (Inquiry's notes), `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
 
 **Starting tasks.** Freeze each question's hypotheses. Choose the design. Justify sample size. Write the analysis plan. Attack the design with `interrogate`. Plan data intake and ethics. Tailor them to the project.
 

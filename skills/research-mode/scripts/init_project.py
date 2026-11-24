@@ -11,9 +11,10 @@ from datetime import date
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REF = HERE.parent / "references"
-FOLDERS = ["data/raw", "docs/literature-review/papers", "docs/inputs", "docs/literature-review/cross-papers", "docs/literature-review/reports",
-           "docs/rstack", "analysis"]
+TPL = HERE.parent / "templates/project"
+FOLDERS = ["data/raw", "docs/rstack", "docs/reports", "docs/literature-review/papers",
+           "docs/literature-review/hyperresearch-reports", "docs/writing", "docs/figures",
+           "docs/inputs", "docs/understanding", "analysis"]
 EXPLORE_TASKS = """# Tasks
 
 Phase > Goal > Task. Only the Project admin playbook edits this file.
@@ -22,8 +23,7 @@ Phase > Goal > Task. Only the Project admin playbook edits this file.
 
 ### Goal: Proposal intake
 - [ ] Run the project interview
-- [ ] Write context (`01_context.md`)
-- [ ] Write aims and milestones (`02_aims-and-milestones.md`)
+- [ ] Fill Context, Aim, and Milestones in `README.md`
 - [ ] Confirm the open points with the supervisor
 
 ### Goal: Scope
@@ -33,22 +33,20 @@ Phase > Goal > Task. Only the Project admin playbook edits this file.
 
 ### Goal: Deepen
 - [ ] Ingest and review the key papers; run the inquiry
-- [ ] Write the literature map (`03_literature-map.md`): themes, search log, and the gap
 
-### Goal: Report bootstrap
-- [ ] Write questions and hypotheses (`04_questions-and-hypotheses.md`)
-- [ ] Write methods and feasibility (`05_methods-and-feasibility.md`)
+### Goal: Report init
+- [ ] Open each question's report folder (`docs/reports/<question>/README.md`)
+- [ ] Fill Intention, scope (`fundamental/`, `method/`, `analysis/`, `results/` or `N/A`), and candidate hypotheses
 - [ ] Assemble the proposal chain and run `interrogate` on it
 """
 
 
 def readme(title):
-    t = (REF / "README.template.md").read_text()
+    t = (TPL / "README.md").read_text()
     t = t.replace("YYYY-MM-DD", date.today().isoformat()).replace("<Project title>", title)
     t = t.replace("<One sentence on where the project stands.>", "Just initialised. The project interview comes first.")
-    # day one has only tasks.md and the literature-review folder: drop links to files that do not exist yet
-    t = re.sub(r"^- Explore:.*$", "- Explore: [tasks](docs/rstack/tasks.md)", t, flags=re.M)
-    t = re.sub(r"^- Literature review:.*$", "- Literature review: [docs/literature-review/](docs/literature-review/)", t, flags=re.M)
+    t = t.replace("<Goal, background, problem statement, scope, resources, and constraints. Anything not decided stays `TODO: unknown` with an owner.>", "TODO: unknown (run the project interview via `/rstack:init`).")
+    t = t.replace("<Overall aim and key milestones with targets and dates.>", "TODO: unknown (run the project interview via `/rstack:init`).")
     # the per-question blocks are filled after the interview; drop the template placeholders
     return re.sub(r"## <Work package name>.*?(?=## State history)", "", t, flags=re.S)
 
@@ -73,8 +71,9 @@ def init(project, title=None):
         if not any((p / d).iterdir()):
             g.touch()
     put("README.md", readme(title))
-    put("AGENTS.md", (REF / "AGENTS.template.md").read_text().replace("<project>", p.name))
-    put("CLAUDE.md", (REF / "CLAUDE.template.md").read_text())
+    put("AGENTS.md", (TPL / "AGENTS.md").read_text().replace("<project>", p.name))
+    put("CLAUDE.md", (TPL / "CLAUDE.md").read_text())
+    put("docs/rstack/README.md", (TPL / "rstack-README.md").read_text().replace("YYYY-MM-DD", date.today().isoformat()))
     put("docs/rstack/tasks.md", EXPLORE_TASKS)
     # an existing README without the task markers cannot be synced; the caller reports it
     r = subprocess.run([sys.executable, str(HERE / "sync_readme_tasks.py"), str(p)], capture_output=True, text=True)
@@ -87,14 +86,15 @@ def selftest():
     with tempfile.TemporaryDirectory() as d:
         proj = Path(d) / "res_demo-device"
         made, skipped = init(proj)
-        assert {"README.md", "AGENTS.md", "CLAUDE.md", "docs/rstack/tasks.md"} <= set(made), made
+        assert {"README.md", "AGENTS.md", "CLAUDE.md", "docs/rstack/README.md", "docs/rstack/tasks.md"} <= set(made), made
         r = (proj / "README.md").read_text()
+        rr = (proj / "docs/rstack/README.md").read_text()
         assert "state: explore" in r and "Demo device" in r and "<Project title>" not in r and "<Work package name>" not in r
-        assert "Tasks (explore): 0/12 done" in r, r
+        assert "Tasks (explore): 0/10 done" in rr, rr
         assert "res_demo-device" in (proj / "AGENTS.md").read_text()
-        for dead in ("00_interview.md", "03_literature-map.md", "references.yaml"):
+        for dead in ("00_interview.md", "references.yaml"):
             assert dead not in r, dead
-        for f in ("data/raw", "docs/literature-review/reports", "docs/rstack"):
+        for f in ("data/raw", "docs/reports", "docs/understanding", "docs/literature-review/hyperresearch-reports", "docs/rstack"):
             assert (proj / f).is_dir()
         (proj / "README.md").write_text("mine")
         made2, skipped2 = init(proj)

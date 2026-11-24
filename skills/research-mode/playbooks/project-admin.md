@@ -1,6 +1,10 @@
 ### Project admin
 
-Phase: any. Keeps a project's documents, tasks and phase in order, and gives a bot the brief for one phase. It runs as the advisor for the project's tasks and is the only writer of `README.md`, `AGENTS.md`, `CLAUDE.md` and `docs/rstack/tasks.md`. Read `references/layout.md` first; it says where everything lives.
+Phase: any. Keeps a project's documents, tasks, Todoist mirror, decisions, and phase/aspect readiness in order, and gives a bot the brief for one phase. It is the only writer of `README.md`, `docs/rstack/README.md`, `AGENTS.md`, `CLAUDE.md`, and `docs/rstack/tasks.md` (templates live in `templates/project/`). Read `references/layout.md` first; it says where everything lives.
+
+**Two levels of work:**
+- **Routine record-keeping (default after any decision or playbook):** append decisions to `docs/rstack/decisions.tsv`, update `docs/reports/<question>/README.md` (`state:` and status), update `docs/rstack/README.md` (Aspect Checklist + report phase table), and update `docs/rstack/tasks.md` (plus Todoist when tasks change).
+- **Milestone / Phase admin (when changing phase or project docs):** run `Exit review`, refresh `README.md` / `AGENTS.md` / `CLAUDE.md`, sync Todoist sections, and run `scripts/check_layout.py <project>`.
 
 Pick the job, then read the one reference it names:
 

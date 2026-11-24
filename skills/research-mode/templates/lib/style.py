@@ -26,6 +26,17 @@ from matplotlib.ticker import MaxNLocator
 _preset = {}
 
 
+def color_for(condition):
+    """Return the project-wide hex color for `condition` from analysis/colors.yaml."""
+    cpath = Path(os.environ.get("RSTACK_PROJECT", "..")) / "analysis/colors.yaml"
+    if not cpath.is_file():
+        cpath = Path(__file__).resolve().parents[1] / "colors.yaml"
+    mapping = (yaml.safe_load(cpath.read_text()) or {}).get("colors") or {}
+    if condition not in mapping:
+        raise KeyError(f"{condition!r} missing from {cpath}; add it before plotting")
+    return mapping[condition]
+
+
 def new_figure(preset, **subplots_kwargs):
     src = Path(os.environ["RSTACK_PRESETS"]) / f"{preset}.yaml"
     if not src.is_file():

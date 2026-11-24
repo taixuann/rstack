@@ -9,8 +9,8 @@ from pathlib import Path
 
 LAYOUT = Path(__file__).resolve().parents[1] / "references/layout.md"
 PHASES = ("explore", "design", "analysis", "write", "closed")
-OLD_NAMES = {"brainstorm": "d-brainstorm/", "inquiry": "d-inquiry/", **{x: "docs/rstack/ itself (flat; put phase: in the front matter)" for x in PHASES}, **{"p-" + x: "docs/rstack/ itself (flat; put phase: in the front matter)" for x in PHASES}}  # names before the flat layout and the short-lived p- folders
-OK_DIRS = ("d-brainstorm", "d-inquiry", "reviews", "writing")
+OLD_NAMES = {"brainstorm": "docs/inputs/ (dated <date>_brainstorm_<slug>.md)", "d-brainstorm": "docs/inputs/ (dated <date>_brainstorm_<slug>.md)", "inquiry": "docs/rstack/d-inquiry/", **{x: "docs/rstack/ itself (flat; put phase: in the front matter)" for x in PHASES}, **{"p-" + x: "docs/rstack/ itself (flat; put phase: in the front matter)" for x in PHASES}}  # names before the flat layout and the short-lived p- folders
+OK_DIRS = ("d-inquiry", "reviews", "writing")
 ROOT_OK = {"data", "docs", "analysis", ".rstack", ".git", ".gitignore", "README.md", "AGENTS.md", "CLAUDE.md", ".claude", ".obsidian", ".DS_Store"}
 
 
@@ -33,13 +33,13 @@ def check(project):
         for d in sorted(x for x in st.iterdir() if x.is_dir()):
             n = d.name
             if n in OLD_NAMES:
-                out.append(f"RENAME docs/rstack/{n}: use {OLD_NAMES[n] if OLD_NAMES[n].startswith('d-') is False else 'docs/rstack/' + OLD_NAMES[n]}")
+                out.append(f"RENAME docs/rstack/{n}: use {OLD_NAMES[n]}")
             elif n not in OK_DIRS:
                 out.append(f"UNKNOWN docs/rstack/{n}: allowed folders are {', '.join(OK_DIRS)}; project documents sit flat in docs/rstack/")
         for f in sorted(st.glob("*.md")):
-            home = "d-brainstorm" if f.name.startswith("brainstorm") else "d-inquiry" if f.name.startswith(("inquiry", "claims")) else None
+            home = "docs/inputs/ as <date>_brainstorm_<slug>.md" if f.name.startswith("brainstorm") else "docs/inputs/ as <date>_inquiry_<slug>.md" if f.name.startswith("inquiry") else "docs/literature-review/" if f.name.startswith("claims") else None
             if home:
-                out.append(f"STRAY docs/rstack/{f.name}: move it to docs/rstack/{home}/")
+                out.append(f"STRAY docs/rstack/{f.name}: move it to {home}")
     return out
 
 
@@ -54,14 +54,14 @@ def selftest():
         for n in ("brainstorm-x.md", "inquiry.md", "claims.md", "01_context.md"):
             (p / "docs/rstack" / n).write_text("x")
         s = [l for l in check(p) if l.startswith("STRAY")]
-        assert len(s) == 3 and "d-brainstorm/" in s[0], s
+        assert len(s) == 3 and "<date>_brainstorm_" in s[0] and "docs/literature-review/" in s[1] and "<date>_inquiry_" in s[2], s
         (p / "docs/rstack/p-explore").mkdir()
         (p / "docs/rstack/brainstorm").mkdir()
         (p / "docs/rstack/notes").mkdir()
         (p / "docs/rstack/reviews").mkdir()
         r = check(p)
         assert any(l.startswith("RENAME docs/rstack/p-explore") and "flat" in l for l in r), r
-        assert any(l.startswith("RENAME docs/rstack/brainstorm") and "d-brainstorm/" in l for l in r), r
+        assert any(l.startswith("RENAME docs/rstack/brainstorm") and "<date>_brainstorm_" in l for l in r), r
         assert any(l.startswith("UNKNOWN docs/rstack/notes") for l in r), r
         assert not any(l.startswith(("UNKNOWN docs/rstack/reviews", "RENAME docs/rstack/reviews")) for l in r), r
     print("selftest ok")

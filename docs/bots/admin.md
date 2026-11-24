@@ -5,7 +5,7 @@ Keeps the project's records, tasks and phase in order. The only role that writes
 ## Owns
 
 - project-admin (Tasks advisor, Docs, Exit review, Brief, Change phase)
-- authoring-a-skill
+- playbook-control
 
 ## May write
 
