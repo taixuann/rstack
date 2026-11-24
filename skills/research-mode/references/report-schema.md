@@ -1,6 +1,6 @@
 # The report: schema and number-check rules
 
-`docs/reports/<question>/` is the folder of one question. Its `README.md` indexes it; `method/design.md`, `method/resources.md`, `method/samples.csv` and `method/log.md` hold the design and what was done; the five files below hold what a piece may say. rstack builds the five in preparation from its outputs and the user's answers. `results/README.md` is an optional index of results that answer the question, written only when needed (Analysis review); it links to result pages and copies no number. The text is checked against it by `number-check` (`scripts/number_check.py`).
+`docs/reports/<question>/` is the folder of one question. Its `README.md` indexes it; `method/design.md`, `method/resources.md`, `method/samples.csv` and `method/log.md` hold the design and what was done; the five files below hold what a piece may say. rstack builds the five in preparation from its outputs and the user's answers. `results/README.md` is an optional index of results that answer the question, written only when needed (Analysis review); it links to result pages and copies no number. The text is checked against it by `number-check` (`skills/number-check/scripts/number_check.py`).
 
 ## Files
 
@@ -46,7 +46,7 @@ After approval the five evidence files are frozen (not the rest of the folder). 
 
 ## What the report check does
 
-`number_check.py report <project> <piece>` fails when: a file is missing; a value or uncertainty is not written in its source file; `target.md` front matter lacks kind, venue, audience, key message, claims or phase (and article type for a paper); any line of `target.md` still says TODO; a chosen claim lacks a statement, a figure in `figures.yaml`, or a number with quantity, value, unit, uncertainty, kind, n and an existing source file; a methods fact lacks its source; a figure path does not exist; a citation key is not in `references.bib` or has no `supports`. It prints one `HASH` line per evidence file.
+`number_check.py report <project> <piece>` fails when: a file is missing; a value or uncertainty is not written in its source file; `target.md` front matter lacks kind, venue, audience, key message, claims or stage (and article type for a paper); any line of `target.md` still says TODO; a chosen claim lacks a statement, a figure in `figures.yaml`, or a number with quantity, value, unit, uncertainty, kind, n and an existing source file; a methods fact lacks its source; a figure path does not exist; a citation key is not in `references.bib` or has no `supports`. It prints one `HASH` line per evidence file.
 
 ## What the draft check does
 

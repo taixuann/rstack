@@ -36,7 +36,7 @@ Every part follows a small set of principles, written as `principle-*` skills. S
 
 ## Install these separately
 
-rstack coaches papers and slides but never writes their prose; it does not teach, view raw files or search the web itself. It calls these tools, which install outside rstack. Without one, only the step that uses it is skipped. `/rstack:setup-research` lists which are missing.
+rstack coaches papers and slides but never writes their prose; it does not view raw files or search the web itself. It calls these tools, which install outside rstack. Without one, only the step that uses it is skipped. `/rstack:setup-research` lists which are missing.
 
 | Tool | Used for | Where it installs | How |
 |---|---|---|---|
@@ -44,7 +44,6 @@ rstack coaches papers and slides but never writes their prose; it does not teach
 | [raw-viewer](https://github.com/taixuann/raw-viewer) | Inventory and look at `data/raw/` | A CLI on your PATH (`~/.local/bin/raw-viewer`) and a macOS app | Follow that repository's README; the `setup-rawviewer` skill configures a project |
 | `zotero-cli` | Read and write the Zotero library (papers, annotations) | A CLI on your PATH (`~/.local/bin/zotero-cli`), installed as a `uv` tool from [zotero-mcp](https://github.com/54yyyu/zotero-mcp). rstack bundles only the skill that teaches Claude to use it. Zotero itself runs on your computer | `uv tool install zotero-mcp-server`, then see the bundled `zotero-cli` skill for its first-run check |
 | `doc-coauthoring` | Writing the lab `wiki/` and `fundamental/` with you; design review (**Protocol wiki**, **Report bootstrap**) | `~/.claude/skills/doc-coauthoring/` (a skill folder, per user) | Copy the `doc-coauthoring` folder from [anthropics/skills](https://github.com/anthropics/skills) into `~/.claude/skills/` |
-| [`/tutor:teach`](https://github.com/kubilaiswf/claude-tutor) | Learning a concept or paper, outside the project | A Claude Code plugin | `claude plugin marketplace add kubilaiswf/claude-tutor && claude plugin install tutor@claude-tutor` |
 | [`claude-scientific-writer`](https://github.com/K-Dense-AI/claude-scientific-writer) | Posters, grants, thesis chapters (planned, not built) | A Claude Code plugin | `claude plugin marketplace add K-Dense-AI/claude-scientific-writer` |
 | Todoist (MCP) | Mirror of `tasks.md` | Your host's MCP connector list | Add the Todoist connector in your host |
 
@@ -87,7 +86,7 @@ A project's `README.md` carries a research state: explore → design → analysi
 | `data/raw/` | Raw data. Immutable |
 | `docs/inputs/` | What came in: proposals, supervisor notes. Never edited |
 | `docs/literature-review/` | One folder per paper, cross-paper notes, search reports |
-| `docs/rstack/<state>/` | The state's tasks, documents, review and decisions |
+| `docs/rstack/` | The tasks, the project's documents (`phase:` in front matter), `reviews/`, and decisions |
 | `analysis/` | Derived work, each number traced to a script. [How it runs](docs/analysis-runner.md) |
 | `.rstack/provenance/` | One folder per figure run: inputs with hashes, scripts, environment, log, checks, review |
 

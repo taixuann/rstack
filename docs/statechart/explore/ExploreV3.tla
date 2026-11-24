@@ -1,7 +1,7 @@
 ---- MODULE ExploreV3 ----
 EXTENDS Naturals
 \* Explore, starting at interrogate. interrogated: aims and gaps are written down. roadmap: the user's overview page exists (the name is from the retired Roadmap section).
-\* lessons: Raw pages ingested in Notion. synced: lessons already carried into docs/rstack/explore/.
+\* lessons: Lesson notes written in docs/understanding/. synced: lessons already carried into docs/rstack/.
 \* registered, analysed, reviewed: papers, as in ExploreStates.
 VARIABLES scoped, intake, interrogated, roadmap, lessons, synced, registered, analysed, reviewed, inquiry, synthesis, review, exit
 vars == <<scoped, intake, interrogated, roadmap, lessons, synced, registered, analysed, reviewed, inquiry, synthesis, review, exit>>
@@ -26,7 +26,7 @@ MakeRoadmap == /\ interrogated /\ ~roadmap /\ ~exit /\ roadmap' = TRUE
 IngestLesson == /\ roadmap /\ ~exit /\ lessons < MaxL /\ lessons' = lessons + 1 /\ review' = FALSE
                 /\ UNCHANGED <<scoped, intake, interrogated, roadmap, synced, registered, analysed, reviewed, inquiry, synthesis, exit>>
 
-\* What the ingested pages show goes into docs/rstack/explore/.
+\* What the ingested pages show goes into docs/rstack/.
 SyncDocs == /\ ~exit /\ synced < lessons /\ synced' = lessons
             /\ UNCHANGED <<scoped, intake, interrogated, roadmap, lessons, registered, analysed, reviewed, inquiry, synthesis, review, exit>>
 

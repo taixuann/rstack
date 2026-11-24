@@ -83,7 +83,7 @@ analysis, assumption reversal, analogical transfer) for a longer session.
 
 ## Deliverable
 
-Save the note to `docs/rstack/brainstorm/<slug>.md` in a research project, never in `docs/rstack/<state>/`.
+Save the note to `docs/rstack/d-brainstorm/<slug>.md` in a research project, never loose in `docs/rstack/`.
 
 ```markdown
 ## Map

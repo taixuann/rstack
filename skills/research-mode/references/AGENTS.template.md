@@ -8,7 +8,7 @@ Operating rules for agents in `<project>`. This file holds the project's rules. 
 - Work must fit the state. Allowed in any state: Inquiry, Project admin, Protocol wiki. explore → Literature review, Inquiry, Report bootstrap. design → Experimental design, Experiment log. analysis → Experiment log, Raw intake, Analysis plan, Analysis run, Analysis review, Hillclimb, Reproduce, Package results. write → Paper preparation, Paper writing, Paper critique, Presentation, Peer review (the user writes every paragraph). closed → Reviewer response. If the request does not fit, say so and propose the state change.
 - Run the exit review (Project admin) before any state change. Advance the state only at an approved gate (below), and add a row to the README State history. Moving backwards is allowed. Log the reason.
 - `docs/rstack/tasks.md` (Phase > Goal > Task) is the source of truth for tasks. Edit it through the Project admin playbook (Tasks job), then run `scripts/sync_readme_tasks.py <project>` (in the `research-mode` skill folder) so the README task block matches.
-- Write each stage's documents under `docs/rstack/<state>/`.
+- Write the project's documents flat in `docs/rstack/`, each with `phase:` in its front matter. A phase exit review goes in `docs/rstack/reviews/<phase>.md`.
 
 ## Layout and write permissions
 
@@ -17,10 +17,10 @@ Operating rules for agents in `<project>`. This file holds the project's rules. 
 | `data/raw/` | Source measurements | Read only. Never edit, rename, or regenerate |
 | `docs/literature-review/papers/<cite>/` | Everything for one paper: `README.md` (start here, with the paper's metadata), `annotations.md` (frozen Zotero snapshot, `scripts/zotero_snapshot.py`), `alignment.md`. Every file except `annotations.md` carries front matter: `created`, `updated`, `kind`, `voice`, `paper` | Add or refresh; never hand-edit `annotations.md`; keep `README.md` and `updated` current |
 | `docs/literature-review/cross-papers/` | Synthesis across papers: comparison tables, themes, gap map | Write; label statements; cite the paper folders |
-| `docs/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought) | Append new dated files; never edit |
+| `docs/inputs/` | The user's own words, as `<date>_<kind>_<slug>.md` (kinds: understanding, learning, supervisor, result-thought, interview), with front matter `created`, `kind`, `voice`, `source`, `topic`, `report`, `confirmed` | Append new dated files; never edit the body (the front matter may grow); `scripts/check_references.py` checks the fields |
 | `docs/literature-review/reports/` | Deep-research and HyperResearch outputs. Leads, not read papers | Append new dated files; never edit; use nothing until checked against a paper |
 | `docs/literature-review/references.yaml` | Which Zotero papers matter and why | Write; run `scripts/check_references.py` after |
-| `docs/rstack/<state>/` | Stage documents; `docs/rstack/tasks.md` holds the tasks; explore also holds the raw `00_interview.md` (append, never edit). Brainstorm notes go in `docs/rstack/brainstorm/`, Inquiry files in `docs/rstack/inquiry/`, never in a state folder | Write |
+| `docs/rstack/` | The project's documents, flat, with `phase:` in front matter; `tasks.md` holds the tasks; `reviews/<phase>.md` holds exit reviews. Brainstorm notes go in `d-brainstorm/`, Inquiry files in `d-inquiry/`, never loose in `docs/rstack/` | Write |
 | `analysis/` | Scripts, figures, tables | Write |
 | `docs/rstack/writing/`, `docs/reports/`, `docs/writing/`, `docs/presentation/` | Control files, reports, manuscripts, slides (see `references/layout.md`) | Write only through the write-phase playbooks; the user writes all prose; numbers come from `analysis/` |
 

@@ -71,7 +71,7 @@ Read the leaf skill in full for any principle you apply. Each leaf is the **prin
 
 The folder standard is `references/layout.md`: every folder, what it holds, which playbook writes it, and whether it is read-only. `scripts/check_layout.py <project>` flags unknown folders. Every playbook opens with the rows it reads and writes.
 
-`annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
+`annotations.md` and the user's inputs are what came in and are never edited. Analyses, reviews and cross-paper notes are what we understand, with ladder labels. Every file except `annotations.md` starts with front matter: `created`, `updated`, `kind`, `voice` (user, assistant, critic, user+assistant), `paper`. Input kinds: `understanding`, `learning`, `supervisor`, `result-thought`, `interview`; input front matter is in `references/layout.md`. Nothing in `docs/literature-review/reports/` is used until checked against a paper.
 
 Create missing folders, never rename existing ones. Prose goes in `docs/`, code and outputs go in `analysis/`. `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate.
 

@@ -13,7 +13,7 @@ stateDiagram-v2
   Scope --> Deepen: the question is narrow, a gap is named, feasibility judged
   state Deepen {
     [*] --> KeyPapers: blind analysis, separate critic, key papers only
-    [*] --> Lessons: teach, ingest, carry into docs/rstack/explore/
+    [*] --> Lessons: write the note in docs/understanding/, carry into docs/rstack/
   }
   Deepen --> Inquiry: one paper has passed
   Inquiry --> Synthesis

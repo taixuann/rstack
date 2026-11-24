@@ -15,7 +15,7 @@ A finding counts only with evidence: a file and line, a number you recomputed, o
 
 ## Mode: source analysis
 
-Skills: `scientific-critical-thinking`, `brainstorming`. Also read `references/review.template.md` if the brief gives it.
+Skills: `scientific-critical-thinking`, `brainstorming`.
 
 **Pass 1: source fidelity (blind).**
 1. Read only the paper (`zotero-cli get fulltext <key>`, figures and tables). Do not open the Source Analysis yet.

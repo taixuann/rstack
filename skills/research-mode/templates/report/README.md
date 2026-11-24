@@ -20,7 +20,7 @@ TODO: the question, the decision it supports, and what counts as success, in the
 
 ## Plan
 
-What must be shown to answer the question, and what proof would count: TODO. Methods and feasibility: link to `docs/rstack/explore/05_methods-and-feasibility.md`. Wiki pages used: TODO.
+What must be shown to answer the question, and what proof would count: TODO. Methods and feasibility: link to `docs/rstack/05_methods-and-feasibility.md`. Wiki pages used: TODO.
 
 ## Contents
 

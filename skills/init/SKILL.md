@@ -32,13 +32,13 @@ analysis/        scripts, figures, tables
 
 ## 3. Interview
 
-Read `../research-mode/references/explore-questions.md`. Run the interview with `interrogate` in interview mode: short rounds of one to four related questions, a recommended option first, skipping what is already known. Save the answers verbatim in `docs/rstack/explore/00_interview.md` (append, never edit). If the user is unsure what the work packages are, use `brainstorming` to propose candidates and mark them as proposals.
+Read `../research-mode/references/explore-questions.md`. Run the interview with `interrogate` in interview mode: short rounds of one to four related questions, a recommended option first, skipping what is already known. Save the answers verbatim in `docs/inputs/<date>_interview_<slug>.md` (a new dated file per session, never edited, with the input front matter). If the user is unsure what the work packages are, use `brainstorming` to propose candidates and mark them as proposals.
 
 Do not invent devices, subject counts, rates, dates, or citations. Anything unanswered stays `TODO: unknown` with an owner (the user or the supervisor).
 
 ## 4. Write the front docs
 
-From the answers write, in `docs/rstack/explore/`:
+From the answers write, in `docs/rstack/`:
 
 | File | Holds |
 |---|---|

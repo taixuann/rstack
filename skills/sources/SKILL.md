@@ -52,8 +52,8 @@ the wrong paper. The deliverable is a table, not a reassurance.
 - [ ] Grade each claim; record the passage and location.
 - [ ] Summarize: counts by grade, the claims that matter most, what to fix first.
 
-**Locating.** Cited papers: fetch by DOI or arXiv id (requests in
-`skills/core/citations/references/apis.md`) and read the relevant section. Project
+**Locating.** Cited papers: fetch by DOI or arXiv id (the DOI resolver or
+the arXiv API) and read the relevant section. Project
 results: open the output file or query the tracked run (`experiments compare`,
 `experiments series`). Datasets: the field and record. Web sources: the page as of today,
 with its date.

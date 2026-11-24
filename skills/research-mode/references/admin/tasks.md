@@ -48,7 +48,7 @@ No map: find the project (`find-projects`), or offer to create one named after t
 **Flow**
 
 1. **Pull.** Read the project's sections and tasks from Todoist every time (`find-sections`, `find-tasks` with the project id from the map). For each mapped task: completed in Todoist and open locally → tick it locally. A goal whose tasks are all done stays open until the user ticks it. Changed title → show both and keep the local text unless the user picks Todoist's. A Todoist task with no map row is the user's own addition: add it under its goal (or `### Goal: Inbox` in the current phase) with a map row, without rewording.
-2. **Assess.** Compare the task list with `references/phases/<phase>.md` (starting tasks, playbooks in order, exit gate angles), `docs/rstack/<phase>/`, `docs/reports/<question>/`, `analysis/<name>/docs/results/`, `decisions.tsv` and the README. Look for:
+2. **Assess.** Compare the task list with `references/phases/<phase>.md` (starting tasks, playbooks in order, exit gate angles), the `docs/rstack/` documents with that `phase:`, `docs/reports/<question>/`, `analysis/<name>/docs/results/`, `decisions.tsv` and the README. Look for:
    - the task blocking the most others, and the playbook that is next;
    - starting tasks or gate findings with no task;
    - tasks that look done in the files but are unticked, or ticked with no evidence;

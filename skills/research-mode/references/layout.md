@@ -6,7 +6,8 @@ Every folder a project may have, who writes it, and whether it is read-only. A p
 |---|---|---|---|
 | `README.md`, `AGENTS.md`, `CLAUDE.md` | Front page and state, operating contract, import stub | project-admin | no |
 | `data/raw/` | Measurements as received, one dated folder per intake | raw-intake | yes, after the intake log seals it |
-| `docs/inputs/` | The user's own words, dated: `<date>_<kind>_<slug>.md` | the user, or inquiry on their behalf | yes |
+| `docs/inputs/` | The user's own words, dated: `<date>_<kind>_<slug>.md`, kind one of understanding, learning, supervisor, result-thought, interview. Front matter: `created`, `kind`, `voice`, `source`, `topic`, `report`, `confirmed` | the user, or inquiry on their behalf | the body yes; the front matter may grow |
+| `docs/understanding/` | The user's understanding notes, kept beside the work: `README.md` is the index, one note per topic, labelled `[user]` or `[assistant]`. Basic, Core and Advanced levels of the Deepen understanding tasks | the user, with `doc-coauthoring` | no |
 | `docs/literature-review/papers/<cite>/` | README, annotations, alignment for one paper | literature-review, inquiry | `annotations.md` yes |
 | `docs/literature-review/cross-papers/` | Comparisons, themes, gap map | literature-review | no |
 | `docs/literature-review/<date>_<slug>.md` | Symlinks to HyperResearch final reports (leads, not read papers). The vault holds the real file; the only link folder | literature-review | yes |
@@ -15,9 +16,10 @@ Every folder a project may have, who writes it, and whether it is read-only. A p
 | `docs/rstack/tasks.md`, `todoist-map.tsv` | The task list and its Todoist map | project-admin only | no |
 | `docs/rstack/requests.tsv` | Handoffs between role bots: date, from, to, kind, text, status (see `docs/bots/README.md`) | any bot appends; the recipient sets `status` | append only |
 | `docs/rstack/decisions.tsv` | Decision trail of long or unattended work | show-me-your-work | append only |
-| `docs/rstack/<phase>/` | Documents of one phase: the proposal documents, review.md, results.md. Never brainstorm or inquiry files | the phase's playbooks | no |
-| `docs/rstack/brainstorm/` | One note per brainstorm, `<slug>.md`, from the `brainstorming` skill | brainstorming, any playbook that brainstorms | no |
-| `docs/rstack/inquiry/` | The Inquiry playbook's files: `inquiry.md`, `inquiry-search.md`, `inquiry-<topic>-wiki.md`, `claims.md` | inquiry, literature-review (reads) | no |
+| `docs/rstack/<NN>_<name>.md` | The project's own documents, flat, each with `phase:` in its front matter (01_context, 02_aims-and-milestones, 03 to 05 and, in analysis, `results.md`). Never brainstorm or inquiry files | the phase's playbooks | no |
+| `docs/rstack/reviews/<phase>.md` | One exit review per phase | project-admin (exit review) | no |
+| `docs/rstack/d-brainstorm/` | One note per brainstorm, `<slug>.md`, from the `brainstorming` skill | brainstorming, any playbook that brainstorms | no |
+| `docs/rstack/d-inquiry/` | The Inquiry playbook's files: `inquiry.md`, `inquiry-search.md`, `inquiry-<topic>-wiki.md`, `claims.md` | inquiry, literature-review (reads) | no |
 | `docs/rstack/writing/<piece>/` | One piece's control files: `target.md`, `todo.md`, `decisions.tsv`, `findings.tsv`, `scaffold/`, `review/` | paper-preparation, paper-writing, paper-critique (through `writing.py`) | the gates only through the script |
 | `docs/reports/<question>/` | One folder per question, three folders and the evidence files: `fundamental/`, `method/`, `results/`. `README.md` is the index (intention, hypotheses, plan, status, links). `fundamental/` holds the background: the user's understanding, then checked facts. `method/` holds the how-to building blocks (instrument setup, sample fabrication, measurement procedure) that **Experimental design** turns into procedures, and `method/design.md`, `method/resources.md`, `method/samples.csv`; `method/log.md`; optional `results/README.md` (an index of results that answer the question); the paper evidence files `claims.yaml`, `methods.yaml`, `figures.yaml`, `citations.yaml`, `limitations.md`. Every number links to its source file | `README.md` and `fundamental/`: report-bootstrap; design files: experimental-design; `method/log.md`: experiment-log; `results.md`: analysis-review, only when needed; evidence files: paper-preparation | `method/design.md` after the design gate; the evidence files after `report-approved`; the rest stays open |
 | `docs/writing/<piece>/` | `main.tex`, `references.bib`, `figures/`, `sections/` | the user; the assistant never writes prose | no |
@@ -34,3 +36,14 @@ Every folder a project may have, who writes it, and whether it is read-only. A p
 | `tools/` | Local tools. `tools/README.md` lists each tool, its entry command, and which playbook uses it | the user |
 
 A report folder is per question. Several analyses, papers and talks may serve one question (`report:` in a piece's `target.md` names the folder). `results/README.md` links to result pages and never copies a number.
+
+## Front matter by folder
+
+Every Markdown file starts with front matter. The fields depend on the folder. A body that came in (the user's words, an annotation snapshot) is never edited; its front matter may grow.
+
+| Folder | Fields | Checked by |
+|---|---|---|
+| `docs/inputs/` | `created`, `kind`, `voice: user`, `source` (chat, interview, supervisor-message), `topic`, `report` (a folder in `docs/reports/`, or `none`), `confirmed` (`user`, or `supervisor` once he confirms it) | `check_references.py` |
+| `docs/literature-review/papers/<cite>/` | `created`, `updated`, `kind`, `voice`, `paper` | `check_references.py` |
+| `docs/understanding/` | `created`, `updated`, `voice`, `level` (basic, core, advanced), `status` (unchecked, source-checked) | convention, not yet checked |
+| `docs/reports/<question>/README.md` | `created`, `updated`, `status`, `question` | convention, not yet checked |

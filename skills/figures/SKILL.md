@@ -17,7 +17,7 @@ metadata:
 
 A figure is an argument, not a screenshot of an array. It makes one claim, and a reader who skips the prose should still get it right.
 
-## Rules (checked by `scripts/figrules.py` in the research-mode skill)
+## Rules (checked by `templates/lib/figrules.py` in the research-mode skill)
 
 1. **No title.** The caption carries the claim. Panel letters name parts of a multi-panel figure.
 2. **3 to 5 major ticks per axis.**

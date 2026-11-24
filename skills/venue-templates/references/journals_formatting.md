@@ -62,7 +62,7 @@ No Science template is bundled in this skill. Use the official instructions and 
 
 PLOS supplies an official LaTeX package and BibTeX style for LaTeX submissions. Follow the target PLOS journal's package and upload instructions; manuscript and figure-file handling can be specific to the journal and submission stage.
 
-`assets/journals/plos_one.tex` is a drafting scaffold, not a substitute for the current PLOS package.
+No PLOS ONE template is bundled; use the current PLOS package.
 
 ## Cell Press
 
@@ -80,7 +80,7 @@ Check the exact journal and article type for:
 - data/code availability declarations; and
 - generative-AI or AI-assisted-technology declarations.
 
-No Cell Press LaTeX template is bundled. Use `references/cell_press_style.md` for writing guidance and the official author resources for submission requirements.
+No Cell Press LaTeX template is bundled. Use the official author resources for submission requirements.
 
 ## IEEE
 
@@ -180,8 +180,6 @@ Use this order:
 Only these journal-oriented assets are present:
 
 - `assets/journals/nature_article.tex`
-- `assets/journals/plos_one.tex`
-- `assets/journals/neurips_article.tex`
 - three Elsevier `elsarticle` examples and their `.bst` files
 
 If a template is not in this list, obtain it from the official source. Do not invent a relative asset path.

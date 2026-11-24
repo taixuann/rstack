@@ -7,7 +7,7 @@
 2. Experimental design (the self-contained note, resources, preparation, protocol)
 3. Experiment log (continues in the analysis phase while the experiments run) (as the experiments run: what was done, as run, against the design; the report later cites it)
 
-**Reads and writes.** Reads `docs/rstack/explore/`; the wiki is read only by Inquiry (via `wiki/CLAUDE.md`), and the design note copies what it needs. Writes `docs/reports/<question>/` (`method/design.md`, `method/resources.md`, `method/samples.csv`, `method/log.md`), `docs/rstack/inquiry/inquiry-<experiment>-wiki.md` (Inquiry's notes), `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
+**Reads and writes.** Reads `docs/rstack/`; the wiki is read only by Inquiry (via `wiki/CLAUDE.md`), and the design note copies what it needs. Writes `docs/reports/<question>/` (`method/design.md`, `method/resources.md`, `method/samples.csv`, `method/log.md`), `docs/rstack/d-inquiry/inquiry-<experiment>-wiki.md` (Inquiry's notes), `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
 
 **Starting tasks.** Freeze each question's hypotheses. Choose the design. Justify sample size. Write the analysis plan. Attack the design with `interrogate`. Plan data intake and ethics. Tailor them to the project.
 

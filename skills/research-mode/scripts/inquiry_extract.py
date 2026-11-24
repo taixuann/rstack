@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append the user's question-like Zotero annotations to docs/rstack/inquiry/inquiry.md.
+"""Append the user's question-like Zotero annotations to docs/rstack/d-inquiry/inquiry.md.
 
 Usage: inquiry_extract.py PROJECT_DIR   |   inquiry_extract.py --selftest
 Reads papers from PROJECT_DIR/docs/literature-review/references.yaml and their annotations through `zotero-cli`.
@@ -34,7 +34,7 @@ def entries(cite, anns, known):
 def run(project):
     project = Path(project)
     refs = yaml.safe_load((project / "docs/literature-review/references.yaml").read_text())
-    f = project / "docs/rstack/inquiry/inquiry.md"
+    f = project / "docs/rstack/d-inquiry/inquiry.md"
     f.parent.mkdir(parents=True, exist_ok=True)
     text = f.read_text() if f.exists() else HEAD
     new = []

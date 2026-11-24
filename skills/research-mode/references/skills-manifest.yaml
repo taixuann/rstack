@@ -3,7 +3,6 @@
 externals:
   - {name: scholar-evaluation, source: claude-scientific-writer, license: MIT, status: external, used_by: [project-admin]}
   - {name: doc-coauthoring, source: Anthropic skills, license: unknown, status: external, used_by: [experimental-design, protocol-wiki]}
-  - {name: tutor:teach, source: tutor plugin, license: unknown, status: external, used_by: [report-bootstrap], optional: true}
   - {name: hyperresearch, source: hyperresearch CLI and skills, license: unknown, status: external, used_by: [literature-review, inquiry]}
   - {name: neurokit2, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-admin]}
   - {name: lab-hardware-cad, source: K-Dense scientific-agent-skills, license: MIT, status: external, used_by: [project-admin]}

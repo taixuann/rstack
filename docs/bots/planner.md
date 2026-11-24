@@ -11,10 +11,10 @@ Turns the questions into reports and designs: opens each question's report folde
 
 ## May write
 
-- `docs/rstack/explore/04_*` and `05_*`
+- `docs/rstack/04_*` and `05_*`
 - `docs/reports/<q>/`: `README.md` body (objective, intention, hypotheses, plan), `fundamental/`, `method/design.md`, `resources.md`, `samples.csv`, `log.md`
-- `docs/rstack/inquiry/inquiry-<experiment>-wiki.md`
-- `docs/rstack/brainstorm/`
+- `docs/rstack/d-inquiry/inquiry-<experiment>-wiki.md`
+- `docs/rstack/d-brainstorm/`
 
 ## Hands off
 

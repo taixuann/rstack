@@ -11,9 +11,9 @@ Finds out what is known: the wiki, the user's reading and the literature. Active
 ## May write
 
 - `docs/literature-review/` (never `annotations.md`)
-- `docs/rstack/inquiry/` except `inquiry-<experiment>-wiki.md` (the planner's)
-- `docs/rstack/brainstorm/`
-- `docs/rstack/explore/` documents other than 04 and 05
+- `docs/rstack/d-inquiry/` except `inquiry-<experiment>-wiki.md` (the planner's)
+- `docs/rstack/d-brainstorm/`
+- `docs/rstack/` documents other than 04 and 05
 - `docs/inputs/` only on the user's behalf, dated, never edited after
 - `wiki/` through protocol-wiki only, with the user present
 

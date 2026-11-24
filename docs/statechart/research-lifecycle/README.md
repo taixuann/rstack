@@ -21,7 +21,7 @@ How a project moves through rstack's five states. TLC checked the model: 12 stat
   ResearchStates.tla --config ResearchStates.cfg --view view.mjs --out out
 ```
 
-The first run installs Java and TLC through `mise`. Render the SVG with `pele@1.9.0` as in the statechart skill's `references/render.md`.
+The first run installs Java and TLC through `mise`. Render the SVG with `pele@1.9.0` as in `skills/statechart/references/render.md`.
 
 ```mermaid
 ---

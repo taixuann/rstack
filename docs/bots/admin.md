@@ -11,7 +11,7 @@ Keeps the project's records, tasks and phase in order. The only role that writes
 
 - `README.md` (state, task block, Contents, State history), `AGENTS.md`, `CLAUDE.md`
 - `docs/rstack/tasks.md`, `docs/rstack/todoist-map.tsv`
-- `docs/rstack/<phase>/` notes
+- `docs/rstack/` documents and `reviews/`
 - each report `docs/reports/<q>/README.md`: only the Status line and the "Analyses, papers and talks" table
 - `docs/rstack/requests.tsv`: marks rows done
 

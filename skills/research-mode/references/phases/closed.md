@@ -5,7 +5,7 @@
 **Playbooks, in order.**
 1. Reviewer response (after submission: answer reviewers, edit the manuscript, quote the new text with its location)
 
-**Reads and writes.** Reads everything. Writes `docs/writing/<piece>/` (the user), `docs/rstack/closed/`, `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
+**Reads and writes.** Reads everything. Writes `docs/writing/<piece>/` (the user), `docs/rstack/reviews/closed.md`, `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
 
 **Starting tasks.** Record the reason (published or abandoned). Archive the package. Answer reviewers if a decision arrives. Tailor them to the project.
 

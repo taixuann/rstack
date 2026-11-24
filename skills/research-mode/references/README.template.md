@@ -18,7 +18,7 @@ updated: YYYY-MM-DD
 
 Link each file once it exists.
 
-- Explore: [interview](docs/rstack/explore/00_interview.md) · [context](docs/rstack/explore/01_context.md) · [aims and milestones](docs/rstack/explore/02_aims-and-milestones.md) · [literature map](docs/rstack/explore/03_literature-map.md) · [questions and hypotheses](docs/rstack/explore/04_questions-and-hypotheses.md) · [methods and feasibility](docs/rstack/explore/05_methods-and-feasibility.md)
+- Explore: [context](docs/rstack/01_context.md) · [aims and milestones](docs/rstack/02_aims-and-milestones.md) · [literature map](docs/rstack/03_literature-map.md) · [questions and hypotheses](docs/rstack/04_questions-and-hypotheses.md) · [methods and feasibility](docs/rstack/05_methods-and-feasibility.md)
 - Literature review: [docs/literature-review/](docs/literature-review/) · Papers: [docs/literature-review/references.yaml](docs/literature-review/references.yaml) and [docs/literature-review/papers/](docs/literature-review/papers/)
 
 Add a line per state as it starts (design, analysis, write).
@@ -38,7 +38,7 @@ Status runs candidate → frozen (at design) → supported or rejected (during a
 **Evidence**
 
 - Data: <device or origin, subjects or samples, rate, conditions; location in `data/raw/`>
-- Results: <accepted results only, each linking to `docs/rstack/analysis/results.md`>
+- Results: <accepted results only, each linking to `docs/rstack/results.md`>
 - Reproduce: <command that rebuilds the tables and figures>
 
 ## State history

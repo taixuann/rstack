@@ -12,7 +12,7 @@
 6. Reproduce (a clean rerun)
 7. Package results (last: a folder someone else can run)
 
-**Reads and writes.** Reads `docs/reports/<question>/` (`README.md`, `method/design.md`), `data/raw/`. Writes `data/raw/` (raw-intake only), `analysis/<name>/`, `analysis/<name>/docs/results/`, `.rstack/`, `docs/rstack/analysis/`, `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
+**Reads and writes.** Reads `docs/reports/<question>/` (`README.md`, `method/design.md`), `data/raw/`. Writes `data/raw/` (raw-intake only), `analysis/<name>/`, `analysis/<name>/docs/results/`, `.rstack/`, `docs/rstack/results.md`, `docs/rstack/tasks.md` (through project-admin). Rows are in `layout.md`; a playbook states its own subset.
 
 **Starting tasks.** Intake data with provenance. Run the planned analyses per question. Run sensitivity checks. Accept or reject each result. Rerun the pipeline clean. Package the results. Tailor them to the project.
 

@@ -13,7 +13,10 @@ import yaml
 
 STATUS = {"unread", "snapshotted", "read"}
 REVIEW = {"needs_review", "pass", "repair", "blocked", "no_review"}
-KINDS = {"understanding", "learning", "supervisor", "result-thought"}
+KINDS = {"understanding", "learning", "supervisor", "result-thought", "interview"}
+SOURCES = {"chat", "interview", "supervisor-message"}
+CONFIRMED = {"user", "supervisor"}
+INPUT_FIELDS = {"created", "kind", "voice", "source", "topic", "report", "confirmed"}  # the body is never edited; only this front matter grows
 DATED = r"\d{4}-\d{2}-\d{2}"
 USED_IN = {"01_context", "02_aims-and-milestones", "03_literature-map",
            "04_questions-and-hypotheses", "05_methods-and-feasibility"}
@@ -28,6 +31,20 @@ def check_raw(root):
         m = re.fullmatch(DATED + r"_([a-z-]+)_[a-z0-9-]+\.md", f.name)
         if not m or m.group(1) not in KINDS:
             errs.append(f"inputs/{f.name}: name must be <date>_<kind>_<slug>.md, kind in {sorted(KINDS)}")
+            continue
+        fm = front(f.read_text())
+        miss = sorted(INPUT_FIELDS - set(fm))
+        if miss:
+            errs.append(f"inputs/{f.name}: front matter missing {miss}")
+            continue
+        if fm["kind"] != m.group(1):
+            errs.append(f"inputs/{f.name}: kind '{fm['kind']}' differs from the kind in its name '{m.group(1)}'")
+        if fm["source"] not in SOURCES:
+            errs.append(f"inputs/{f.name}: source '{fm['source']}' must be one of {sorted(SOURCES)}")
+        if fm["confirmed"] not in CONFIRMED:
+            errs.append(f"inputs/{f.name}: confirmed '{fm['confirmed']}' must be one of {sorted(CONFIRMED)}")
+        if fm["report"] != "none" and not (root / "docs/reports" / fm["report"]).is_dir():
+            errs.append(f"inputs/{f.name}: report '{fm['report']}' is not a folder in docs/reports/ (use none if it feeds no report)")
     for f in sorted((root / "docs/literature-review/reports").glob("*")):
         if not f.name.startswith(".") and not re.fullmatch(DATED + r"_[a-z0-9-]+_[a-z0-9-]+\.md", f.name):
             errs.append(f"reports/{f.name}: name must be <date>_<tool>_<slug>.md")
@@ -74,6 +91,8 @@ def check_notes(root):
         m = re.match(r"---\n(.*?)\n---\n", text, re.S)
         keys = set(re.findall(r"^(\w+):", m.group(1), re.M)) if m else set()
         need = {"created", "updated", "kind", "voice"}
+        if "inputs" in f.parts:
+            need = {"created", "kind", "voice"}  # inputs are never edited, so no updated; check_raw checks the rest
         if "papers" in f.parts:
             need.add("paper")
         if need - keys:
@@ -141,10 +160,16 @@ def selftest():
         e = " ".join(check(f))
         assert "not found" in e and "unknown used_in" in e and "needs an analysis" in e and "review is needs_review" in e, e
         (root / "docs/inputs").mkdir()
-        (root / "docs/inputs/2026-11-02_learning_ecg.md").write_text("---\ncreated: x\nupdated: x\nkind: k\nvoice: v\n---\n")
+        (root / "docs/inputs/2026-11-02_learning_ecg.md").write_text("---\ncreated: x\nkind: learning\nvoice: user\nsource: chat\ntopic: t\nreport: none\nconfirmed: user\n---\n")
         (root / "docs/inputs/notes.md").write_text("x")
         e = " ".join(check(f))
         assert "inputs/notes.md" in e and "2026-11-02_learning" not in e, e
+        (root / "docs/inputs/2026-11-03_learning_bad.md").write_text("---\ncreated: x\nkind: learning\nvoice: user\nsource: chat\ntopic: t\nreport: nope\n---\n")
+        e = " ".join(check(f))
+        assert "2026-11-03_learning_bad.md: front matter missing ['confirmed']" in e, e
+        (root / "docs/inputs/2026-11-03_learning_bad.md").write_text("---\ncreated: x\nkind: learning\nvoice: user\nsource: chat\ntopic: t\nreport: nope\nconfirmed: user\n---\n")
+        assert "report 'nope' is not a folder" in " ".join(check(f))
+        (root / "docs/inputs/2026-11-03_learning_bad.md").unlink()
         (root / "docs/literature-review/papers/b").mkdir()
         (root / "README.md").write_text("no links")
         e = " ".join(check(f))
