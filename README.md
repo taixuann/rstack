@@ -2,7 +2,7 @@
 
 The research counterpart to [pstack](https://github.com/cursor/plugins/tree/main/pstack). pstack helps you write less, higher quality code. rstack helps you run research projects the same way: state the question, pick a playbook, delegate deliberately, and verify every number against a file.
 
-rstack has 18 playbooks, 24 principles and one agent (`critic`, six modes), plus 25 bundled domain skills. You never pick among them by hand: `/rstack:research-mode` reads the project's state and the task, then picks the playbook. For project learning notes use `/rstack:learn-mode`; for cross-project lab wiki protocols use `/rstack:wiki-mode`; for meta workflow governance use `/rstack:playbook-control`.
+rstack has 18 playbooks, 24 principles and one agent (`critic`, six modes), plus 26 bundled domain skills. You never pick among them by hand: `/rstack:research-mode` reads the project's state and the task, then picks the playbook. For project learning notes use `/rstack:learn-mode`; for cross-project lab wiki protocols use `/rstack:wiki-mode`; for meta workflow governance use `/rstack:playbook-control`.
 
 ## The four parts
 

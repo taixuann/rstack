@@ -1,7 +1,7 @@
 {
   "name": "rstack",
-  "version": "0.35.1",
-  "description": "Research counterpart to pstack: research-mode with 18 playbooks, 24 principles, one agent (critic, six modes), using-rstack, setup-research, learn-mode, wiki-mode, playbook-control, plus 25 bundled domain skills.",
+  "version": "0.36.0",
+  "description": "Research counterpart to pstack: research-mode with 18 playbooks, 24 principles, one agent (critic, six modes), using-rstack, setup-research, learn-mode, wiki-mode, playbook-control, plus 26 bundled domain skills.",
   "author": {
     "name": "taixuann"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "rstack",
     "shortDescription": "Research playbooks with evidence gates",
-    "longDescription": "Research counterpart to pstack: research-mode with 18 playbooks, 24 principles, one agent (critic, six modes), using-rstack, setup-research, learn-mode, wiki-mode, playbook-control, plus 25 bundled domain skills.",
+    "longDescription": "Research counterpart to pstack: research-mode with 18 playbooks, 24 principles, one agent (critic, six modes), using-rstack, setup-research, learn-mode, wiki-mode, playbook-control, plus 26 bundled domain skills.",
     "developerName": "taixuann",
     "category": "Research",
     "capabilities": [
