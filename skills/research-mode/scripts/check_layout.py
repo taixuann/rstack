@@ -11,7 +11,7 @@ LAYOUT = Path(__file__).resolve().parents[1] / "references/layout.md"
 PHASES = ("explore", "design", "analysis", "write", "closed")
 OLD_NAMES = {"brainstorm": "docs/inputs/ (dated <date>_brainstorm_<slug>.md)", "d-brainstorm": "docs/inputs/ (dated <date>_brainstorm_<slug>.md)", "inquiry": "docs/rstack/d-inquiry/", **{x: "docs/rstack/ itself (flat; put phase: in the front matter)" for x in PHASES}, **{"p-" + x: "docs/rstack/ itself (flat; put phase: in the front matter)" for x in PHASES}}  # names before the flat layout and the short-lived p- folders
 OK_DIRS = ("d-inquiry", "reviews", "writing")
-ROOT_OK = {"data", "docs", "analysis", ".rstack", ".git", ".gitignore", "README.md", "AGENTS.md", "CLAUDE.md", ".claude", ".obsidian", ".DS_Store"}
+ROOT_OK = {"data", "docs", "analysis", ".raw-viewer", ".rstack", ".git", ".gitignore", "README.md", "AGENTS.md", "CLAUDE.md", ".claude", ".obsidian", ".DS_Store"}
 
 
 def known_docs():
@@ -40,6 +40,13 @@ def check(project):
             home = "docs/inputs/ as <date>_brainstorm_<slug>.md" if f.name.startswith("brainstorm") else "docs/inputs/ as <date>_inquiry_<slug>.md" if f.name.startswith("inquiry") else "docs/literature-review/" if f.name.startswith("claims") else None
             if home:
                 out.append(f"STRAY docs/rstack/{f.name}: move it to {home}")
+    reports = docs / "reports"
+    if reports.is_dir():
+        for fig_dir in sorted(reports.glob("*/results/figures")):
+            if fig_dir.is_dir():
+                for f in sorted(fig_dir.iterdir()):
+                    if f.is_symlink() and not f.exists():
+                        out.append(f"BROKEN SYMLINK {f.relative_to(p)}: target missing (re-run analysis or fix symlink)")
     return out
 
 
@@ -64,6 +71,10 @@ def selftest():
         assert any(l.startswith("RENAME docs/rstack/brainstorm") and "<date>_brainstorm_" in l for l in r), r
         assert any(l.startswith("UNKNOWN docs/rstack/notes") for l in r), r
         assert not any(l.startswith(("UNKNOWN docs/rstack/reviews", "RENAME docs/rstack/reviews")) for l in r), r
+        rfig = p / "docs/reports/demo/results/figures"
+        rfig.mkdir(parents=True)
+        (rfig / "broken.png").symlink_to("../../../analysis/missing.png")
+        assert any(l.startswith("BROKEN SYMLINK") and "broken.png" in l for l in check(p)), "broken symlink not caught"
     print("selftest ok")
 
 

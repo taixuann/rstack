@@ -26,7 +26,7 @@ IGNORE = {"state", "tick", "check", "critic", "show", "nature-single", "new", "r
           "todo", "model", "haiku", "main", "docs", "data", "raw", "wiki", "analysis", "unknown",
           "pele", "figures", "mermaid", "parts", "label", "legend", "path", "nature-open", "nature-heatmap", "nature-violin", "figrecipe", "why", "updated", "created", "kind", "voice", "paper", "parent", "depth", "status", "review", "pass", "repair", "blocked", "needs_review", "no_review", "manuscripts", "presentation",
           # plugin, repo, agent, and example names
-          "claude-scientific-writer", "scientific-agent-skills", "experiment", "operator", "inputs", "mode", "question", "source", "critique-passed", "draft-ready", "report-approved", "progressing", "ready-for-publish", "annotations", "docx", "pdf", "pptx", "xlsx"}
+          "claude-scientific-writer", "scientific-agent-skills", "experiment", "operator", "inputs", "mode", "question", "source", "critique-passed", "draft-ready", "report-approved", "progressing", "ready-for-publish", "annotations", "docx", "pdf", "pptx", "xlsx", "devices", "remarks"}
 # Old name -> what replaced it. Add a row in the same change as a rename or removal.
 RETIRED = {
     r"proposal-synthesis|report-bootstrap|Report bootstrap": "report-init",

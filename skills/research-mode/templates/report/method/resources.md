@@ -1,26 +1,46 @@
 # Resources
 
-What exists in the lab, written once and reused by every experiment. Update it when stock or access changes. `TODO: unknown` is allowed; a guess is not.
+General lab inventory of what exists in the lab, written once and reused across experiments (whether kept as shared `docs/reports/resources.md` or in `method/resources.md`). Update it when stock or access changes. **Never** include report-specific beaker numbers or run labels here — those belong in `method/procedure.md` or `method/samples.csv`. `TODO: unknown` is allowed; a guess is not.
 
-## Chemicals and materials on hand
+## Equipment & Software
 
-| item | grade / supplier | lot | amount on hand | storage | expires |
+### Equipment + Software (Coupled)
+
+| instrument | control / acquisition software | what it does here | booking / access | per-run time | limit (samples, cost, queue) |
 |---|---|---|---|---|---|
 | TODO: unknown | | | | | |
 
-## Standing stock solutions
+### Equipment Only
+
+| equipment | what it does here | booking / access | per-run time | limit (samples, cost, queue) |
+|---|---|---|---|---|
+| TODO: unknown | | | | |
+
+### Software Only
+
+| software | version / license | what it does here | runs on | access / notes |
+|---|---|---|---|---|
+| TODO: unknown | | | | |
+
+## Materials, Tools & Consumables
+
+| item | spec / dimensions | supplier / model | amount on hand | prep / storage | notes |
+|---|---|---|---|---|---|
+| TODO: unknown | | | | | |
+
+## Raw Chemicals (as purchased)
+
+| chemical | grade / purity / supplier | lot | amount on hand | storage | expires |
+|---|---|---|---|---|---|
+| TODO: unknown | | | | | |
+
+## Standing Stock Solutions & Standard Reagents
 
 Recipes you make again and again. An experiment note lists which of these it needs and how much.
 
-| stock | concentration | solvent | recipe (mass or volume per volume) | shelf life | storage |
+| stock / reagent | concentration | solvent | recipe (mass or volume per volume) | shelf life | storage |
 |---|---|---|---|---|---|
 | TODO: unknown | | | | | |
-
-## Equipment and access
-
-| equipment | what it does here | booking rule | per-run time | limit (samples per run, cost, queue) |
-|---|---|---|---|---|
-| TODO: unknown | | | | |
 
 ## Characterization menu
 

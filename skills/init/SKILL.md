@@ -33,6 +33,8 @@ analysis/                              scripts, figures, tables
 
 `data/raw` holds measurements and `docs/literature-review` holds literature. Keep them separate. Derived data goes in `analysis/`, never back into `data/raw`.
 
+Register the new project in `qmd` if `qmd` is installed: run `qmd collection add <project-path> --name <project-name>`, add `ignore: ["**/data/**"]` under that collection in `~/.config/qmd/index.yml` (so `data/raw/` is never indexed), and run `qmd update && qmd embed`.
+
 ## 3. Interview
 
 Read `../research-mode/references/explore-questions.md`. Run the interview with `interrogate` in interview mode: short rounds of one to four related questions, a recommended option first, skipping what is already known. Save the answers verbatim in `docs/inputs/<date>_interview_<slug>.md` (a new dated file per session, never edited, with the input front matter). If the user is unsure what the work packages are, use `brainstorming` to propose candidates and mark them as proposals.

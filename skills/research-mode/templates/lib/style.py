@@ -27,25 +27,35 @@ _preset = {}
 
 
 def color_for(condition):
-    """Return the project-wide hex color for `condition` from analysis/colors.yaml."""
-    cpath = Path(os.environ.get("RSTACK_PROJECT", "..")) / "analysis/colors.yaml"
-    if not cpath.is_file():
-        cpath = Path(__file__).resolve().parents[1] / "colors.yaml"
-    mapping = (yaml.safe_load(cpath.read_text()) or {}).get("colors") or {}
-    if condition not in mapping:
-        raise KeyError(f"{condition!r} missing from {cpath}; add it before plotting")
-    return mapping[condition]
+    """Return the hex color for `condition` from scripts/config/colors.yaml or analysis/colors.yaml."""
+    candidates = []
+    if os.environ.get("RSTACK_RUN_DIR"):
+        candidates.append(Path(os.environ["RSTACK_RUN_DIR"]) / "scripts/config/colors.yaml")
+    else:
+        candidates.append(Path("scripts/config/colors.yaml"))
+    proj_colors = Path(os.environ.get("RSTACK_PROJECT", "..")) / "analysis/colors.yaml"
+    if not proj_colors.is_file():
+        proj_colors = Path(__file__).resolve().parents[1] / "colors.yaml"
+    candidates.append(proj_colors)
+    checked = []
+    for cpath in candidates:
+        if cpath.is_file():
+            checked.append(str(cpath))
+            mapping = (yaml.safe_load(cpath.read_text()) or {}).get("colors") or {}
+            if condition in mapping:
+                return mapping[condition]
+    raise KeyError(f"{condition!r} missing from {', '.join(checked) or str(proj_colors)}; add it before plotting")
 
 
 def new_figure(preset, **subplots_kwargs):
     src = Path(os.environ["RSTACK_PRESETS"]) / f"{preset}.yaml"
     if not src.is_file():
         raise FileNotFoundError(f"preset {preset!r} not found in {src.parent}")
-    dst = Path(os.environ["RSTACK_RUN_DIR"]) / "config"
-    dst.mkdir(exist_ok=True)
-    shutil.copy(src, dst / src.name)
-    _preset["path"] = dst / src.name
-    fr.load_style(str(dst / src.name))
+    dst = Path(os.environ["RSTACK_RUN_DIR"]) / "config" / f"{preset}.yaml"
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(src, dst)
+    _preset["path"] = dst
+    fr.load_style(str(dst))
     subplots_kwargs.setdefault("constrained_layout", False)  # otherwise figrecipe discards the mm sizing
     return fr.subplots(**subplots_kwargs)
 
@@ -68,8 +78,9 @@ def overrides(fig):
     return out
 
 
-def save_figure(fig, figure, ticks=4):
-    """ticks: target number of major ticks on linear axes (the preset alone gives 7); None keeps the axes as drawn."""
+def save_figure(fig, figure, ticks=4, name=None):
+    """ticks: target number of major ticks on linear axes (the preset alone gives 7); None keeps the axes as drawn.
+    name: optional image stem inside figures/<figure>/ (defaults to `figure`)."""
     if ticks:
         for a in getattr(fig, "fig", fig).axes:
             for axis, scale in ((a.xaxis, a.get_xscale()), (a.yaxis, a.get_yscale())):
@@ -78,17 +89,20 @@ def save_figure(fig, figure, ticks=4):
     figrules.check(fig)
     if "path" in _preset and os.environ.get("RSTACK_RUN_DIR"):
         (Path(os.environ["RSTACK_RUN_DIR"]) / "style_overrides.json").write_text(json.dumps(overrides(fig)))
+    stem = name or figure
     out = Path("figures") / figure
     out.mkdir(parents=True, exist_ok=True)
     run_id = Path(os.environ["RSTACK_RUN_DIR"]).name if os.environ.get("RSTACK_RUN_DIR") else None
-    fr.save(fig, out / f"{figure}.png")
+    png = out / f"{stem}.png"
+    fr.save(fig, png)
+    raw_fig = getattr(fig, "fig", fig)
+    raw_fig.savefig(png, format="png", dpi=600)
     if run_id:  # a copy of the figure still says which run made it; a hint only, rstack_run.py check compares hashes
         from PIL import Image, PngImagePlugin
-        png = out / f"{figure}.png"
         info = PngImagePlugin.PngInfo()
         im = Image.open(png)
         for k, v in getattr(im, "text", {}).items():
             info.add_text(k, v)
         info.add_text("rstack-run", run_id)
         im.save(png, pnginfo=info, dpi=im.info.get("dpi"))
-    fig.savefig(out / f"{figure}.pdf", format="pdf", dpi=600, metadata={"Subject": f"rstack run {run_id}"} if run_id else None)
+    raw_fig.savefig(out / f"{stem}.pdf", format="pdf", dpi=600, metadata={"Subject": f"rstack run {run_id}"} if run_id else None)

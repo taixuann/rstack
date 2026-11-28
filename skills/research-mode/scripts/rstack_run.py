@@ -87,7 +87,7 @@ def tree(base):
 
 
 def project_of(analysis):
-    return analysis.parents[1]
+    return next((p.parent for p in analysis.parents if p.name == "analysis"), analysis.parents[1])
 
 
 def key(analysis, figure):
@@ -247,18 +247,21 @@ def figrecipe_problems(outputs, figure):
     if not mine:
         return []
     out = []
-    if f"figures/{figure}/{figure}.yaml" not in mine:
-        out.append(f"figures/{figure}/{figure}.yaml not written: save the figure with figrecipe (style.save_figure)")
-    if not any(k.startswith(f"figures/{figure}/{figure}_data/") for k in mine):
-        out.append(f"figures/{figure}/{figure}_data/ not written: save the figure with figrecipe (style.save_figure)")
-    if not any(k.endswith((".png", ".pdf")) for k in mine):
-        out.append(f"figures/{figure}/ has no png or pdf from this run")
+    pngs = sorted(k for k in mine if k.endswith(".png") and Path(k).parent == Path(f"figures/{figure}"))
+    if not pngs:
+        return [f"figures/{figure}/ has no png from this run"]
+    for png in pngs:
+        stem = Path(png).stem
+        if f"figures/{figure}/{stem}.yaml" not in mine:
+            out.append(f"figures/{figure}/{stem}.yaml not written: save the figure with figrecipe (style.save_figure)")
+        if not any(k.startswith(f"figures/{figure}/{stem}_data/") for k in mine):
+            out.append(f"figures/{figure}/{stem}_data/ not written: save the figure with figrecipe (style.save_figure)")
     return out
 
 
 def execute(analysis, figure, stage, ids, scripts, py, note, command, expect=None, lib=None, presets=None):
     root, name = project_of(analysis), key(analysis, figure)
-    script = scripts / f"{figure}.py"
+    script = scripts / "check" / f"{figure}.py" if stage == "check" and (scripts / "check" / f"{figure}.py").is_file() else scripts / f"{figure}.py"
     if not script.is_file():
         sys.exit(f"missing {script}: one script per figure, named after it")
     chosen = select(analysis, ids)
@@ -277,7 +280,7 @@ def execute(analysis, figure, stage, ids, scripts, py, note, command, expect=Non
             m["copy"] = f"inputs/{m['path']}"
     (run / "inputs.yaml").write_text(yaml.safe_dump({"inputs": chosen}, sort_keys=False))
     shutil.copytree(scripts, run / "scripts")
-    lib = analysis.parent / "lib" if lib is None else lib
+    lib = (root / "analysis/lib") if lib is None else lib
     if lib.is_dir():
         shutil.copytree(lib, run / "lib", ignore=shutil.ignore_patterns("__pycache__"))
     (run / "command.txt").write_text(command + "\n")
@@ -325,7 +328,7 @@ def execute(analysis, figure, stage, ids, scripts, py, note, command, expect=Non
     elif problems:
         status = "rejected"
     else:
-        checks = run / "scripts" / f"{figure}.checks.py"
+        checks = run / "scripts" / "check" / f"{figure}.checks.py" if stage == "check" and (run / "scripts" / "check" / f"{figure}.checks.py").is_file() else run / "scripts" / f"{figure}.checks.py"
         if checks.is_file():
             c = subprocess.run([py, str(checks)], cwd=analysis, capture_output=True, text=True,
                                env=dict(env, RSTACK_OUTPUTS=str(run / "outputs")))
@@ -351,11 +354,11 @@ def execute(analysis, figure, stage, ids, scripts, py, note, command, expect=Non
         for top in {analysis / "figures" / figure} if (analysis / "figures" / figure).is_dir() else ():
             (top / "run.txt").write_text(f"{run.name}\n{os.path.relpath(run, top)}\n")
     (run / "run.yaml").write_text(yaml.safe_dump({
-        "run_id": run.name, "analysis": analysis.name, "figure": figure, "stage": stage, "status": status,
+        "run_id": run.name, "analysis": analysis.name, "analysis_rel": str(analysis.relative_to(root / "analysis")), "figure": figure, "stage": stage, "status": status,
         "exit_code": r.returncode, "started": started.isoformat(), "ended": ended.isoformat(),
         "selected_ids": [m["id"] for m in chosen], "outputs": outputs, "problems": problems,
         "lib": {f.name: sha256(f) for f in sorted((run / "lib").glob("*.py"))} if (run / "lib").is_dir() else {},
-        "presets": sorted(f.name for f in (run / "config").glob("*")) if (run / "config").is_dir() else [],
+        "presets": sorted(str(f.relative_to(run / "config")) for f in (run / "config").rglob("*") if f.is_file()) if (run / "config").is_dir() else [],
         "style_overrides": style_overrides,
         "warnings": warns, "note": note or "", "approved_by_user": None}, sort_keys=False))
     for w in warns + problems:
@@ -524,6 +527,8 @@ def figure_notes(analysis):
 
 
 def objective_gate(analysis, figure):
+    if not (analysis / "docs/method.md").is_file():
+        return
     n = figure_notes(analysis).get(figure, {})
     bad = [k for k in ("objective", "why") if not n.get(k) or n[k].startswith("TODO")]
     if bad:
@@ -556,20 +561,24 @@ def collect(analysis):
         for ry_f in sorted((root / ".rstack/provenance" / key(analysis, fig)).glob("*/run.yaml"), reverse=True):
             run, ry = ry_f.parent, yaml.safe_load(ry_f.read_text())
             rd = lambda f: (run / f).read_text() if (run / f).is_file() else ""
-            png = run / "outputs/figures" / fig / f"{fig}.png"
+            fig_dir = run / "outputs/figures" / fig
+            pngs = sorted(fig_dir.glob("*.png")) if fig_dir.is_dir() else []
+            b64 = lambda p: "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
+            primary = (fig_dir / f"{fig}.png") if (fig_dir / f"{fig}.png").is_file() else (pngs[0] if pngs else None)
             runs.append({
                 "run_id": ry["run_id"], "status": ry["status"], "approved": ry.get("approved_by_user"), "note": ry.get("note", ""),
                 "stage": ry["stage"], "started": ry["started"], "selected_ids": ry["selected_ids"],
                 "inputs": yaml.safe_load(rd("inputs.yaml") or "inputs: []")["inputs"],
                 "checks": rd("checks.txt"), "log": rd("log.txt"), "env": rd("env.txt"),
                 "overrides": ry.get("style_overrides", []), "warnings": ry.get("warnings", []), "problems": ry.get("problems", []),
-                "scripts": {f.name: f.read_text() for f in sorted((run / "scripts").glob("*.py"))} if (run / "scripts").is_dir() else {},
+                "scripts": {str(f.relative_to(run / "scripts")): f.read_text() for f in sorted((run / "scripts").rglob("*.py")) if "__pycache__" not in f.parts} if (run / "scripts").is_dir() else {},
                 "lib": {f.name: f.read_text() for f in sorted((run / "lib").glob("*.py"))} if (run / "lib").is_dir() else {},
                 "review": rd("review.md") or None,
-                "image": "data:image/png;base64," + base64.b64encode(png.read_bytes()).decode() if png.is_file() else None})
+                "image": b64(primary) if primary else None,
+                "images": [{"name": p.name, "image": b64(p)} for p in pngs]})
         rf = front(res)
         cur = root / ".rstack/provenance" / key(analysis, fig) / str(rf.get("run"))
-        live_lib = {f.name: sha256(f) for f in sorted((analysis.parent / "lib").glob("*.py"))}
+        live_lib = {f.name: sha256(f) for f in sorted((root / "analysis/lib").glob("*.py"))}
         state, rv, _ = review_state(root, analysis, fig)
         figs.append({"figure": fig, "stage": stage, "done": done, "task": text, "claim": claim, "runs": runs,
                      "result": {"run": rf.get("run"), "claim_for": rf.get("claim_for"), "cited": bool(rf.get("cited")), "superseded": rf.get("superseded", [])} if rf else None,
@@ -625,8 +634,11 @@ def tick(analysis, figure, approved, run_id=None):
     ry = yaml.safe_load(runs[-1].read_text())
     if ry["status"] != "verified":
         sys.exit(f"refused: run {ry['run_id']} is {ry['status']}, not verified")
-    if front(analysis / "docs/results" / f"{figure}.md").get("run") == ry["run_id"]:
+    has_docs = (analysis / "docs").is_dir() or (analysis / "docs/method.md").is_file()
+    if has_docs and front(analysis / "docs/results" / f"{figure}.md").get("run") == ry["run_id"]:
         sys.exit(f"refused: run {ry['run_id']} was already approved and is the accepted result; run the figure again for a new result")
+    if not has_docs and ry.get("approved_by_user"):
+        sys.exit(f"refused: run {ry['run_id']} was already approved; run the figure again for a new result")
     if run_id:  # accepting an earlier run: put its files back
         for rel, digest in ry["outputs"].items():
             src = runs[-1].parent / "outputs" / rel
@@ -648,8 +660,8 @@ def tick(analysis, figure, approved, run_id=None):
     if not done:
         text = re.sub(rf"^(\s*- \[) (\] {re.escape(task)})$", r"\1x\2", text, count=1, flags=re.M)
     ry["approved_by_user"] = ry.get("approved_by_user") or datetime.now().isoformat()
-    replaced = write_result(analysis, figure, ry)
-    note = f"re-run, replaces {replaced}" if done else (ry["note"] or figure)
+    replaced = write_result(analysis, figure, ry) if has_docs else None
+    note = f"re-run, replaces {replaced}" if done and replaced else ("re-run" if done else (ry["note"] or figure))
     row = f"| {ry['run_id']} | {','.join(ry['selected_ids']) or 'all'} | {note} | verified |\n"
     if re.search(r"^## Runs\s*$", text, re.M):
         text = re.sub(r"(^## Runs\s*$.*?)(?=^## |\Z)", lambda m: m.group(1).rstrip("\n") + "\n" + row + "\n", text, count=1, flags=re.M | re.S)
@@ -657,7 +669,8 @@ def tick(analysis, figure, approved, run_id=None):
         text = text.rstrip("\n") + "\n\n## Runs\n\n| run | inputs | note | status |\n|---|---|---|---|\n" + row
     readme.write_text(text)
     runs[-1].write_text(yaml.safe_dump(ry, sort_keys=False))
-    print(f"{'recorded a re-run of' if done else 'ticked'} {task!r}; run {ry['run_id']} in the Runs table; docs/results/{figure}.md written")
+    suffix = f"; docs/results/{figure}.md written" if has_docs else ""
+    print(f"{'recorded a re-run of' if done else 'ticked'} {task!r}; run {ry['run_id']} in the Runs table{suffix}")
 
 
 PACKAGE_TEMPLATES = Path(__file__).resolve().parent.parent / "templates/package"
@@ -689,13 +702,13 @@ def _package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=N
             problems.append(f"{fig}: the claim in docs/results/{fig}.md is still TODO; the package never writes a claim for you")
         if fm.get("claim_for", fm.get("run")) != fm.get("run"):
             problems.append(f"{fig}: the claim was written for run {fm.get('claim_for')}, the result is run {fm.get('run')}; re-check it and set claim_for")
-        if any(not notes.get(fig, {}).get(k) or notes[fig][k].startswith("TODO") for k in ("objective", "why")):
+        if (analysis / "docs/method.md").is_file() and any(not notes.get(fig, {}).get(k) or notes[fig][k].startswith("TODO") for k in ("objective", "why")):
             problems.append(f"{fig}: docs/method.md has no Objective and Why for it")
         accepted[fig] = (run, ry, claim, fm)
     if not problems:
         runs = list(accepted.values())
         for what, getter in (("lib", lambda run, ry: ry.get("lib", {})),
-                             ("preset", lambda run, ry: {f.name: sha256(f) for f in sorted((run / "config").glob("*"))} if (run / "config").is_dir() else {})):
+                             ("preset", lambda run, ry: {str(f.relative_to(run / "config")): sha256(f) for f in sorted((run / "config").rglob("*")) if f.is_file()} if (run / "config").is_dir() else {})):
             seen = {}
             for fig, (run, ry, _, _) in accepted.items():
                 for name, digest in getter(run, ry).items():
@@ -721,14 +734,18 @@ def _package(analysis, out=None, max_raw_mb=100, exclude=(), replace=False, py=N
             if (run / f).is_file():
                 shutil.copy2(run / f, prov / f)
         for f in (f"{fig}.py", f"{fig}.checks.py"):
-            if (run / "scripts" / f).is_file():
-                shutil.copy2(run / "scripts" / f, out / "scripts" / f)
+            src_s = run / "scripts" / "check" / f if ry["stage"] == "check" and (run / "scripts" / "check" / f).is_file() else run / "scripts" / f
+            if src_s.is_file():
+                shutil.copy2(src_s, out / "scripts" / f)
         for f in sorted((run / "lib").glob("*.py")) if (run / "lib").is_dir() else ():
             if f.name != "load.py":
                 shutil.copy2(f, out / "lib" / f.name)
         if (run / "config").is_dir():
-            for f in (run / "config").glob("*"):
-                shutil.copy2(f, out / "presets" / f.name)
+            for f in (run / "config").rglob("*"):
+                if f.is_file():
+                    rel = f.relative_to(run / "config")
+                    (out / "presets" / rel).parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(f, out / "presets" / rel)
         pkg_inputs = []
         for m in yaml.safe_load((run / "inputs.yaml").read_text())["inputs"]:
             rel, entry = m["path"], {k: m[k] for k in ("id", "path", "label", "legend", "sha256") if k in m}
@@ -851,10 +868,11 @@ def export(analysis, figure, run_id=None, out=None):
     made = []
     for rel, digest in ry["outputs"].items():
         src = run / "outputs" / rel
-        if rel.startswith(f"figures/{figure}/{figure}.") and rel.endswith((".png", ".pdf")):
+        if rel.startswith(f"figures/{figure}/") and Path(rel).parent == Path(f"figures/{figure}") and rel.endswith((".png", ".pdf")):
             if not src.is_file() or sha256(src) != digest:
                 sys.exit(f"refused: {rel} in run {run_id} no longer matches its recorded hash")
-            dst = out / f"{run_id}_{figure}{src.suffix}"
+            dst_name = f"{run_id}_{figure}{src.suffix}" if src.stem == figure else f"{run_id}_{figure}_{src.stem}{src.suffix}"
+            dst = out / dst_name
             shutil.copy2(src, dst)
             made.append(dst)
     if not made:
@@ -870,7 +888,13 @@ def comparable(rel):
 def replay(run, py, command):
     ry = yaml.safe_load((run / "run.yaml").read_text())
     lib = run / "lib"
-    analysis = run.parents[3] / "analysis" / ry["analysis"]
+    root = run.parents[3]
+    rel_an = ry.get("analysis_rel")
+    if rel_an:
+        analysis = root / "analysis" / rel_an
+    else:
+        cand = root / "analysis" / ry["analysis"]
+        analysis = cand if cand.is_dir() else next((p for p in (root / "analysis").rglob(ry["analysis"]) if p.is_dir()), cand)
     old = {m["path"]: m["sha256"] for m in yaml.safe_load((run / "inputs.yaml").read_text())["inputs"]}
     new, status = execute(analysis, ry["figure"], ry["stage"], ry["selected_ids"], run / "scripts", py, f"replay of {run.name}", command, old, lib, run / "config" if (run / "config").is_dir() else None)
     ny = yaml.safe_load((new / "run.yaml").read_text())
@@ -1111,6 +1135,86 @@ def selftest():
         gate(proj2 / "analysis/iv", "check", "dev")
         refused(lambda: gate(proj2 / "analysis/iv", "main", "summary"), "open check")
         refused(lambda: new_analysis(proj2, "iv", ["bogus:x"]), "stage:name")
+        # check/<fig>.py, scripts/config/, and subdirectory preset replay
+        a3 = proj2 / "analysis/chk"
+        (a3 / "scripts/check").mkdir(parents=True)
+        (a3 / "scripts/config").mkdir(parents=True)
+        (proj2 / "tools/figrecipe/presets/archived").mkdir(parents=True)
+        (proj2 / "tools/figrecipe/presets/archived/PAPER_USTH.yaml").write_text("axes: {width_mm: 60}\n")
+        (a3 / "scripts/config/colors.yaml").write_text("colors:\n  condA: '#112233'\n")
+        (a3 / "inputs.yaml").write_text(yaml.safe_dump({"inputs": [{"id": "d", "path": "analysis/chk/d.csv", "label": "D", "legend": "d"}]}))
+        (a3 / "d.csv").write_text("a\n1\n")
+        (a3 / "README.md").write_text("# C\n\n## Question\n\nQ?\n\n## Tasks\n\n### Check\n- [ ] `chk1` check\n")
+        (a3 / "docs").mkdir()
+        (a3 / "docs/method.md").write_text("# Method\n\n### chk1\n\n- Objective: o\n- Why: w\n")
+        (a3 / "scripts/check/chk1.py").write_text(
+            "import os, pathlib, shutil, yaml\n"
+            "psrc = pathlib.Path(os.environ['RSTACK_PRESETS'], 'archived/PAPER_USTH.yaml')\n"
+            "pdst = pathlib.Path(os.environ['RSTACK_RUN_DIR'], 'config/archived/PAPER_USTH.yaml')\n"
+            "pdst.parent.mkdir(parents=True, exist_ok=True); shutil.copy(psrc, pdst)\n"
+            "c = yaml.safe_load(pathlib.Path(os.environ['RSTACK_RUN_DIR'], 'scripts/config/colors.yaml').read_text())['colors']['condA']\n"
+            "f = pathlib.Path('figures/chk1'); (f/'chk1_data').mkdir(parents=True, exist_ok=True)\n"
+            "(f/'chk1.png').write_text('p'); (f/'chk1.yaml').write_text('x: 1\\n'); (f/'chk1_data/d.csv').write_text(c)\n")
+        (a3 / "scripts/check/chk1.checks.py").write_text("import os, pathlib\nassert pathlib.Path(os.environ['RSTACK_OUTPUTS'], 'figures/chk1/chk1_data/d.csv').read_text() == '#112233'\n")
+        r_chk, st_chk = execute(a3, "chk1", "check", ["d"], a3 / "scripts", sys.executable, "", "selftest")
+        assert st_chk == "verified" and "archived/PAPER_USTH.yaml" in yaml.safe_load((r_chk / "run.yaml").read_text())["presets"]
+        (a3 / "scripts/config/colors.yaml").write_text("colors:\n  condA: '#999999'\n")
+        assert replay(r_chk, sys.executable, "selftest") == 0, "replay with scripts/check, scripts/config, and subdir preset failed"
+        # nested analysis/<group>/<name> resolves project root, analysis/lib, and replay
+        a4 = proj2 / "analysis/electrochemistry/nested"
+        (a4 / "scripts").mkdir(parents=True)
+        (a4 / "inputs.yaml").write_text(yaml.safe_dump({"inputs": [{"id": "d", "path": "analysis/electrochemistry/nested/d.csv", "label": "D", "legend": "d"}]}))
+        (a4 / "d.csv").write_text("a\n1\n")
+        (a4 / "README.md").write_text("# N\n\n## Question\n\nQ?\n\n## Tasks\n\n### Check\n- [ ] `n1` nested\n")
+        (a4 / "docs").mkdir()
+        (a4 / "docs/method.md").write_text("# Method\n\n### n1\n\n- Objective: o\n- Why: w\n")
+        (a4 / "scripts/n1.py").write_text(
+            "import pathlib\nf = pathlib.Path('figures/n1'); (f/'n1_data').mkdir(parents=True, exist_ok=True)\n"
+            "(f/'n1.png').write_text('p'); (f/'n1.yaml').write_text('x: 1\\n'); (f/'n1_data/d.csv').write_text('1\\n')\n")
+        (a4 / "scripts/n1.checks.py").write_text("import os, pathlib\nassert pathlib.Path(os.environ['RSTACK_OUTPUTS'], 'figures/n1/n1_data/d.csv').exists()\n")
+        r_nest, st_nest = execute(a4, "n1", "check", ["d"], a4 / "scripts", sys.executable, "", "selftest")
+        assert st_nest == "verified" and (r_nest / "lib/load.py").is_file()
+        assert replay(r_nest, sys.executable, "selftest") == 0, "nested analysis replay failed"
+        # multi-image figure folder: figures/<fig>/{a,b}.png each with .yaml and _data/
+        (a4 / "README.md").write_text("# N\n\n## Question\n\nQ?\n\n## Tasks\n\n### Check\n- [x] `n1` nested\n\n### Main\n- [ ] `m1` multi\n")
+        (a4 / "docs/method.md").write_text("# Method\n\n### n1\n\n- Objective: o\n- Why: w\n\n### m1\n\n- Objective: o\n- Why: w\n")
+        (a4 / "scripts/m1.py").write_text(
+            "import pathlib\nf = pathlib.Path('figures/m1')\nfor s in ('a', 'b'):\n"
+            "    (f/f'{s}_data').mkdir(parents=True, exist_ok=True); (f/f'{s}.png').write_text(s)\n"
+            "    (f/f'{s}.yaml').write_text('x: 1\\n'); (f/f'{s}_data/d.csv').write_text(s)\n")
+        (a4 / "scripts/m1.checks.py").write_text(
+            "import os, pathlib\nfor s in ('a', 'b'):\n    assert pathlib.Path(os.environ['RSTACK_OUTPUTS'], f'figures/m1/{s}_data/d.csv').exists()\n")
+        r_m1, st_m1 = execute(a4, "m1", "main", ["d"], a4 / "scripts", sys.executable, "", "selftest")
+        assert st_m1 == "verified" and check(a4) == 0
+        c_m1 = collect(a4)
+        m1_runs = next(f for f in c_m1["figures"] if f["figure"] == "m1")["runs"]
+        assert [im["name"] for im in m1_runs[0]["images"]] == ["a.png", "b.png"], m1_runs[0]["images"]
+        tick(a4, "m1", True)
+        ex_m1 = export(a4, "m1", out=Path(d) / "exp_m1")
+        assert sorted(p.name for p in ex_m1) == [f"{r_m1.name}_m1_a.png", f"{r_m1.name}_m1_b.png"], ex_m1
+        (a4 / "scripts/m1.py").write_text(
+            "import pathlib\nf = pathlib.Path('figures/m1'); (f/'a_data').mkdir(parents=True, exist_ok=True)\n"
+            "(f/'a.png').write_text('a'); (f/'a.yaml').write_text('x: 1\\n'); (f/'a_data/d.csv').write_text('a')\n"
+            "(f/'b.png').write_text('b')\n")
+        _, st_bad = execute(a4, "m1", "main", ["d"], a4 / "scripts", sys.executable, "", "selftest")
+        assert st_bad == "rejected", "multi-image missing b.yaml/b_data must be rejected"
+        # docs/-free analysis: objective_gate, execute, tick (no docs/results created), check
+        a5 = proj2 / "analysis/electrochemistry/nodocs"
+        (a5 / "scripts").mkdir(parents=True)
+        (a5 / "inputs.yaml").write_text(yaml.safe_dump({"inputs": [{"id": "d", "path": "analysis/electrochemistry/nodocs/d.csv", "label": "D", "legend": "d"}]}))
+        (a5 / "d.csv").write_text("a\n1\n")
+        (a5 / "README.md").write_text("# NoDocs\n\n## Question\n\nQ?\n\n## Tasks\n\n### Check\n- [ ] `nd1` check\n")
+        (a5 / "scripts/nd1.py").write_text(
+            "import pathlib\nf = pathlib.Path('figures/nd1'); (f/'nd1_data').mkdir(parents=True, exist_ok=True)\n"
+            "(f/'nd1.png').write_text('p'); (f/'nd1.yaml').write_text('x: 1\\n'); (f/'nd1_data/d.csv').write_text('1\\n')\n")
+        (a5 / "scripts/nd1.checks.py").write_text("import os, pathlib\nassert pathlib.Path(os.environ['RSTACK_OUTPUTS'], 'figures/nd1/nd1_data/d.csv').exists()\n")
+        objective_gate(a5, "nd1")
+        r_nd, st_nd = execute(a5, "nd1", "check", ["d"], a5 / "scripts", sys.executable, "", "selftest")
+        assert st_nd == "verified"
+        tick(a5, "nd1", True)
+        assert not (a5 / "docs").exists(), "tick created docs/ on a docs/-free analysis"
+        assert "- [x] `nd1` check" in (a5 / "README.md").read_text() and r_nd.name in (a5 / "README.md").read_text()
+        assert check(a5) == 0
     print("selftest ok")
 
 

@@ -8,11 +8,11 @@ data/raw/ goes through raw-viewer: the filename grammar gives `tokens` (device, 
 matched instrument profile gives the measurement data (`raw-viewer files export`). With no matching
 profile this raises and names the fix; it never guesses a format.
 """
-import io
 import json
 import os
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 import pandas as pd
@@ -46,5 +46,7 @@ def load(input_id):
         return pd.read_csv(project / rel), {}
     base = ["files", "match", "--project", str(project), "--file", rel]
     tokens = json.loads(_raw_viewer(["--json", *base]))["data"].get("tokens", {})
-    csv = _raw_viewer(["files", "export", "--project", str(project), "--file", rel, "--format", "csv", "--out", "-"])
-    return pd.read_csv(io.StringIO(csv)), tokens
+    with tempfile.TemporaryDirectory() as tmp:
+        out_csv = Path(tmp) / "export.csv"
+        _raw_viewer(["files", "export", "--project", str(project), "--file", rel, "--format", "csv", "--out", str(out_csv)])
+        return pd.read_csv(out_csv), tokens
