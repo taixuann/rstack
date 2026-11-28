@@ -1,6 +1,6 @@
 {
   "name": "rstack",
-  "version": "0.35.0",
+  "version": "0.35.1",
   "description": "Research counterpart to pstack: research-mode with 18 playbooks, 24 principles, one agent (critic, six modes), using-rstack, setup-research, learn-mode, wiki-mode, playbook-control, plus 25 bundled domain skills.",
   "author": {
     "name": "taixuann"
